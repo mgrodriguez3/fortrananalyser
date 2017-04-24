@@ -35,11 +35,11 @@ public class Window extends JFrame implements ActionListener {
 
     public Window() {
         super();                    // usamos el contructor de la clase padre JFrame
-        configurarVentana();        // configuramos la ventana
-        inicializarComponentes();   // inicializamos los atributos o componentes
+        configureWindow();        // configuramos la ventana
+        initialiceComponents();   // inicializamos los atributos o componentes
     }
 
-    private void configurarVentana() {
+    private void configureWindow() {
         this.setTitle("FortranAnalyser Tool");                   // colocamos titulo a la ventana
         this.setSize(400, 200);                                 // colocamos tamanio a la ventana (ancho, alto)
         this.setLocationRelativeTo(null);                       // centramos la ventana en la pantalla
@@ -49,7 +49,7 @@ public class Window extends JFrame implements ActionListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);    // hacemos que cuando se cierre la ventana termina todo proceso
     }
 
-    private void inicializarComponentes() {
+    private void initialiceComponents() {
         // creamos los componentes
         this.texto = new JLabel();
         this.caja = new JTextField();
@@ -91,7 +91,7 @@ public class Window extends JFrame implements ActionListener {
 
         if (e.getSource().equals(boton)) {
             if (!this.caja.getText().isEmpty()) {
-                analyce(this.caja.getText());
+                analize(this.caja.getText());
             }
             /*String nombre = caja.getText();                                 // obtenemos el contenido de la caja de texto
             JOptionPane.showMessageDialog(this, "Hola " + nombre + ".");    // mostramos un mensaje (frame, mensaje)*/
@@ -112,7 +112,7 @@ public class Window extends JFrame implements ActionListener {
 
     }
 
-    private void analyce(String directory) {
+    private void analize(String directory) {
 
         try {
             List<File> filesInFolder;

@@ -41,7 +41,7 @@ public class PDF {
 
     pdf.getCatalog ()
 
-    .setLang(new PdfString("en-US"));
+    .setLang(new PdfString("es"));
     pdf.getCatalog ()
     .setViewerPreferences(
                 new PdfViewerPreferences().setDisplayDocTitle(true));
