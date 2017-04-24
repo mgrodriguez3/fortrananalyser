@@ -22,63 +22,64 @@ import com.itextpdf.layout.element.Text;
 import java.io.IOException;
 
 /**
- *
+ * This class create the document PDF with the quality report
  * @author michael
  */
 public class PDF {
 
     public void createPdf(String dest) throws IOException {
-        
-    String DOG = "/home/michael/Descargas/Word Cloud(30).png";
-    String FOX = "/home/michael/Descargas/wave.png";
-    String FONT = "/home/michael/Descargas/FreeSans.ttf";
 
-    PdfDocument pdf = new PdfDocument(new PdfWriter(dest, new WriterProperties().addXmpMetadata()));
-    Document document = new Document(pdf);
+        String COVER = "./img/ephyslab.png";
+        String FOX = "/home/michael/Descargas/wave.png";
+        String FONT = "/home/michael/Descargas/FreeSans.ttf";
 
-    //Setting some required parameters
-    pdf.setTagged ();
+        PdfDocument pdf = new PdfDocument(new PdfWriter(dest, new WriterProperties().addXmpMetadata()));
+        Document document = new Document(pdf);
 
-    pdf.getCatalog ()
+        //Setting some required parameters
+        pdf.setTagged();
 
-    .setLang(new PdfString("es"));
-    pdf.getCatalog ()
-    .setViewerPreferences(
-                new PdfViewerPreferences().setDisplayDocTitle(true));
+        pdf.getCatalog()
+                .setLang(new PdfString("es"));
+        pdf.getCatalog()
+                .setViewerPreferences(
+                        new PdfViewerPreferences().setDisplayDocTitle(true));
         PdfDocumentInfo info = pdf.getDocumentInfo();
 
-    info.setTitle (
-    "iText7 PDF/UA example");
- 
+        info.setTitle(
+                "FortranAnalyser: Quality report");
+
         //Fonts need to be embedded
         PdfFont font = PdfFontFactory.createFont(FONT, PdfEncodings.WINANSI, true);
-    Paragraph p = new Paragraph();
+        Paragraph p = new Paragraph();
 
-    p.setFont (font);
+        p.setFont(font);
+        p.setFontSize(40);
 
-    p.add (
-    new Text("The quick brown "));
-        Image foxImage = new Image(ImageDataFactory.create(FOX));
-    //PDF/UA: Set alt text
+        p.add(
+                new Text("FortranAnalyser: Quality report"));
+        Image coverImage = new Image(ImageDataFactory.create(COVER));
 
-    foxImage.getAccessibilityProperties ()
+        coverImage.getAccessibilityProperties()
+                .setAlternateDescription("Fox");
+        coverImage.setHeight(150);
+        coverImage.setWidth(150);
+        coverImage.setAutoScaleWidth(true);
+        
+        p.add(coverImage);
 
-    .setAlternateDescription("Fox");
-    p.add (foxImage);
+        p.setFontSize(12);
+        p.add(
+                " jumps over the lazy ");
+        Image dogImage = new Image(ImageDataFactory.create(COVER));
 
-    p.add (
-    " jumps over the lazy ");
-        Image dogImage = new Image(ImageDataFactory.create(DOG));
-    //PDF/UA: Set alt text
+        dogImage.getAccessibilityProperties()
+                .setAlternateDescription("Dog");
+        p.add(dogImage);
 
-    dogImage.getAccessibilityProperties ()
+        document.add(p);
 
-    .setAlternateDescription("Dog");
-    p.add (dogImage);
-
-    document.add (p);
-
-    document.close ();
-}
+        document.close();
+    }
 
 }
