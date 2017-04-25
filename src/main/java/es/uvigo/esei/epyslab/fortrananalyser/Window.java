@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -126,7 +127,6 @@ public class Window extends JFrame implements ActionListener {
 
         PDF pdf;
         String DEST = "/home/michael/temp/QualityInform.pdf";
- 
 
         try {
 
@@ -135,27 +135,31 @@ public class Window extends JFrame implements ActionListener {
 
             List<File> filesInFolder;
             String auxDir = "";
+            
+            //start the duration of the analysis
+            long timeStart = System.currentTimeMillis();
+            
             filesInFolder = Files.walk(Paths.get(directory))
                     .filter(Files::isRegularFile)
                     .map(java.nio.file.Path::toFile)
                     .collect(Collectors.toList());
-
             
             for (File file : filesInFolder) {
 
-                
-                if (!auxDir.equals(getPathFromFile(file))) {
+                if (!auxDir.equals(getPathFromFile(file)) && getFileExtension(file).equals("txt")) {
                     auxDir = getPathFromFile(file);
                     pdf.addSection(auxDir);
                 }
 
                 if (getFileExtension(file).equals("txt")) {
-                    pdf.addParagraph(file.getName());
+                    pdf.addSubSection(file.getName());
                     pdf.addResult(analyseFile(file.getAbsolutePath()));
-                    
                 }
             }
             pdf.closePDF();
+            long timeStop = System.currentTimeMillis();
+            timeStop = timeStop - timeStart;
+            JOptionPane.showMessageDialog(this, "Análisis realizado.\n Time: " + getDurationAnalyse(timeStop));
         } catch (IOException ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -166,11 +170,10 @@ public class Window extends JFrame implements ActionListener {
         String result = "";
 
         //1.- count the number of lines in the file
-        result += "Número de líneas: "+analyseNumberOfLines(pathFile);
-        result +="\n";
-        
-        //2.- count the number of calls
+        result += "Número de líneas: " + analyseNumberOfLines(pathFile);
+        result += "\n";
 
+        //2.- count the number of calls
         return result;
 
     }
@@ -217,6 +220,32 @@ public class Window extends JFrame implements ActionListener {
         return file.getAbsolutePath().
                 substring(0, file.getAbsolutePath().lastIndexOf(File.separator));
 
+    }
+
+    private static String getDurationAnalyse(long millis) {
+        if (millis < 0) {
+            throw new IllegalArgumentException("Duration must be greater than zero!");
+        }
+
+        long days = TimeUnit.MILLISECONDS.toDays(millis);
+        millis -= TimeUnit.DAYS.toMillis(days);
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        millis -= TimeUnit.HOURS.toMillis(hours);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+        StringBuilder sb = new StringBuilder(64);
+        sb.append(days);
+        sb.append(" Days ");
+        sb.append(hours);
+        sb.append(" Hours ");
+        sb.append(minutes);
+        sb.append(" Minutes ");
+        sb.append(seconds);
+        sb.append(" Seconds");
+
+        return sb.toString();
     }
 
 }

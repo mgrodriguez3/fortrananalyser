@@ -5,8 +5,6 @@
  */
 package es.uvigo.esei.epyslab.fortrananalyser;
 
-import com.itextpdf.io.font.FontConstants;
-import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.font.PdfFont;
@@ -21,6 +19,7 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.property.TextAlignment;
 import java.io.IOException;
 
 /**
@@ -36,11 +35,12 @@ public class PDF {
 
         String COVER = "./img/ephyslab.png";
 
+
         PdfDocument pdf = new PdfDocument(new PdfWriter(dest, new WriterProperties().addXmpMetadata()));
         this.document = new Document(pdf);
 
         //Fonts need to be embedded
-        PdfFont bold = PdfFontFactory.createFont(FontConstants.TIMES_BOLD);
+        PdfFont arial = PdfFontFactory.createFont("./Fonts/arial.ttf");
 
         //Setting some required parameters
         pdf.setTagged();
@@ -66,27 +66,30 @@ public class PDF {
         coverImage.setWidth(350);
         //coverImage.setAutoScaleWidth(true);
 
-        p.add(coverImage);
+        p.add(coverImage.setTextAlignment(TextAlignment.CENTER));
         p.add("\n");
 
-        /*Paragraph p2 = new Paragraph("Foobar Film Festival", new Font(FontFamily.HELVETICA, 22));
-        p2.setAlignment(Element.ALIGN_CENTER);
-        document.add(p2);*/
-        p.add(title.setFont(bold).setFontSize(36).setFontColor(Color.DARK_GRAY));
+        p.add(title.setFont(arial).setFontSize(36).setFontColor(Color.DARK_GRAY)).setTextAlignment(TextAlignment.CENTER);
         p.add("\n");
 
-        p.add(
-                new Text("Quality report").setFont(bold).setFontSize(36).setFontColor(Color.DARK_GRAY));
-
-        p.add("\n\n\n\n\n\n\n\n\n\n\n\n\n");
-
+        p.add(new Text("Quality report").setFont(arial).setFontSize(36).setFontColor(Color.DARK_GRAY).setTextAlignment(TextAlignment.CENTER));
+        p.add("\n\n\n\n\n\n\n\n\n\n\n\n");
+        
         this.document.add(p);
+        
+        Paragraph p2 = new Paragraph();
+        
+        p2.add(new Text("Michael García Rodríguez").setFont(arial).setFontSize(11).setFontColor(Color.BLACK).setTextAlignment(TextAlignment.RIGHT));
+        
+        this.document.add(p2);
+
+        
 
     }
 
     public void addParagraph(String text) throws IOException {
         //Fonts need to be embedded
-        PdfFont textFont = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
+        PdfFont textFont = PdfFontFactory.createFont("./Fonts/arial.ttf");
         Paragraph p = new Paragraph();
         Text t = new Text(text);
 
@@ -97,10 +100,23 @@ public class PDF {
 
     }
     
+    public void addSubSection(String text) throws IOException {
+        //Fonts need to be embedded
+        PdfFont textFont = PdfFontFactory.createFont("./Fonts/arial.ttf");
+        Paragraph p = new Paragraph();
+        Text t = new Text(text);
+
+        p.add(t.setFont(textFont).setFontSize(16).setFontColor(Color.BLACK));
+        p.add("\n");
+
+        this.document.add(p);
+
+    }
+    
     public void addSection(String section) throws IOException
     {
         //Fonts need to embedded
-        PdfFont textFont = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+        PdfFont textFont = PdfFontFactory.createFont("./Fonts/arial.ttf");
         Paragraph p = new Paragraph();
         Text sect = new Text(section);
         
@@ -113,7 +129,7 @@ public class PDF {
     public void addResult(String result) throws IOException
     {
         //Fonts need to be embedded
-        PdfFont textFont = PdfFontFactory.createFont(FontConstants.TIMES_ITALIC);
+        PdfFont textFont = PdfFontFactory.createFont("./Fonts/arial.ttf");
         Paragraph p = new Paragraph();
         Text t = new Text(result);
 
