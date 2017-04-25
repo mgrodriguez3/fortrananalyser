@@ -5,8 +5,10 @@
  */
 package es.uvigo.esei.epyslab.fortrananalyser;
 
+import com.itextpdf.io.font.FontConstants;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -23,18 +25,22 @@ import java.io.IOException;
 
 /**
  * This class create the document PDF with the quality report
+ *
  * @author michael
  */
 public class PDF {
 
+    private Document document;
+
     public void createPdf(String dest) throws IOException {
 
         String COVER = "./img/ephyslab.png";
-        String FOX = "/home/michael/Descargas/wave.png";
-        String FONT = "/home/michael/Descargas/FreeSans.ttf";
 
         PdfDocument pdf = new PdfDocument(new PdfWriter(dest, new WriterProperties().addXmpMetadata()));
-        Document document = new Document(pdf);
+        this.document = new Document(pdf);
+
+        //Fonts need to be embedded
+        PdfFont bold = PdfFontFactory.createFont(FontConstants.TIMES_BOLD);
 
         //Setting some required parameters
         pdf.setTagged();
@@ -49,37 +55,76 @@ public class PDF {
         info.setTitle(
                 "FortranAnalyser: Quality report");
 
-        //Fonts need to be embedded
-        PdfFont font = PdfFontFactory.createFont(FONT, PdfEncodings.WINANSI, true);
         Paragraph p = new Paragraph();
+        Text title = new Text("Fortran Analyser");
 
-        p.setFont(font);
-        p.setFontSize(40);
-
-        p.add(
-                new Text("FortranAnalyser: Quality report"));
         Image coverImage = new Image(ImageDataFactory.create(COVER));
 
         coverImage.getAccessibilityProperties()
                 .setAlternateDescription("Fox");
-        coverImage.setHeight(150);
-        coverImage.setWidth(150);
-        coverImage.setAutoScaleWidth(true);
-        
+        coverImage.setHeight(350);
+        coverImage.setWidth(350);
+        //coverImage.setAutoScaleWidth(true);
+
         p.add(coverImage);
+        p.add("\n");
 
-        p.setFontSize(12);
+        /*Paragraph p2 = new Paragraph("Foobar Film Festival", new Font(FontFamily.HELVETICA, 22));
+        p2.setAlignment(Element.ALIGN_CENTER);
+        document.add(p2);*/
+        p.add(title.setFont(bold).setFontSize(36).setFontColor(Color.DARK_GRAY));
+        p.add("\n");
+
         p.add(
-                " jumps over the lazy ");
-        Image dogImage = new Image(ImageDataFactory.create(COVER));
+                new Text("Quality report").setFont(bold).setFontSize(36).setFontColor(Color.DARK_GRAY));
 
-        dogImage.getAccessibilityProperties()
-                .setAlternateDescription("Dog");
-        p.add(dogImage);
+        p.add("\n\n\n\n\n\n\n\n\n\n\n\n\n");
 
-        document.add(p);
+        this.document.add(p);
 
-        document.close();
+    }
+
+    public void addParagraph(String text) throws IOException {
+        //Fonts need to be embedded
+        PdfFont textFont = PdfFontFactory.createFont(FontConstants.TIMES_ROMAN);
+        Paragraph p = new Paragraph();
+        Text t = new Text(text);
+
+        p.add(t.setFont(textFont).setFontSize(12).setFontColor(Color.BLACK));
+        p.add("\n");
+
+        this.document.add(p);
+
+    }
+    
+    public void addSection(String section) throws IOException
+    {
+        //Fonts need to embedded
+        PdfFont textFont = PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD);
+        Paragraph p = new Paragraph();
+        Text sect = new Text(section);
+        
+        p.add(sect.setFont(textFont).setFontSize(18).setFontColor(Color.GRAY));
+        p.add("\n");
+        
+        this.document.add(p);
+    }
+    
+    public void addResult(String result) throws IOException
+    {
+        //Fonts need to be embedded
+        PdfFont textFont = PdfFontFactory.createFont(FontConstants.TIMES_ITALIC);
+        Paragraph p = new Paragraph();
+        Text t = new Text(result);
+
+        p.add(t.setFont(textFont).setFontSize(12).setFontColor(Color.BLACK));
+        p.add("\n");
+
+        this.document.add(p);
+    }
+
+    public void closePDF() {
+        this.document.close();
     }
 
 }

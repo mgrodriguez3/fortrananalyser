@@ -4,20 +4,27 @@
  * and open the template in the editor.
  */
 package es.uvigo.esei.epyslab.fortrananalyser;
+
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 /**
@@ -29,19 +36,20 @@ public class Window extends JFrame implements ActionListener {
     private final JFileChooser fc = new JFileChooser();
     private JLabel texto;           // etiqueta o texto no editable
     private JTextField caja;        // caja de texto, para insertar datos
-    private JButton boton;          // boton con una determinada accion
-    private JButton boton2;
+    private JButton buttonanalyse;          // boton con una determinada accion
+    private JButton buttonExit;
     private JButton buttonFileExplorer; //file explorer button
 
-    public Window() {
+    public Window() throws IOException {
         super();                    // usamos el contructor de la clase padre JFrame
         configureWindow();        // configuramos la ventana
         initialiceComponents();   // inicializamos los atributos o componentes
     }
 
-    private void configureWindow() {
+    private void configureWindow() throws IOException {
         this.setTitle("FortranAnalyser Tool");                   // colocamos titulo a la ventana
         this.setSize(400, 200);                                 // colocamos tamanio a la ventana (ancho, alto)
+        this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("./img/ephyslab.png")))));
         this.setLocationRelativeTo(null);                       // centramos la ventana en la pantalla
         this.setResizable(false); //evita poner redimensionar la ventana
         this.setLayout(null);                                   // no usamos ningun layout, solo asi podremos dar posiciones a los componentes
@@ -53,8 +61,8 @@ public class Window extends JFrame implements ActionListener {
         // creamos los componentes
         this.texto = new JLabel();
         this.caja = new JTextField();
-        this.boton = new JButton();
-        this.boton2 = new JButton();
+        this.buttonanalyse = new JButton();
+        this.buttonExit = new JButton();
         this.buttonFileExplorer = new JButton();
 
         // configuramos los componentes
@@ -64,13 +72,13 @@ public class Window extends JFrame implements ActionListener {
         this.caja.setBounds(25, 50, 250, 25);   // colocamos posicion y tamanio a la caja (x, y, ancho, alto)
         this.caja.setEditable(false);
 
-        this.boton.setText("Analizar");   // colocamos un texto al boton
-        this.boton.setBounds(50, 100, 200, 30);  // colocamos posicion y tamanio al boton (x, y, ancho, alto)
-        this.boton.addActionListener(this);      // hacemos que el boton tenga una accion y esa accion estara en esta clase
+        this.buttonanalyse.setText("Analizar");   // colocamos un texto al boton
+        this.buttonanalyse.setBounds(50, 100, 200, 30);  // colocamos posicion y tamanio al boton (x, y, ancho, alto)
+        this.buttonanalyse.addActionListener(this);      // hacemos que el boton tenga una accion y esa accion estara en esta clase
 
-        this.boton2.setText("Salir");
-        this.boton2.setBounds(50, 150, 200, 30);
-        this.boton2.addActionListener(this);
+        this.buttonExit.setText("Salir");
+        this.buttonExit.setBounds(50, 150, 200, 30);
+        this.buttonExit.addActionListener(this);
 
         this.buttonFileExplorer.setText("...");
         this.buttonFileExplorer.setBounds(300, 50, 50, 25);
@@ -81,23 +89,25 @@ public class Window extends JFrame implements ActionListener {
         // adicionamos los componentes a la ventana
         this.add(texto);
         this.add(caja);
-        this.add(boton);
-        this.add(boton2);
+        this.add(buttonanalyse);
+        this.add(buttonExit);
         this.add(buttonFileExplorer);
+
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
-        if (e.getSource().equals(boton)) {
+        if (e.getSource().equals(buttonanalyse)) {
             if (!this.caja.getText().isEmpty()) {
-                analize(this.caja.getText());
+                analizeDirectories(this.caja.getText());
+            } else {
+                JOptionPane.showMessageDialog(this, "Seleccione un directorio ");// mostramos un mensaje (frame, mensaje)
             }
-            /*String nombre = caja.getText();                                 // obtenemos el contenido de la caja de texto
-            JOptionPane.showMessageDialog(this, "Hola " + nombre + ".");    // mostramos un mensaje (frame, mensaje)*/
+
         }
 
-        if (e.getSource().equals(boton2)) {
+        if (e.getSource().equals(buttonExit)) {
             System.exit(0);
         }
 
@@ -112,9 +122,17 @@ public class Window extends JFrame implements ActionListener {
 
     }
 
-    private void analize(String directory) {
+    private void analizeDirectories(String directory) {
+
+        PDF pdf;
+        String DEST = "/home/michael/temp/QualityInform.pdf";
+ 
 
         try {
+
+            pdf = new PDF();
+            pdf.createPdf(DEST);
+
             List<File> filesInFolder;
             String auxDir = "";
             filesInFolder = Files.walk(Paths.get(directory))
@@ -122,21 +140,55 @@ public class Window extends JFrame implements ActionListener {
                     .map(java.nio.file.Path::toFile)
                     .collect(Collectors.toList());
 
+            
             for (File file : filesInFolder) {
 
+                
                 if (!auxDir.equals(getPathFromFile(file))) {
                     auxDir = getPathFromFile(file);
-                    System.out.println(auxDir);
+                    pdf.addSection(auxDir);
                 }
 
                 if (getFileExtension(file).equals("txt")) {
-                    System.out.println(file.getName());
+                    pdf.addParagraph(file.getName());
+                    pdf.addResult(analyseFile(file.getAbsolutePath()));
+                    
                 }
             }
+            pdf.closePDF();
         } catch (IOException ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public String analyseFile(String pathFile) throws IOException {
+        String result = "";
+
+        //1.- count the number of lines in the file
+        result += "Número de líneas: "+analyseNumberOfLines(pathFile);
+        result +="\n";
+        
+        //2.- count the number of calls
+
+        return result;
+
+    }
+
+    private String analyseNumberOfLines(String f) throws IOException {
+        int count = 0;
+        String cadena = "";
+        File file = new File(f);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((cadena = b.readLine()) != null) {
+                count++;
+            }
+        }
+
+        return Integer.toString(count);
     }
 
     /**
@@ -168,4 +220,3 @@ public class Window extends JFrame implements ActionListener {
     }
 
 }
-

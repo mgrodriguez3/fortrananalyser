@@ -24,14 +24,10 @@ public class Principal {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws FileNotFoundException, IOException {
+        org.apache.log4j.BasicConfigurator.configure();
 
-        String DEST = "/home/michael/temp/QualityInform.pdf";
-
-        /*Window w = new Window();
-        w.setVisible(true);*/
-        
-        PDF pdf = new PDF();
-        pdf.createPdf(DEST);
+        Window w = new Window();
+        w.setVisible(true);
 
     }
 }
