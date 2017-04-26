@@ -5,25 +5,21 @@
  */
 package es.uvigo.esei.epyslab.fortrananalyser;
 
-import com.itextpdf.kernel.pdf.PdfDocument;
-import com.itextpdf.kernel.pdf.PdfWriter;
-import com.itextpdf.layout.Document;
-import com.itextpdf.layout.element.Paragraph;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 /**
+ * Main class that is called initially when the code is executed
  *
  * @author michael
+ * @version 1.0
  */
 public class Principal {
 
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
-    public static void main(String[] args) throws FileNotFoundException, IOException {
+    public static void main(String[] args) throws IOException {
         org.apache.log4j.BasicConfigurator.configure();
 
         Window w = new Window();
