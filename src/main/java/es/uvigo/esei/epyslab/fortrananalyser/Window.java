@@ -68,8 +68,10 @@ public class Window extends JFrame implements ActionListener {
     private String errorDirectoryEmpty = "Seleccione un directorio";
     private String exitMessage = "Análisis realizado.\nDocumento guardado en:\n" + Window.DEST + "\nTiempo: ";
     private String numberOfLines = "Número de líneas: ";
-    private String implicitNone = "Implicit none: ";
-    private String method = "Número de funciones: ";
+    private final String implicitNone = "Implicit none: ";
+    private String funtions = "Número de funciones: ";
+    private String comments = "Número de comentarios: ";
+    private String subroutines = "Número de llamadas a subrutinas: ";
 
     /**
      * Constructor from Class
@@ -286,10 +288,72 @@ public class Window extends JFrame implements ActionListener {
         result += "\n";
 
         //3.- count the number of functions declared
-        result += this.getMethod() + this.analyseNumDeclaredVariables(pathFile);
+        result += this.getMethod() + this.analyseNumFunctions(pathFile);
+        result += "\n";
 
+        //4.- count the number of subroutines calls
+        result += this.getSubroutines() + this.analyseNumCalls(pathFile);
+        result += "\n";
+
+        //5.- count the number of comments
+        result += this.getComments() + this.analyseNumComments(pathFile);
+        result += " \n";
+
+        //6.- good comments in file
+        
+        //7.- check the number of Nested loops
+        
+        
         return result;
 
+    }
+
+    
+    private String analyseNestedLoops(String filePath) throws IOException{
+        
+        String chain = "";
+        File file = new File(filePath);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+                if (chain.contains("FOR") || chain.contains("for")) {
+
+                }
+            }
+        }
+
+        return "";
+    }
+    
+    /**
+     * This method check if all comments are good. This is: 1.- the functions are
+     * commented after or before the declaration. 2.- the variables are commented
+     * after or before the declaration. 3.- the subrutines are commented after or
+     * befor the declaration. 4.- the three first or more lines of a file are
+     * commented.
+     *
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    private String analyseGoodComment(String filePath) throws IOException {
+
+        String chain = "";
+        File file = new File(filePath);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+                if (chain.contains("!")) {
+
+                }
+            }
+        }
+
+        return "";
     }
 
     /**
@@ -340,7 +404,14 @@ public class Window extends JFrame implements ActionListener {
         return false;
     }
 
-    private String analyseNumDeclaredVariables(String filePath) throws IOException {
+    /**
+     * This method analyse the number of functions in file filePath
+     *
+     * @param filePath The path from file to analyse
+     * @return the number of functions in this file
+     * @throws IOException
+     */
+    private String analyseNumFunctions(String filePath) throws IOException {
 
         int count = 0;
         String chain = "";
@@ -357,6 +428,56 @@ public class Window extends JFrame implements ActionListener {
         }
 
         return Integer.toString(count / 2);
+    }
+
+    /**
+     * This method analyse the number of subroutines are called in this file
+     *
+     * @param filePath the absolute path from file
+     * @return the number of subroutines calls
+     * @throws IOException
+     */
+    private String analyseNumCalls(String filePath) throws IOException {
+        int count = 0;
+        String chain = "";
+        File file = new File(filePath);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+                if (chain.contains("CALL") || chain.contains("call")) {
+                    count++;
+                }
+            }
+        }
+
+        return Integer.toString(count);
+    }
+
+    /**
+     * This methos analyse the number of comments are in a file
+     *
+     * @param filePath the absolute path of the file
+     * @return the number of comments
+     * @throws IOException
+     */
+    private String analyseNumComments(String filePath) throws IOException {
+        int count = 0;
+        String chain = "";
+        File file = new File(filePath);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+                if (chain.contains("!")) {
+                    count++;
+                }
+            }
+        }
+
+        return Integer.toString(count);
     }
 
     /**
@@ -437,6 +558,9 @@ public class Window extends JFrame implements ActionListener {
                     setNumberOfLines("Número de líneas: ");
                     setMethod("Número de funciones: ");
                     setSelectDirectory("Seleccione un directorio: ");
+                    setComments("Número de comentarios: ");
+                    setFuntions("Número de funciones: ");
+                    setSubroutines("Número de llamadas a subrutinas: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -458,6 +582,9 @@ public class Window extends JFrame implements ActionListener {
                     setNumberOfLines("Nombre de lignes: ");
                     setMethod("Nombre de fonctions: ");
                     setSelectDirectory("Seleccioné un répertoire: ");
+                    setComments("Nombre de commentaires: ");
+                    setFuntions("Nombre de fonctions: ");
+                    setSubroutines("Nombre d'apelles à des sous-routines: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -479,6 +606,9 @@ public class Window extends JFrame implements ActionListener {
                     setNumberOfLines("Número de liñas: ");
                     setMethod("Número de funcións: ");
                     setSelectDirectory("Seleccione un directorio: ");
+                    setComments("Número de comentarios: ");
+                    setFuntions("Número de funcións: ");
+                    setSubroutines("Número de chamadas a subrutinas: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -500,6 +630,9 @@ public class Window extends JFrame implements ActionListener {
                     setNumberOfLines("Number of lines: ");
                     setMethod("Number of functions: ");
                     setSelectDirectory("Select a directory: ");
+                    setComments("Number of comments: ");
+                    setFuntions("Number of functions: ");
+                    setSubroutines("Number of subroutines calls: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -660,7 +793,7 @@ public class Window extends JFrame implements ActionListener {
      * @return
      */
     public String getMethod() {
-        return method;
+        return funtions;
     }
 
     /**
@@ -669,7 +802,7 @@ public class Window extends JFrame implements ActionListener {
      * @param method
      */
     public void setMethod(String method) {
-        this.method = method;
+        this.funtions = method;
     }
 
     /**
@@ -689,4 +822,59 @@ public class Window extends JFrame implements ActionListener {
     public void setSelectDirectory(String selectDirectory) {
         this.selectDirectory = selectDirectory;
     }
+
+    /**
+     * Getter from funcitions
+     *
+     * @return
+     */
+    public String getFuntions() {
+        return funtions;
+    }
+
+    /**
+     * Setter of functions
+     *
+     * @param funtions
+     */
+    public void setFuntions(String funtions) {
+        this.funtions = funtions;
+    }
+
+    /**
+     * Getter of Comments
+     *
+     * @return
+     */
+    public String getComments() {
+        return comments;
+    }
+
+    /**
+     * Setter of Comments
+     *
+     * @param comments
+     */
+    public void setComments(String comments) {
+        this.comments = comments;
+    }
+
+    /**
+     * Getter of Subroutines
+     *
+     * @return
+     */
+    public String getSubroutines() {
+        return subroutines;
+    }
+
+    /**
+     * Setter of Subroutines
+     *
+     * @param subroutines
+     */
+    public void setSubroutines(String subroutines) {
+        this.subroutines = subroutines;
+    }
+
 }

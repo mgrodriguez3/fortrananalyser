@@ -25,7 +25,7 @@ import java.io.IOException;
 /**
  * This class create the document PDF with the quality report
  *
- * @author michael
+ * @author Michael García Rodríguez
  * @version 1.0
  */
 public class PDF {
@@ -34,6 +34,7 @@ public class PDF {
      * Variables from the class
      */
     private Document document;
+    private final static String AUTHOR = "Michael García Rodríguez";
 
     /**
      * Method that create the cover from the report document
@@ -70,7 +71,7 @@ public class PDF {
         Image coverImage = new Image(ImageDataFactory.create(COVER));
 
         coverImage.getAccessibilityProperties()
-                .setAlternateDescription("Fox");
+                .setAlternateDescription("EphySLab");
         coverImage.setHeight(350);
         coverImage.setWidth(350);
 
@@ -87,7 +88,7 @@ public class PDF {
 
         Paragraph p2 = new Paragraph();
 
-        p2.add(new Text("Michael García Rodríguez").setFont(arial).setFontSize(11).setFontColor(Color.BLACK).setTextAlignment(TextAlignment.RIGHT));
+        p2.add(new Text(PDF.AUTHOR).setFont(arial).setFontSize(11).setFontColor(Color.BLACK).setTextAlignment(TextAlignment.RIGHT));
 
         this.document.add(p2);
 

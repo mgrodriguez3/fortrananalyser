@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Main class that is called initially when the code is executed
  *
- * @author michael
+ * @author Michael García Rodríguez
  * @version 1.0
  */
 public class Principal {
