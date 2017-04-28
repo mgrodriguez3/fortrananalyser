@@ -14,6 +14,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Formatter;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,6 +74,10 @@ public class Window extends JFrame implements ActionListener {
     private String funtions = "Número de funciones: ";
     private String comments = "Número de comentarios: ";
     private String subroutines = "Número de llamadas a subrutinas: ";
+    private String goodComments = "Bien comentado en: ";
+    private String function = "funciones declaradas: ";
+    private String variable = "variables declaradas: ";
+    private String initDoc = "el inicio del archivo: ";
 
     /**
      * Constructor from Class
@@ -300,17 +306,16 @@ public class Window extends JFrame implements ActionListener {
         result += " \n";
 
         //6.- good comments in file
-        
+        result += this.getGoodComments() + this.analyseGoodComment(pathFile);
+        result += "\n";
+
         //7.- check the number of Nested loops
-        
-        
         return result;
 
     }
 
-    
-    private String analyseNestedLoops(String filePath) throws IOException{
-        
+    private String analyseNestedLoops(String filePath) throws IOException {
+
         String chain = "";
         File file = new File(filePath);
 
@@ -326,13 +331,13 @@ public class Window extends JFrame implements ActionListener {
 
         return "";
     }
-    
+
     /**
-     * This method check if all comments are good. This is: 1.- the functions are
-     * commented after or before the declaration. 2.- the variables are commented
-     * after or before the declaration. 3.- the subrutines are commented after or
-     * befor the declaration. 4.- the three first or more lines of a file are
-     * commented.
+     * This method check if all comments are good. This is: 1.- the functions
+     * are commented after or before the declaration. 2.- the variables are
+     * commented after or before the declaration. 3.- the subrutines are
+     * commented after or befor the declaration. 4.- the three first or more
+     * lines of a file are commented.
      *
      * @param filePath
      * @return
@@ -340,20 +345,69 @@ public class Window extends JFrame implements ActionListener {
      */
     private String analyseGoodComment(String filePath) throws IOException {
 
+        StringBuilder sb = new StringBuilder();
+        Formatter formatter = new Formatter(sb, Locale.ENGLISH);
+        
+        return "\n   -->" + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
+                +formatter.format("%1$2s", "\n   -->"+ this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)) ;
+    }
+
+    /**
+     * This method analyse if there is a good comment at the beginning of a file
+     *
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    private boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
+
         String chain = "";
+        int count = 0;
+        File file = new File(filePath);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null && count < 2) {
+               
+                if (chain.contains("!")) {
+                    count++;
+                }
+            }
+        }
+
+        return count > 1;
+    }
+
+    /**
+     * This method check if the functions delcared in a file have or not a
+     * comment. The comment can be after or before the declaration of the
+     * function. In addition, at the end of function there are no comments.
+     *
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    private boolean analyseGoodCommentFunctions(String filePath) throws IOException {
+
+        String chain = "";
+        String previousChain = "";
         File file = new File(filePath);
 
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-                if (chain.contains("!")) {
+                previousChain = chain;
 
+                if ((chain.contains("!") && (previousChain.contains("function") || previousChain.contains("FUNCTION")))
+                        || (chain.contains("function") || chain.contains("FUNCTION") && previousChain.contains("!"))
+                        && chain.contains("end function") || chain.contains("END FUNCTION")) {
+                    return true;
                 }
             }
         }
-
-        return "";
+        return false;
     }
 
     /**
@@ -561,6 +615,10 @@ public class Window extends JFrame implements ActionListener {
                     setComments("Número de comentarios: ");
                     setFuntions("Número de funciones: ");
                     setSubroutines("Número de llamadas a subrutinas: ");
+                    setGoodComments("Bien comentado en: ");
+                    setFunction("las funciones: ");
+                    setInitDoc("el inicio del archivo: ");
+                    setVariable("la declaración de cada variable: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -585,6 +643,10 @@ public class Window extends JFrame implements ActionListener {
                     setComments("Nombre de commentaires: ");
                     setFuntions("Nombre de fonctions: ");
                     setSubroutines("Nombre d'apelles à des sous-routines: ");
+                    setGoodComments("Commentaires valides dans: ");
+                    setFunction("les fonctions: ");
+                    setInitDoc("le début du document: ");
+                    setVariable("les variables déclarées: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -609,6 +671,10 @@ public class Window extends JFrame implements ActionListener {
                     setComments("Número de comentarios: ");
                     setFuntions("Número de funcións: ");
                     setSubroutines("Número de chamadas a subrutinas: ");
+                    setGoodComments("Bos comentarios: ");
+                    setFunction("nas funcións: ");
+                    setInitDoc("ao comezo do arquivo: ");
+                    setVariable("na declaración das variables: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -633,6 +699,10 @@ public class Window extends JFrame implements ActionListener {
                     setComments("Number of comments: ");
                     setFuntions("Number of functions: ");
                     setSubroutines("Number of subroutines calls: ");
+                    setGoodComments("Good comments at: ");
+                    setFunction("functions: ");
+                    setInitDoc("the beginning of the file: ");
+                    setVariable("the declarations of the variables: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -875,6 +945,78 @@ public class Window extends JFrame implements ActionListener {
      */
     public void setSubroutines(String subroutines) {
         this.subroutines = subroutines;
+    }
+
+    /**
+     * Getter of goodComments
+     *
+     * @return
+     */
+    public String getGoodComments() {
+        return goodComments;
+    }
+
+    /**
+     * Setter of goodComments
+     *
+     * @param goodComments
+     */
+    public void setGoodComments(String goodComments) {
+        this.goodComments = goodComments;
+    }
+
+    /**
+     * Getter of function
+     *
+     * @return
+     */
+    public String getFunction() {
+        return function;
+    }
+
+    /**
+     * Setter of function
+     *
+     * @param function
+     */
+    public void setFunction(String function) {
+        this.function = function;
+    }
+
+    /**
+     * Getter of variable
+     *
+     * @return
+     */
+    public String getVariable() {
+        return variable;
+    }
+
+    /**
+     * Setter of variable
+     *
+     * @param variable
+     */
+    public void setVariable(String variable) {
+        this.variable = variable;
+    }
+
+    /**
+     * Getter of initDoc
+     *
+     * @return
+     */
+    public String getInitDoc() {
+        return initDoc;
+    }
+
+    /**
+     * Setter of initDoc
+     *
+     * @param initDoc
+     */
+    public void setInitDoc(String initDoc) {
+        this.initDoc = initDoc;
     }
 
 }
