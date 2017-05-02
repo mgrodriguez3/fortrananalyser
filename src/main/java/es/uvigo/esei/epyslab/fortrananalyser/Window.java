@@ -76,8 +76,9 @@ public class Window extends JFrame implements ActionListener {
     private String subroutines = "Número de llamadas a subrutinas: ";
     private String goodComments = "Bien comentado en: ";
     private String function = "funciones declaradas: ";
-    private String variable = "variables declaradas: ";
+    private String numVariables = "Número de variables declaradas: ";
     private String initDoc = "el inicio del archivo: ";
+    private String variables = "variables:";
 
     /**
      * Constructor from Class
@@ -305,11 +306,15 @@ public class Window extends JFrame implements ActionListener {
         result += this.getComments() + this.analyseNumComments(pathFile);
         result += " \n";
 
-        //6.- good comments in file
+        //6.- count the number of variables declared
+        result += this.getNumVariable() + this.analyseNumberOfDeclaredVariables(pathFile);
+        result += "\n";
+
+        //7.- good comments in file
         result += this.getGoodComments() + this.analyseGoodComment(pathFile);
         result += "\n";
 
-        //7.- check the number of Nested loops
+        //8.- check the Nested loops
         return result;
 
     }
@@ -333,6 +338,31 @@ public class Window extends JFrame implements ActionListener {
     }
 
     /**
+     * This method count the number of declared variables in a file
+     *
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    private int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
+        String chain = "";
+        int count = 0;
+        File file = new File(filePath);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+                if (chain.contains("::")) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    /**
      * This method check if all comments are good. This is: 1.- the functions
      * are commented after or before the declaration. 2.- the variables are
      * commented after or before the declaration. 3.- the subrutines are
@@ -347,9 +377,10 @@ public class Window extends JFrame implements ActionListener {
 
         StringBuilder sb = new StringBuilder();
         Formatter formatter = new Formatter(sb, Locale.ENGLISH);
-        
-        return "\n   -->" + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
-                +formatter.format("%1$2s", "\n   -->"+ this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)) ;
+
+        return "\n   --> " + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
+                + "\n   --> " + this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)
+                + "\n   --> " + this.getVariables();
     }
 
     /**
@@ -369,7 +400,7 @@ public class Window extends JFrame implements ActionListener {
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null && count < 2) {
-               
+
                 if (chain.contains("!")) {
                     count++;
                 }
@@ -380,9 +411,9 @@ public class Window extends JFrame implements ActionListener {
     }
 
     /**
-     * This method check if the functions delcared in a file have or not a
+     * This method check if the functions delcared in a file have or not have a
      * comment. The comment can be after or before the declaration of the
-     * function. In addition, at the end of function there are no comments.
+     * function. In addition, at the end of functions there are no comments.
      *
      * @param filePath
      * @return
@@ -393,21 +424,32 @@ public class Window extends JFrame implements ActionListener {
         String chain = "";
         String previousChain = "";
         File file = new File(filePath);
+        int numFunction = 0;
+        int totalFunctions = 0;
 
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-                previousChain = chain;
 
-                if ((chain.contains("!") && (previousChain.contains("function") || previousChain.contains("FUNCTION")))
-                        || (chain.contains("function") || chain.contains("FUNCTION") && previousChain.contains("!"))
-                        && chain.contains("end function") || chain.contains("END FUNCTION")) {
-                    return true;
+                //check if it is a declaration of a function
+                if (!chain.contains("!")
+                        && !chain.contains(" end function")
+                        && !chain.contains("END FUNCTION")
+                        && (chain.contains("function")
+                        || chain.contains("FUNCTION"))) {
+                    totalFunctions++;
+
+                    //check if the next line is a comment or the previous line
+                    //is a comment
+                    if (b.readLine().contains("!") || previousChain.contains("!")) {
+                        numFunction++;
+                    }
                 }
+                previousChain = chain;
             }
         }
-        return false;
+        return totalFunctions == numFunction;
     }
 
     /**
@@ -450,7 +492,7 @@ public class Window extends JFrame implements ActionListener {
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-                if ((chain.contains("IMPLICIT NONE")) || (chain.contains("implicit none"))) {
+                if (!chain.contains("!") && (chain.contains("IMPLICIT NONE")) || (chain.contains("implicit none"))) {
                     return true;
                 }
             }
@@ -475,7 +517,9 @@ public class Window extends JFrame implements ActionListener {
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-                if (chain.contains("FUNCTION") || chain.contains("function")) {
+                if (!chain.contains("!")
+                        && (!chain.contains("END FUNCTION") || !chain.contains("end function"))
+                        && (chain.contains("FUNCTION") || chain.contains("function"))) {
                     count++;
                 }
             }
@@ -500,7 +544,7 @@ public class Window extends JFrame implements ActionListener {
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-                if (chain.contains("CALL") || chain.contains("call")) {
+                if (!chain.contains("!") && (chain.contains("CALL") || chain.contains("call"))) {
                     count++;
                 }
             }
@@ -618,7 +662,7 @@ public class Window extends JFrame implements ActionListener {
                     setGoodComments("Bien comentado en: ");
                     setFunction("las funciones: ");
                     setInitDoc("el inicio del archivo: ");
-                    setVariable("la declaración de cada variable: ");
+                    setNumVariable("la declaración de cada variable: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -646,7 +690,7 @@ public class Window extends JFrame implements ActionListener {
                     setGoodComments("Commentaires valides dans: ");
                     setFunction("les fonctions: ");
                     setInitDoc("le début du document: ");
-                    setVariable("les variables déclarées: ");
+                    setNumVariable("les variables déclarées: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -674,7 +718,7 @@ public class Window extends JFrame implements ActionListener {
                     setGoodComments("Bos comentarios: ");
                     setFunction("nas funcións: ");
                     setInitDoc("ao comezo do arquivo: ");
-                    setVariable("na declaración das variables: ");
+                    setNumVariable("na declaración das variables: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -702,7 +746,7 @@ public class Window extends JFrame implements ActionListener {
                     setGoodComments("Good comments at: ");
                     setFunction("functions: ");
                     setInitDoc("the beginning of the file: ");
-                    setVariable("the declarations of the variables: ");
+                    setNumVariable("the declarations of the variables: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -988,8 +1032,8 @@ public class Window extends JFrame implements ActionListener {
      *
      * @return
      */
-    public String getVariable() {
-        return variable;
+    public String getNumVariable() {
+        return numVariables;
     }
 
     /**
@@ -997,8 +1041,8 @@ public class Window extends JFrame implements ActionListener {
      *
      * @param variable
      */
-    public void setVariable(String variable) {
-        this.variable = variable;
+    public void setNumVariable(String variable) {
+        this.numVariables = variable;
     }
 
     /**
@@ -1017,6 +1061,24 @@ public class Window extends JFrame implements ActionListener {
      */
     public void setInitDoc(String initDoc) {
         this.initDoc = initDoc;
+    }
+
+    /**
+     * Getter of variables
+     *
+     * @return
+     */
+    public String getVariables() {
+        return variables;
+    }
+
+    /**
+     * Setter of variables
+     *
+     * @param variables
+     */
+    public void setVariables(String variables) {
+        this.variables = variables;
     }
 
 }
