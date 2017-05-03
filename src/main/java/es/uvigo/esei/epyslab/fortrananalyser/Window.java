@@ -832,7 +832,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from NameButtonAnalyse
      *
-     * @return
+     * @return nameButtonAnalyse
      */
     public String getNameButtonAnalyse() {
         return nameButtonAnalyse;
@@ -850,7 +850,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from NameButtonExit
      *
-     * @return
+     * @return nameButtonExit
      */
     public String getNameButtonExit() {
         return nameButtonExit;
@@ -868,7 +868,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from NameButtonSpanish
      *
-     * @return
+     * @return nameButtonSpanish
      */
     public String getNameButtonSpanish() {
         return nameButtonSpanish;
@@ -877,7 +877,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from NameButtonEnglish
      *
-     * @return
+     * @return nameButtonEnglish
      */
     public String getNameButtonEnglish() {
         return nameButtonEnglish;
@@ -886,7 +886,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from NameButtonFrench
      *
-     * @return
+     * @return nameButtonFrench
      */
     public String getNameButtonFrench() {
         return nameButtonFrench;
@@ -895,7 +895,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from NameButtonGalician
      *
-     * @return
+     * @return nameButtonGalician
      */
     public String getNameButtonGalician() {
         return nameButtonGalician;
@@ -904,7 +904,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from NameMenu
      *
-     * @return
+     * @return nameMenu
      */
     public String getNameMenu() {
         return nameMenu;
@@ -922,7 +922,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from ErrorDirectoryEmpty
      *
-     * @return
+     * @return errorDirectory
      */
     public String getErrorDirectoryEmpty() {
         return errorDirectoryEmpty;
@@ -940,7 +940,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from ExitMessage
      *
-     * @return
+     * @return exitMessage
      */
     public String getExitMessage() {
         return exitMessage;
@@ -958,7 +958,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from NumberOfLines
      *
-     * @return
+     * @return numberOfLines
      */
     public String getNumberOfLines() {
         return numberOfLines;
@@ -976,7 +976,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from number of functions
      *
-     * @return
+     * @return method
      */
     public String getMethod() {
         return funtions;
@@ -994,7 +994,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from selectDirectory
      *
-     * @return
+     * @return directory selected
      */
     public String getSelectDirectory() {
         return selectDirectory;
@@ -1012,7 +1012,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter from funcitions
      *
-     * @return
+     * @return functions
      */
     public String getFuntions() {
         return funtions;
@@ -1030,7 +1030,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter of Comments
      *
-     * @return
+     * @return comments
      */
     public String getComments() {
         return comments;
@@ -1048,7 +1048,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter of Subroutines
      *
-     * @return
+     * @return subroutines
      */
     public String getSubroutines() {
         return subroutines;
@@ -1066,7 +1066,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter of goodComments
      *
-     * @return
+     * @return goodComments
      */
     public String getGoodComments() {
         return goodComments;
@@ -1084,7 +1084,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter of function
      *
-     * @return
+     * @return functions
      */
     public String getFunction() {
         return function;
@@ -1102,7 +1102,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter of variable
      *
-     * @return
+     * @return numVariable
      */
     public String getNumVariable() {
         return numVariables;
@@ -1120,7 +1120,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter of initDoc
      *
-     * @return
+     * @return InitDoc
      */
     public String getInitDoc() {
         return initDoc;
@@ -1138,7 +1138,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter of variables
      *
-     * @return
+     * @return variables
      */
     public String getVariables() {
         return variables;
@@ -1156,7 +1156,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter NestedLoops
      *
-     * @return
+     * @return nestedLoops
      */
     public String getNestedLoops() {
         return nestedLoops;
