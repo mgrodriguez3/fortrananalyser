@@ -14,11 +14,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Formatter;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -79,6 +79,7 @@ public class Window extends JFrame implements ActionListener {
     private String numVariables = "Número de variables declaradas: ";
     private String initDoc = "el inicio del archivo: ";
     private String variables = "variables:";
+    private String nestedLoops = "Cumple con la complejidad máxima de anidamiento de los bucles: ";
 
     /**
      * Constructor from Class
@@ -315,33 +316,62 @@ public class Window extends JFrame implements ActionListener {
         result += "\n";
 
         //8.- check the Nested loops
+        result += this.getNestedLoops() + this.analyseNestedLoops(pathFile);
+        result += "\n";
         return result;
 
     }
 
-    private String analyseNestedLoops(String filePath) throws IOException {
+    /**
+     * This method analyse the number of Nested loops there are. If this number
+     * is greater than 3 or smaller than 0 or this line have a comment , it is
+     * consider a bad programming practice.
+     *
+     * @param filePath
+     * @return boolean
+     * @throws IOException
+     */
+    private boolean analyseNestedLoops(String filePath) throws IOException {
 
         String chain = "";
+        int nestedLoops = 0;
         File file = new File(filePath);
-
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-                if (chain.contains("FOR") || chain.contains("for")) {
+
+                if (!chain.contains("!")
+                        && !chain.contains("END DO")
+                        && chain.contains("DO")) {
+
+                    nestedLoops++;
+                    if (nestedLoops > 3) {
+                        return false;
+                    }
 
                 }
+
+                if (!chain.contains("!")
+                        && chain.contains("END DO")) {
+                    nestedLoops--;
+                    if (nestedLoops < 0) {
+                        return false;
+                    }
+                }
+
             }
+
         }
 
-        return "";
+        return true;
     }
 
     /**
      * This method count the number of declared variables in a file
      *
      * @param filePath
-     * @return
+     * @return the number of declared variables
      * @throws IOException
      */
     private int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
@@ -370,24 +400,58 @@ public class Window extends JFrame implements ActionListener {
      * lines of a file are commented.
      *
      * @param filePath
-     * @return
+     * @return the paragraph to add to the pdf file
      * @throws IOException
      */
     private String analyseGoodComment(String filePath) throws IOException {
 
         StringBuilder sb = new StringBuilder();
-        Formatter formatter = new Formatter(sb, Locale.ENGLISH);
 
         return "\n   --> " + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
                 + "\n   --> " + this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)
-                + "\n   --> " + this.getVariables();
+                + "\n   --> " + this.getVariables() + this.analyseGoodCommentedVariables(filePath);
+    }
+
+    /**
+     * This method analyse if for each variable, there is a comment to describe
+     * what it done.
+     *
+     * @param filePath
+     * @return boolean
+     * @throws IOException
+     */
+    private boolean analyseGoodCommentedVariables(String filePath) throws IOException {
+        String chain = "";
+        File file = new File(filePath);
+        int variablesCommented = 0;
+        int totalVariables = 0;
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+
+                //check if the chain is a declaration of a variable and
+                //it is not a comment 
+                if (chain.contains("::")) {
+
+                    totalVariables++;
+
+                    if (chain.contains("!")) {
+                        variablesCommented++;
+                    }
+
+                }
+            }
+        }
+        return totalVariables == variablesCommented;
     }
 
     /**
      * This method analyse if there is a good comment at the beginning of a file
      *
      * @param filePath
-     * @return
+     * @return boolean
      * @throws IOException
      */
     private boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
@@ -416,7 +480,7 @@ public class Window extends JFrame implements ActionListener {
      * function. In addition, at the end of functions there are no comments.
      *
      * @param filePath
-     * @return
+     * @return boolean
      * @throws IOException
      */
     private boolean analyseGoodCommentFunctions(String filePath) throws IOException {
@@ -480,7 +544,7 @@ public class Window extends JFrame implements ActionListener {
      * This method analyse if the sentence implicit none is used
      *
      * @param filePath
-     * @return
+     * @return boolean
      * @throws IOException
      */
     private boolean analyseUseImplicitNone(String filePath) throws IOException {
@@ -641,6 +705,10 @@ public class Window extends JFrame implements ActionListener {
         return sb.toString();
     }
 
+    /**
+     * This method update the parameters in the lenguage selected by the user.
+     * @param lang 
+     */
     private void changeLanguage(String lang) {
 
         switch (lang) {
@@ -663,6 +731,7 @@ public class Window extends JFrame implements ActionListener {
                     setFunction("las funciones: ");
                     setInitDoc("el inicio del archivo: ");
                     setNumVariable("la declaración de cada variable: ");
+                    setNestedLoops("Cumple con la complejidad máxima de anidamiento de los bucles: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -691,6 +760,7 @@ public class Window extends JFrame implements ActionListener {
                     setFunction("les fonctions: ");
                     setInitDoc("le début du document: ");
                     setNumVariable("les variables déclarées: ");
+                    setNestedLoops("il n'a pas l'imbrication très complexe:");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -719,6 +789,7 @@ public class Window extends JFrame implements ActionListener {
                     setFunction("nas funcións: ");
                     setInitDoc("ao comezo do arquivo: ");
                     setNumVariable("na declaración das variables: ");
+                    setNestedLoops("Cumple coa complexidade máxima de anidamento dos bucles: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -747,6 +818,7 @@ public class Window extends JFrame implements ActionListener {
                     setFunction("functions: ");
                     setInitDoc("the beginning of the file: ");
                     setNumVariable("the declarations of the variables: ");
+                    setNestedLoops("The complexity of the loops is not hight: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -1079,6 +1151,24 @@ public class Window extends JFrame implements ActionListener {
      */
     public void setVariables(String variables) {
         this.variables = variables;
+    }
+
+    /**
+     * Getter NestedLoops
+     *
+     * @return
+     */
+    public String getNestedLoops() {
+        return nestedLoops;
+    }
+
+    /**
+     * Setter nestedLoops
+     *
+     * @param nestedLoops
+     */
+    public void setNestedLoops(String nestedLoops) {
+        this.nestedLoops = nestedLoops;
     }
 
 }
