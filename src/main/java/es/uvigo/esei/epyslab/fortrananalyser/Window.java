@@ -53,7 +53,7 @@ public class Window extends JFrame implements ActionListener {
     private JMenu menuLanguages;
     private JMenuItem spanish, galician, english, french;
     private static final String EXTENSION = "txt";
-    private static final String DEST = System.getProperty("user.home") + "/temp/QualityInform.pdf";
+    private static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
 
     /**
      * By default, the selected language is Spanish
@@ -73,13 +73,15 @@ public class Window extends JFrame implements ActionListener {
     private final String implicitNone = "Implicit none: ";
     private String funtions = "Número de funciones: ";
     private String comments = "Número de comentarios: ";
-    private String subroutines = "Número de llamadas a subrutinas: ";
+    private String subroutinesCall = "Número de llamadas a subrutinas: ";
+    private String subroutines = "Número de subrutinas: ";
     private String goodComments = "Bien comentado en: ";
     private String function = "funciones declaradas: ";
     private String numVariables = "Número de variables declaradas: ";
     private String initDoc = "el inicio del archivo: ";
-    private String variables = "variables:";
+    private String variables = "declaración de variables:";
     private String nestedLoops = "Cumple con la complejidad máxima de anidamiento de los bucles: ";
+    private String commentSubroutines = "declaración de subrutinas: ";
 
     /**
      * Constructor from Class
@@ -300,7 +302,7 @@ public class Window extends JFrame implements ActionListener {
         result += "\n";
 
         //4.- count the number of subroutines calls
-        result += this.getSubroutines() + this.analyseNumCalls(pathFile);
+        result += this.getSubroutinesCall() + this.analyseNumCalls(pathFile);
         result += "\n";
 
         //5.- count the number of comments
@@ -318,8 +320,41 @@ public class Window extends JFrame implements ActionListener {
         //8.- check the Nested loops
         result += this.getNestedLoops() + this.analyseNestedLoops(pathFile);
         result += "\n";
+
+        //9.- check the number of declared subroutines
+        result += this.getSubroutines() + this.analyseNumberSubroutines(pathFile);
+        result += "\n";
+
         return result;
 
+    }
+
+    /**
+     * This method analyse the number of subroutines declared in a file
+     *
+     * @param filePath
+     * @return the number of subroutines
+     * @throws IOException
+     */
+    private int analyseNumberSubroutines(String filePath) throws IOException {
+
+        String chain = "";
+        int count = 0;
+        File file = new File(filePath);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+                if ((chain.contains("subroutine") || chain.contains("SUBROUTINE"))
+                        && !chain.contains("!")
+                        && (chain.contains("end subroutine") || chain.contains("END SUBROUTINE"))) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
     }
 
     /**
@@ -409,7 +444,48 @@ public class Window extends JFrame implements ActionListener {
 
         return "\n   --> " + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
                 + "\n   --> " + this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)
-                + "\n   --> " + this.getVariables() + this.analyseGoodCommentedVariables(filePath);
+                + "\n   --> " + this.getVariables() + this.analyseGoodCommentedVariables(filePath)
+                + "\n   --> " + this.getCommentSubroutines() + this.analyseGoodCommentSubroutines(filePath);
+
+    }
+
+    /**
+     * This method analyse if the declaration of subroutine is commented
+     *
+     * @param filePath
+     * @return boolean
+     * @throws IOException
+     */
+    private boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
+        String chain = "";
+        String previousChain = "";
+        File file = new File(filePath);
+        int numSubroutines = 0;
+        int totalSubroutines = 0;
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+
+                //check if it is a declaration of a function
+                if (!chain.contains("!")
+                        && !chain.contains(" end subroutine")
+                        && !chain.contains("END SUBROUTINE")
+                        && (chain.contains("subroutine")
+                        || chain.contains("SUBROUTINE"))) {
+                    totalSubroutines++;
+
+                    //check if the next line is a comment or the previous line
+                    //is a comment
+                    if (b.readLine().contains("!") || previousChain.contains("!")) {
+                        numSubroutines++;
+                    }
+                }
+                previousChain = chain;
+            }
+        }
+        return totalSubroutines == numSubroutines;
     }
 
     /**
@@ -707,7 +783,9 @@ public class Window extends JFrame implements ActionListener {
 
     /**
      * This method update the parameters in the lenguage selected by the user.
-     * @param lang 
+     * es: spanish, fr: french, gl: galician, en: english
+     *
+     * @param lang
      */
     private void changeLanguage(String lang) {
 
@@ -726,12 +804,15 @@ public class Window extends JFrame implements ActionListener {
                     setSelectDirectory("Seleccione un directorio: ");
                     setComments("Número de comentarios: ");
                     setFuntions("Número de funciones: ");
-                    setSubroutines("Número de llamadas a subrutinas: ");
+                    setSubroutinesCall("Número de llamadas a subrutinas: ");
                     setGoodComments("Bien comentado en: ");
                     setFunction("las funciones: ");
                     setInitDoc("el inicio del archivo: ");
                     setNumVariable("la declaración de cada variable: ");
                     setNestedLoops("Cumple con la complejidad máxima de anidamiento de los bucles: ");
+                    setSubroutines("Número de subrutinas: ");
+                    setVariables("declaración de variables: ");
+                    setCommentSubroutines("declaración de subrutinas: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -755,12 +836,15 @@ public class Window extends JFrame implements ActionListener {
                     setSelectDirectory("Seleccioné un répertoire: ");
                     setComments("Nombre de commentaires: ");
                     setFuntions("Nombre de fonctions: ");
-                    setSubroutines("Nombre d'apelles à des sous-routines: ");
+                    setSubroutinesCall("Nombre d'apelles à des sous-routines: ");
                     setGoodComments("Commentaires valides dans: ");
                     setFunction("les fonctions: ");
                     setInitDoc("le début du document: ");
                     setNumVariable("les variables déclarées: ");
                     setNestedLoops("il n'a pas l'imbrication très complexe:");
+                    setSubroutines("Nombre de sous-routines: ");
+                    setVariables("déclaration des variables: ");
+                    setCommentSubroutines("déclaration des sous-routines: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -784,12 +868,15 @@ public class Window extends JFrame implements ActionListener {
                     setSelectDirectory("Seleccione un directorio: ");
                     setComments("Número de comentarios: ");
                     setFuntions("Número de funcións: ");
-                    setSubroutines("Número de chamadas a subrutinas: ");
+                    setSubroutinesCall("Número de chamadas a subrutinas: ");
                     setGoodComments("Bos comentarios: ");
                     setFunction("nas funcións: ");
                     setInitDoc("ao comezo do arquivo: ");
                     setNumVariable("na declaración das variables: ");
                     setNestedLoops("Cumple coa complexidade máxima de anidamento dos bucles: ");
+                    setSubroutines("Número de subrutinas: ");
+                    setVariables("declaración das variables: ");
+                    setCommentSubroutines("declaración das subrutinas: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -813,12 +900,15 @@ public class Window extends JFrame implements ActionListener {
                     setSelectDirectory("Select a directory: ");
                     setComments("Number of comments: ");
                     setFuntions("Number of functions: ");
-                    setSubroutines("Number of subroutines calls: ");
+                    setSubroutinesCall("Number of subroutines calls: ");
                     setGoodComments("Good comments at: ");
                     setFunction("functions: ");
                     setInitDoc("the beginning of the file: ");
                     setNumVariable("the declarations of the variables: ");
                     setNestedLoops("The complexity of the loops is not hight: ");
+                    setSubroutines("Number of subroutines: ");
+                    setVariables("declared variables: ");
+                    setCommentSubroutines("declared subroutines: ");
 
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
@@ -1169,6 +1259,42 @@ public class Window extends JFrame implements ActionListener {
      */
     public void setNestedLoops(String nestedLoops) {
         this.nestedLoops = nestedLoops;
+    }
+
+    /**
+     * Getter subroutinesCall
+     *
+     * @return subroutinesCall
+     */
+    public String getSubroutinesCall() {
+        return subroutinesCall;
+    }
+
+    /**
+     * Setter subroutinesCall
+     *
+     * @param subroutinesCall
+     */
+    public void setSubroutinesCall(String subroutinesCall) {
+        this.subroutinesCall = subroutinesCall;
+    }
+
+    /**
+     * Getter commentSubroutines
+     *
+     * @return commentSubroutines
+     */
+    public String getCommentSubroutines() {
+        return commentSubroutines;
+    }
+
+    /**
+     * Setter commentSubroutines
+     *
+     * @param commentSubroutines
+     */
+    public void setCommentSubroutines(String commentSubroutines) {
+        this.commentSubroutines = commentSubroutines;
     }
 
 }
