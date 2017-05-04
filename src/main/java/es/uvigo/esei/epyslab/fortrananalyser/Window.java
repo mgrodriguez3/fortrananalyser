@@ -51,8 +51,7 @@ public class Window extends JFrame implements ActionListener {
     private JMenu menuLanguages;
     private JMenuItem spanish, galician, english, french;
     private static final String EXTENSION = "txt";
-    private static String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
-                
+    private static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
 
     /**
      * By default, the selected language is Spanish
@@ -109,6 +108,7 @@ public class Window extends JFrame implements ActionListener {
         this.setLayout(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
     }
 
     /**
@@ -148,6 +148,7 @@ public class Window extends JFrame implements ActionListener {
 
         this.fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
+        //Configure MenuBar
         this.menuLanguages = new JMenu(this.getNameMenu());
         this.mb.add(menuLanguages);
 
@@ -441,10 +442,10 @@ public class Window extends JFrame implements ActionListener {
 
         StringBuilder sb = new StringBuilder();
 
-        return "\n"+"   \t--> " + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
-                + "\n"+"   \t--> " + this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)
-                + "\n"+"   \t--> " + this.getVariables() + this.analyseGoodCommentedVariables(filePath)
-                + "\n"+"   \t--> " + this.getCommentSubroutines() + this.analyseGoodCommentSubroutines(filePath);
+        return "\n\t--> " + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
+                + "\n\t--> " + this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)
+                + "\n\t--> " + this.getVariables() + this.analyseGoodCommentedVariables(filePath)
+                + "\n\t--> " + this.getCommentSubroutines() + this.analyseGoodCommentSubroutines(filePath);
 
     }
 
@@ -792,6 +793,7 @@ public class Window extends JFrame implements ActionListener {
             case "es":
                 if (!this.selectedLanguage.equals("es")) {
 
+                    //translate the text
                     this.selectedLanguage = "es";
                     setNameButtonAnalyse("Analizar");
                     setNameButtonExit("Salir");
@@ -813,10 +815,32 @@ public class Window extends JFrame implements ActionListener {
                     setVariables("declaración de variables: ");
                     setCommentSubroutines("declaración de subrutinas: ");
 
+                    //configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
-                    this.menuLanguages.setName(this.getNameMenu());
                     this.text.setText(this.getSelectDirectory());
+
+                    //Configure MenuBar
+                    this.mb.remove(menuLanguages);
+                    this.menuLanguages.setName(this.getNameMenu());
+                    this.menuLanguages = new JMenu(this.getNameMenu());
+                    this.mb.add(menuLanguages);
+
+                    this.spanish = new JMenuItem(this.getNameButtonSpanish());
+                    this.spanish.addActionListener(this);
+                    this.menuLanguages.add(spanish);
+
+                    this.galician = new JMenuItem(this.getNameButtonGalician());
+                    this.galician.addActionListener(this);
+                    this.menuLanguages.add(galician);
+
+                    this.english = new JMenuItem(this.getNameButtonEnglish());
+                    this.english.addActionListener(this);
+                    this.menuLanguages.add(english);
+
+                    this.french = new JMenuItem(this.getNameButtonFrench());
+                    this.french.addActionListener(this);
+                    this.menuLanguages.add(french);
 
                 }
                 break;
@@ -824,6 +848,7 @@ public class Window extends JFrame implements ActionListener {
             case "fr":
                 if (!this.selectedLanguage.equals("fr")) {
 
+                    //translate the text
                     this.selectedLanguage = "fr";
                     setNameButtonAnalyse("Analyzer");
                     setNameButtonExit("Sortir");
@@ -845,10 +870,32 @@ public class Window extends JFrame implements ActionListener {
                     setVariables("déclaration des variables: ");
                     setCommentSubroutines("déclaration des sous-routines: ");
 
+                    //Configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
-                    this.menuLanguages.setName(this.getNameMenu());
                     this.text.setText(this.getSelectDirectory());
+
+                    //Configure MenuBar
+                    this.mb.remove(menuLanguages);
+                    this.menuLanguages.setName(this.getNameMenu());
+                    this.menuLanguages = new JMenu(this.getNameMenu());
+                    this.mb.add(menuLanguages);
+
+                    this.spanish = new JMenuItem(this.getNameButtonSpanish());
+                    this.spanish.addActionListener(this);
+                    this.menuLanguages.add(spanish);
+
+                    this.galician = new JMenuItem(this.getNameButtonGalician());
+                    this.galician.addActionListener(this);
+                    this.menuLanguages.add(galician);
+
+                    this.english = new JMenuItem(this.getNameButtonEnglish());
+                    this.english.addActionListener(this);
+                    this.menuLanguages.add(english);
+
+                    this.french = new JMenuItem(this.getNameButtonFrench());
+                    this.french.addActionListener(this);
+                    this.menuLanguages.add(french);
 
                 }
                 break;
@@ -856,6 +903,7 @@ public class Window extends JFrame implements ActionListener {
             case "gl":
                 if (!this.selectedLanguage.equals("gl")) {
 
+                    //translate the text
                     this.selectedLanguage = "gl";
                     setNameButtonAnalyse("Análise");
                     setNameButtonExit("Saír");
@@ -877,10 +925,32 @@ public class Window extends JFrame implements ActionListener {
                     setVariables("declaración das variables: ");
                     setCommentSubroutines("declaración das subrutinas: ");
 
+                    //configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
-                    this.menuLanguages.setName(this.getNameMenu());
                     this.text.setText(this.getSelectDirectory());
+
+                    //Configure MenuBar
+                    this.mb.remove(menuLanguages);
+                    this.menuLanguages.setName(this.getNameMenu());
+                    this.menuLanguages = new JMenu(this.getNameMenu());
+                    this.mb.add(menuLanguages);
+
+                    this.spanish = new JMenuItem(this.getNameButtonSpanish());
+                    this.spanish.addActionListener(this);
+                    this.menuLanguages.add(spanish);
+
+                    this.galician = new JMenuItem(this.getNameButtonGalician());
+                    this.galician.addActionListener(this);
+                    this.menuLanguages.add(galician);
+
+                    this.english = new JMenuItem(this.getNameButtonEnglish());
+                    this.english.addActionListener(this);
+                    this.menuLanguages.add(english);
+
+                    this.french = new JMenuItem(this.getNameButtonFrench());
+                    this.french.addActionListener(this);
+                    this.menuLanguages.add(french);
 
                 }
                 break;
@@ -888,6 +958,7 @@ public class Window extends JFrame implements ActionListener {
             case "en":
                 if (!this.selectedLanguage.equals("en")) {
 
+                    //translate the text
                     this.selectedLanguage = "es";
                     setNameButtonAnalyse("Analyse");
                     setNameButtonExit("Exit");
@@ -909,10 +980,32 @@ public class Window extends JFrame implements ActionListener {
                     setVariables("declared variables: ");
                     setCommentSubroutines("declared subroutines: ");
 
+                    //configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
                     this.buttonExit.setText(this.getNameButtonExit());
-                    this.menuLanguages.setName(this.getNameMenu());
                     this.text.setText(this.getSelectDirectory());
+
+                    //Configure MenuBar
+                    this.mb.remove(menuLanguages);
+                    this.menuLanguages.setName(this.getNameMenu());
+                    this.menuLanguages = new JMenu(this.getNameMenu());
+                    this.mb.add(menuLanguages);
+
+                    this.spanish = new JMenuItem(this.getNameButtonSpanish());
+                    this.spanish.addActionListener(this);
+                    this.menuLanguages.add(spanish);
+
+                    this.galician = new JMenuItem(this.getNameButtonGalician());
+                    this.galician.addActionListener(this);
+                    this.menuLanguages.add(galician);
+
+                    this.english = new JMenuItem(this.getNameButtonEnglish());
+                    this.english.addActionListener(this);
+                    this.menuLanguages.add(english);
+
+                    this.french = new JMenuItem(this.getNameButtonFrench());
+                    this.french.addActionListener(this);
+                    this.menuLanguages.add(french);
                 }
                 break;
         }
