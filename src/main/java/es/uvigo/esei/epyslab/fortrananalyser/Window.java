@@ -17,8 +17,6 @@ import java.nio.file.Paths;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -53,7 +51,8 @@ public class Window extends JFrame implements ActionListener {
     private JMenu menuLanguages;
     private JMenuItem spanish, galician, english, french;
     private static final String EXTENSION = "txt";
-    private static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
+    private static String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
+                
 
     /**
      * By default, the selected language is Spanish
@@ -242,14 +241,14 @@ public class Window extends JFrame implements ActionListener {
 
         try {
 
-            pdf = new PDF();
-            pdf.createPdf(Window.DEST);
-
             List<File> filesInFolder;
             String auxDir = "";
+            pdf = new PDF();
 
             //start the duration of the analysis
             long timeStart = System.currentTimeMillis();
+
+            pdf.createPdf(Window.DEST);
 
             filesInFolder = Files.walk(Paths.get(directory))
                     .filter(Files::isRegularFile)
@@ -442,10 +441,10 @@ public class Window extends JFrame implements ActionListener {
 
         StringBuilder sb = new StringBuilder();
 
-        return "\n   --> " + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
-                + "\n   --> " + this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)
-                + "\n   --> " + this.getVariables() + this.analyseGoodCommentedVariables(filePath)
-                + "\n   --> " + this.getCommentSubroutines() + this.analyseGoodCommentSubroutines(filePath);
+        return "\n"+"   \t--> " + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
+                + "\n"+"   \t--> " + this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)
+                + "\n"+"   \t--> " + this.getVariables() + this.analyseGoodCommentedVariables(filePath)
+                + "\n"+"   \t--> " + this.getCommentSubroutines() + this.analyseGoodCommentSubroutines(filePath);
 
     }
 
