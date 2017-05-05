@@ -50,7 +50,8 @@ public class Window extends JFrame implements ActionListener {
     private JMenuBar mb;
     private JMenu menuLanguages;
     private JMenuItem spanish, galician, english, french;
-    private static final String EXTENSION = "txt";
+    private static final String EXTENSION = "f90";
+    private static final String EXTENSION2 = "h90";
     private static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
 
     /**
@@ -78,8 +79,10 @@ public class Window extends JFrame implements ActionListener {
     private String numVariables = "Número de variables declaradas: ";
     private String initDoc = "el inicio del archivo: ";
     private String variables = "declaración de variables:";
-    private String nestedLoops = "Cumple con la complejidad máxima de anidamiento de los bucles: ";
+    private String nestedLoops = "Cumple con la complejidad máxima de anidamiento de los bucles y formato de los comentarios: ";
     private String commentSubroutines = "declaración de subrutinas: ";
+    private String exit = "Utiliza la sentencia EXIT para salir de los bucles antes de tiempo: ";
+    private String cycle = "Utiliza la sentencia CYCLE para evitar realizar determinadas sentencias, iterando al siguiente elemento: ";
 
     /**
      * Constructor from Class
@@ -258,12 +261,19 @@ public class Window extends JFrame implements ActionListener {
 
             for (File file : filesInFolder) {
 
-                if (!auxDir.equals(getPathFromFile(file)) && getFileExtension(file).equals(Window.EXTENSION)) {
+                if (!auxDir.equals(getPathFromFile(file))
+                        && (getFileExtension(file).equals(Window.EXTENSION)
+                        || getFileExtension(file).equals(Window.EXTENSION2)
+                        || getFileExtension(file).equals(Window.EXTENSION.toUpperCase())
+                        || getFileExtension(file).equals(Window.EXTENSION2.toUpperCase()))) {
                     auxDir = getPathFromFile(file);
                     pdf.addSection(auxDir);
                 }
 
-                if (getFileExtension(file).equals(Window.EXTENSION)) {
+                if (getFileExtension(file).equals(Window.EXTENSION)
+                        || getFileExtension(file).equals(Window.EXTENSION2)
+                        || getFileExtension(file).equals(Window.EXTENSION.toUpperCase())
+                        || getFileExtension(file).equals(Window.EXTENSION2.toUpperCase())) {
                     pdf.addSubSection(file.getName());
                     pdf.addResult(analyseFile(file.getAbsolutePath()));
                 }
@@ -325,8 +335,77 @@ public class Window extends JFrame implements ActionListener {
         result += this.getSubroutines() + this.analyseNumberSubroutines(pathFile);
         result += "\n";
 
+        //10.- check the use of EXIT
+        result += this.getExit() + this.analyseUseExit(pathFile);
+        result += "\n";
+
+        //11.- check the use of CYCLE
+        result += this.getCycle() + this.analyseUseCycle(pathFile);
+        result += "\n";
+
         return result;
 
+    }
+
+    /**
+     * This method analyse the use of the CYCLE sentence in the file. It is used
+     * in loops to avoid making a certain sentence, so that it continues to
+     * iterate to the next element. With they use, the code is more efficient.
+     *
+     * @param filePath
+     * @return
+     * @throws IOException
+     */
+    private boolean analyseUseCycle(String filePath) throws IOException {
+
+        String chain = "";
+        File file = new File(filePath);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+
+                //check if the chain is a declaration of a variable and
+                //it is not a comment 
+                if ((chain.contains("CYCLE") || chain.contains("cycle"))
+                        && !chain.contains("!")) {
+
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * This method check if the EXIT sentence is used in the file. EXIT sentence
+     * is used to go out of a loop, so the code is more efficient
+     *
+     * @param filePath
+     * @return boolean
+     * @throws IOException
+     */
+    private boolean analyseUseExit(String filePath) throws IOException {
+
+        String chain = "";
+        File file = new File(filePath);
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+
+                //check if the chain is a declaration of a variable and
+                //it is not a comment 
+                if ((chain.contains("EXIT") || chain.contains("exit"))
+                        && !chain.contains("!")) {
+
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -359,8 +438,8 @@ public class Window extends JFrame implements ActionListener {
 
     /**
      * This method analyse the number of Nested loops there are. If this number
-     * is greater than 3 or smaller than 0 or this line have a comment , it is
-     * consider a bad programming practice.
+     * is greater than 3 or smaller than 0 AND this line don't have a comment ,
+     * it is consider a bad programming practice.
      *
      * @param filePath
      * @return boolean
@@ -462,6 +541,7 @@ public class Window extends JFrame implements ActionListener {
         File file = new File(filePath);
         int numSubroutines = 0;
         int totalSubroutines = 0;
+        String nextLine = "";
 
         FileReader fr = new FileReader(file);
 
@@ -476,9 +556,13 @@ public class Window extends JFrame implements ActionListener {
                         || chain.contains("SUBROUTINE"))) {
                     totalSubroutines++;
 
+                    if (b.readLine() == null) {
+                        nextLine = "";
+                    }
+
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (b.readLine().contains("!") || previousChain.contains("!")) {
+                    if (nextLine.contains("!") || previousChain.contains("!")) {
                         numSubroutines++;
                     }
                 }
@@ -566,6 +650,7 @@ public class Window extends JFrame implements ActionListener {
         File file = new File(filePath);
         int numFunction = 0;
         int totalFunctions = 0;
+        String nextLine = "";
 
         FileReader fr = new FileReader(file);
 
@@ -580,9 +665,12 @@ public class Window extends JFrame implements ActionListener {
                         || chain.contains("FUNCTION"))) {
                     totalFunctions++;
 
+                    if (b.readLine() == null) {
+                        nextLine = "";
+                    }
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (b.readLine().contains("!") || previousChain.contains("!")) {
+                    if (nextLine.contains("!") || previousChain.contains("!")) {
                         numFunction++;
                     }
                 }
@@ -810,7 +898,7 @@ public class Window extends JFrame implements ActionListener {
                     setFunction("las funciones: ");
                     setInitDoc("el inicio del archivo: ");
                     setNumVariable("la declaración de cada variable: ");
-                    setNestedLoops("Cumple con la complejidad máxima de anidamiento de los bucles: ");
+                    setNestedLoops("Cumple con la complejidad máxima de anidamiento de los bucles y formato de los comentarios: ");
                     setSubroutines("Número de subrutinas: ");
                     setVariables("declaración de variables: ");
                     setCommentSubroutines("declaración de subrutinas: ");
@@ -865,7 +953,7 @@ public class Window extends JFrame implements ActionListener {
                     setFunction("les fonctions: ");
                     setInitDoc("le début du document: ");
                     setNumVariable("les variables déclarées: ");
-                    setNestedLoops("il n'a pas l'imbrication très complexe:");
+                    setNestedLoops("il n'a pas l'imbrication très complexe et le format des commentaires est correct:");
                     setSubroutines("Nombre de sous-routines: ");
                     setVariables("déclaration des variables: ");
                     setCommentSubroutines("déclaration des sous-routines: ");
@@ -920,7 +1008,7 @@ public class Window extends JFrame implements ActionListener {
                     setFunction("nas funcións: ");
                     setInitDoc("ao comezo do arquivo: ");
                     setNumVariable("na declaración das variables: ");
-                    setNestedLoops("Cumple coa complexidade máxima de anidamento dos bucles: ");
+                    setNestedLoops("Cumple coa complexidade máxima de anidamento dos bucles e o formato dos comentarios é o correcto: ");
                     setSubroutines("Número de subrutinas: ");
                     setVariables("declaración das variables: ");
                     setCommentSubroutines("declaración das subrutinas: ");
@@ -975,7 +1063,7 @@ public class Window extends JFrame implements ActionListener {
                     setFunction("functions: ");
                     setInitDoc("the beginning of the file: ");
                     setNumVariable("the declarations of the variables: ");
-                    setNestedLoops("The complexity of the loops is not hight: ");
+                    setNestedLoops("The complexity of the loops is not hight and the format of comments is correct: ");
                     setSubroutines("Number of subroutines: ");
                     setVariables("declared variables: ");
                     setCommentSubroutines("declared subroutines: ");
@@ -1387,6 +1475,42 @@ public class Window extends JFrame implements ActionListener {
      */
     public void setCommentSubroutines(String commentSubroutines) {
         this.commentSubroutines = commentSubroutines;
+    }
+
+    /**
+     * Getter of Exit
+     *
+     * @return exit
+     */
+    public String getExit() {
+        return exit;
+    }
+
+    /**
+     * Setter of Exit
+     *
+     * @param exit
+     */
+    public void setExit(String exit) {
+        this.exit = exit;
+    }
+
+    /**
+     * Getter of Cycle
+     *
+     * @return
+     */
+    public String getCycle() {
+        return cycle;
+    }
+
+    /**
+     * Setter of Cycle
+     *
+     * @param cycle
+     */
+    public void setCycle(String cycle) {
+        this.cycle = cycle;
     }
 
 }
