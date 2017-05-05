@@ -902,6 +902,8 @@ public class Window extends JFrame implements ActionListener {
                     setSubroutines("Número de subrutinas: ");
                     setVariables("declaración de variables: ");
                     setCommentSubroutines("declaración de subrutinas: ");
+                    setExit("Utiliza la sentencia EXIT para salir de los bucles antes de tiempo: ");
+                    setCycle("Utiliza la sentencia CYCLE para evitar realizar determinadas sentencias, iterando al siguiente elemento: ");
 
                     //configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
@@ -957,6 +959,8 @@ public class Window extends JFrame implements ActionListener {
                     setSubroutines("Nombre de sous-routines: ");
                     setVariables("déclaration des variables: ");
                     setCommentSubroutines("déclaration des sous-routines: ");
+                    setExit("Utilization de EXIT pour sortir des boucles: ");
+                    setCycle("Utilization de CYCLE pour eviter de realizer certains contrôles et itérer au element suivant: ");
 
                     //Configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
@@ -1012,6 +1016,8 @@ public class Window extends JFrame implements ActionListener {
                     setSubroutines("Número de subrutinas: ");
                     setVariables("declaración das variables: ");
                     setCommentSubroutines("declaración das subrutinas: ");
+                    setExit("Uso da sentencia EXIT para saír dos bucles: ");
+                    setCycle("Uso da sentencia CYCLE para evitar realizar determinadas sentencias, iterando ao seguinte elemento: ");
 
                     //configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
@@ -1067,6 +1073,8 @@ public class Window extends JFrame implements ActionListener {
                     setSubroutines("Number of subroutines: ");
                     setVariables("declared variables: ");
                     setCommentSubroutines("declared subroutines: ");
+                    setExit("Use the sentence EXIT to go out of loop: ");
+                    setCycle("Use the sentence CYCLE to avoid making certain judgments, iterating to the next element: ");
 
                     //configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
