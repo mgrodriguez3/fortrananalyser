@@ -1498,7 +1498,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Getter of Cycle
      *
-     * @return
+     * @return cycle
      */
     public String getCycle() {
         return cycle;
