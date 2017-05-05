@@ -1053,7 +1053,7 @@ public class Window extends JFrame implements ActionListener {
                 if (!this.selectedLanguage.equals("en")) {
 
                     //translate the text
-                    this.selectedLanguage = "es";
+                    this.selectedLanguage = "en";
                     setNameButtonAnalyse("Analyse");
                     setNameButtonExit("Exit");
                     setNameMenu("Language");
