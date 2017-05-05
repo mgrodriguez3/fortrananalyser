@@ -57,6 +57,18 @@ Version: 1.0
         If the number of nested loops is gretter than 3, it is considere a bad 
         programming practice. the complexity of this type of loop is O(n)^3.
 
+    - check the use of EXIT sentence.
+        This sentence is used in loops to optimize it. In some cases, the 
+        solution is finded before the end of the loop, so it is more efficient 
+        exit in this moment of the loop and save resources to use them for 
+        another work.
+
+    - check the use of CYCLE sentence.
+        This sentence is used in loops to optimize it. In some cases, you don't 
+        need to check a statement, so it is iterated to the next element. With 
+        they use, the code is more efficient and it save resources to use them 
+        for another work.
+
 
 ================================================================================ 
 =                              INSTRUCTIONS                                    =
@@ -78,4 +90,5 @@ Execute the program and you can visualice the follow buttons:
     - "language": This menu button deploy the options to select the programe 
                   language. In addition, the quality report is generated in 
                   this language too. By default, the language selected is 
-                  spanish.
+                  spanish. You can switch to English, Galician, French and 
+                  Spanish.
