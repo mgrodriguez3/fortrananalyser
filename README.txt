@@ -5,7 +5,6 @@ Environmental Physics Laboratory - University of Vigo, Ourense.
 
 Version: 1.0
 
-
 ================================================================================ 
 =                               DESCRIPTION                                    =
 ================================================================================
@@ -27,8 +26,8 @@ Version: 1.0
         resources to be used to execute it will be greater.
 
     - count the number of subroutines declared.
-        Each declared subroutine method is a good practice in programming, because
-        it help to structure the code and improves code readability.
+        Each declared subroutine method is a good practice in programming, 
+        because it help to structure the code and improves code readability.
 
     - check the use of the sentence "implicit none". 
         There is a convention for the implicit declaration of integer and real 

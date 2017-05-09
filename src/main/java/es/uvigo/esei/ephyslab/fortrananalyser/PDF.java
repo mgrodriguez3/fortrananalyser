@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.uvigo.esei.epyslab.fortrananalyser;
+package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;

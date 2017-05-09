@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package es.uvigo.esei.epyslab.fortrananalyser;
+package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import java.io.IOException;
 
@@ -27,3 +27,4 @@ public class Principal {
 
     }
 }
+
