@@ -53,6 +53,8 @@ public class Window extends JFrame implements ActionListener {
     private static final String EXTENSION = "f90";
     private static final String EXTENSION2 = "h90";
     private static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
+    private double assesment = 0.0;
+    private double finalCalification = 0.0;
 
     /**
      * By default, the selected language is Spanish
@@ -242,6 +244,7 @@ public class Window extends JFrame implements ActionListener {
     private void analizeDirectories(String directory) {
 
         PDF pdf;
+        int countNumberOfFiles = 0;
 
         try {
 
@@ -276,9 +279,14 @@ public class Window extends JFrame implements ActionListener {
                         || getFileExtension(file).equals(Window.EXTENSION2.toUpperCase())) {
                     pdf.addSubSection(file.getName());
                     pdf.addResult(analyseFile(file.getAbsolutePath()));
+                    countNumberOfFiles++;
+                    pdf.addResult("Nota del archivo: "+assesment);
+                    finalCalification += assesment;
                 }
             }
+            pdf.addResult("Nota media: "+ finalCalification / countNumberOfFiles);
             pdf.closePDF();
+            finalCalification = 0.0;
             long timeStop = System.currentTimeMillis();
             timeStop = timeStop - timeStart;
             JOptionPane.showMessageDialog(this, this.getExitMessage() + getDurationAnalyse(timeStop));
@@ -298,14 +306,25 @@ public class Window extends JFrame implements ActionListener {
     public String analyseFile(String pathFile) throws IOException {
 
         String result = "";
+        assesment = 0.0;
+        int numLines = this.analyseNumberOfLines(pathFile);
+        boolean useImplicitNone = this.analyseUseImplicitNone(pathFile);
+        int numComments = this.analyseNumComments(pathFile);
+        boolean checkNestedLoops = this.analyseNestedLoops(pathFile);
+        boolean useExit = this.analyseUseExit(pathFile);
+        boolean useCycle = this.analyseUseCycle(pathFile);
 
         //1.- count the number of lines in the file
-        result += this.getNumberOfLines() + analyseNumberOfLines(pathFile);
+        result += this.getNumberOfLines() + numLines;
         result += "\n";
 
         //2.- Use or not use  the sentence IMPLICIT NONE
-        result += this.implicitNone + this.analyseUseImplicitNone(pathFile);
+        result += this.implicitNone + useImplicitNone;
         result += "\n";
+
+        if (useImplicitNone) {
+            assesment += 2.0;
+        }
 
         //3.- count the number of functions declared
         result += this.getMethod() + this.analyseNumFunctions(pathFile);
@@ -316,8 +335,12 @@ public class Window extends JFrame implements ActionListener {
         result += "\n";
 
         //5.- count the number of comments
-        result += this.getComments() + this.analyseNumComments(pathFile);
+        result += this.getComments() + numComments;
         result += " \n";
+
+        if ((numComments * 100) / numLines > 20) {
+            assesment += 2.0;
+        }
 
         //6.- count the number of variables declared
         result += this.getNumVariable() + this.analyseNumberOfDeclaredVariables(pathFile);
@@ -328,20 +351,35 @@ public class Window extends JFrame implements ActionListener {
         result += "\n";
 
         //8.- check the Nested loops
-        result += this.getNestedLoops() + this.analyseNestedLoops(pathFile);
+        result += this.getNestedLoops() + checkNestedLoops;
         result += "\n";
+        
+        if(checkNestedLoops)
+        {
+            assesment += 2.0;
+        }
 
         //9.- check the number of declared subroutines
         result += this.getSubroutines() + this.analyseNumberSubroutines(pathFile);
         result += "\n";
 
         //10.- check the use of EXIT
-        result += this.getExit() + this.analyseUseExit(pathFile);
+        result += this.getExit() + useExit;
         result += "\n";
+        
+        if(useExit)
+        {
+            assesment += 1.0;
+        }
 
         //11.- check the use of CYCLE
-        result += this.getCycle() + this.analyseUseCycle(pathFile);
+        result += this.getCycle() + useCycle;
         result += "\n";
+        
+        if(useCycle)
+        {
+            assesment += 1.0;
+        }
 
         return result;
 
@@ -519,12 +557,35 @@ public class Window extends JFrame implements ActionListener {
      */
     private String analyseGoodComment(String filePath) throws IOException {
 
-        StringBuilder sb = new StringBuilder();
+        String sb = "";
+        boolean goodCommentFunctions = this.analyseGoodCommentFunctions(filePath);
+        boolean goodCommentInitDoc = this.analyseGoodCommentInitDoc(filePath);
+        boolean goodCommentVariables = this.analyseGoodCommentedVariables(filePath);
+        boolean goodCommentSubroutines = this.analyseGoodCommentSubroutines(filePath);
 
-        return "\n\t--> " + this.getFunction() + this.analyseGoodCommentFunctions(filePath)
-                + "\n\t--> " + this.getInitDoc() + this.analyseGoodCommentInitDoc(filePath)
-                + "\n\t--> " + this.getVariables() + this.analyseGoodCommentedVariables(filePath)
-                + "\n\t--> " + this.getCommentSubroutines() + this.analyseGoodCommentSubroutines(filePath);
+        sb = "\n\t--> " + this.getFunction() + goodCommentFunctions;
+        sb += "\n\t--> " + this.getInitDoc() + goodCommentInitDoc;
+        sb += "\n\t--> " + this.getVariables() + goodCommentVariables;
+        sb += "\n\t--> " + this.getCommentSubroutines() + goodCommentSubroutines;
+        
+        if(goodCommentFunctions)
+        {
+            assesment += 0.5;
+        }
+        if(goodCommentInitDoc)
+        {
+            assesment += 0.5;
+        }
+        if(goodCommentVariables)
+        {
+            assesment += 0.5;
+        }
+        if(goodCommentSubroutines)
+        {
+            assesment += 0.5;
+        }
+        
+        return sb;
 
     }
 
@@ -687,7 +748,7 @@ public class Window extends JFrame implements ActionListener {
      * @return the number of lines from file
      * @throws IOException
      */
-    private String analyseNumberOfLines(String filePath) throws IOException {
+    private int analyseNumberOfLines(String filePath) throws IOException {
 
         int count = 0;
         String chain = "";
@@ -701,7 +762,7 @@ public class Window extends JFrame implements ActionListener {
             }
         }
 
-        return Integer.toString(count);
+        return count;
     }
 
     /**
@@ -735,7 +796,7 @@ public class Window extends JFrame implements ActionListener {
      * @return the number of functions in this file
      * @throws IOException
      */
-    private String analyseNumFunctions(String filePath) throws IOException {
+    private int analyseNumFunctions(String filePath) throws IOException {
 
         int count = 0;
         String chain = "";
@@ -753,7 +814,7 @@ public class Window extends JFrame implements ActionListener {
             }
         }
 
-        return Integer.toString(count / 2);
+        return (count / 2);
     }
 
     /**
@@ -763,7 +824,7 @@ public class Window extends JFrame implements ActionListener {
      * @return the number of subroutines calls
      * @throws IOException
      */
-    private String analyseNumCalls(String filePath) throws IOException {
+    private int analyseNumCalls(String filePath) throws IOException {
         int count = 0;
         String chain = "";
         File file = new File(filePath);
@@ -778,7 +839,7 @@ public class Window extends JFrame implements ActionListener {
             }
         }
 
-        return Integer.toString(count);
+        return count;
     }
 
     /**
@@ -788,7 +849,7 @@ public class Window extends JFrame implements ActionListener {
      * @return the number of comments
      * @throws IOException
      */
-    private String analyseNumComments(String filePath) throws IOException {
+    private int analyseNumComments(String filePath) throws IOException {
         int count = 0;
         String chain = "";
         File file = new File(filePath);
@@ -803,7 +864,7 @@ public class Window extends JFrame implements ActionListener {
             }
         }
 
-        return Integer.toString(count);
+        return count;
     }
 
     /**
