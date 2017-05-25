@@ -46,7 +46,7 @@ public class PDF {
     private final static String ICON_EPHYSLAB
             = PDF.class.getResource("ephyslab.png").toString();
     
-    private final static PdfFont loadPdfFont() {
+    private static PdfFont loadPdfFont() {
         try {
             Path tmpFile = Files.createTempFile("fa-arial", ".ttf");
             Files.copy(PDF.class.getResourceAsStream("arial.ttf"), tmpFile, StandardCopyOption.REPLACE_EXISTING);
