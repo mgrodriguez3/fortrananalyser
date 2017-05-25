@@ -41,6 +41,8 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Variables from the class Window
      */
+    private final static ImageIcon ICON_EPHYSLAB
+            = new ImageIcon(Window.class.getResource("ephyslab.png"));
     private final JFileChooser fc = new JFileChooser();
     private JLabel text;
     private JTextField box;
@@ -107,7 +109,7 @@ public class Window extends JFrame implements ActionListener {
 
         this.setTitle("FortranAnalyser Tool");
         this.setSize(400, 250);
-        this.setContentPane(new JLabel(new ImageIcon(ImageIO.read(new File("./img/ephyslab.png")))));
+        this.setContentPane(new JLabel(ICON_EPHYSLAB));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setLayout(null);
@@ -280,11 +282,11 @@ public class Window extends JFrame implements ActionListener {
                     pdf.addSubSection(file.getName());
                     pdf.addResult(analyseFile(file.getAbsolutePath()));
                     countNumberOfFiles++;
-                    pdf.addResult("Nota del archivo: "+assesment);
+                    pdf.addResult("Nota del archivo: " + assesment);
                     finalCalification += assesment;
                 }
             }
-            pdf.addResult("Nota media: "+ finalCalification / countNumberOfFiles);
+            pdf.addResult("Nota media: " + finalCalification / countNumberOfFiles);
             pdf.closePDF();
             finalCalification = 0.0;
             long timeStop = System.currentTimeMillis();
@@ -353,9 +355,8 @@ public class Window extends JFrame implements ActionListener {
         //8.- check the Nested loops
         result += this.getNestedLoops() + checkNestedLoops;
         result += "\n";
-        
-        if(checkNestedLoops)
-        {
+
+        if (checkNestedLoops) {
             assesment += 2.0;
         }
 
@@ -366,18 +367,16 @@ public class Window extends JFrame implements ActionListener {
         //10.- check the use of EXIT
         result += this.getExit() + useExit;
         result += "\n";
-        
-        if(useExit)
-        {
+
+        if (useExit) {
             assesment += 1.0;
         }
 
         //11.- check the use of CYCLE
         result += this.getCycle() + useCycle;
         result += "\n";
-        
-        if(useCycle)
-        {
+
+        if (useCycle) {
             assesment += 1.0;
         }
 
@@ -567,24 +566,20 @@ public class Window extends JFrame implements ActionListener {
         sb += "\n\t--> " + this.getInitDoc() + goodCommentInitDoc;
         sb += "\n\t--> " + this.getVariables() + goodCommentVariables;
         sb += "\n\t--> " + this.getCommentSubroutines() + goodCommentSubroutines;
-        
-        if(goodCommentFunctions)
-        {
+
+        if (goodCommentFunctions) {
             assesment += 0.5;
         }
-        if(goodCommentInitDoc)
-        {
+        if (goodCommentInitDoc) {
             assesment += 0.5;
         }
-        if(goodCommentVariables)
-        {
+        if (goodCommentVariables) {
             assesment += 0.5;
         }
-        if(goodCommentSubroutines)
-        {
+        if (goodCommentSubroutines) {
             assesment += 0.5;
         }
-        
+
         return sb;
 
     }

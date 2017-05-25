@@ -20,7 +20,14 @@ import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * This class create the document PDF with the quality report
@@ -35,6 +42,21 @@ public class PDF {
      */
     private Document document;
     private final static String AUTHOR = "Michael García Rodríguez";
+    private final static PdfFont PDF_FONT = loadPdfFont();
+    private final static String ICON_EPHYSLAB
+            = PDF.class.getResource("ephyslab.png").toString();
+    
+    private final static PdfFont loadPdfFont() {
+        try {
+            Path tmpFile = Files.createTempFile("fa-arial", ".ttf");
+            Files.copy(PDF.class.getResourceAsStream("arial.ttf"), tmpFile, StandardCopyOption.REPLACE_EXISTING);
+            
+            return PdfFontFactory.createFont(tmpFile.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(PDF.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
+        }
+    }
 
     /**
      * Method that create the cover from the report document
@@ -44,13 +66,8 @@ public class PDF {
      */
     public void createPdf(String dest) throws IOException {
 
-        String COVER = "./img/ephyslab.png";
-
         PdfDocument pdf = new PdfDocument(new PdfWriter(dest, new WriterProperties().addXmpMetadata()));
         this.document = new Document(pdf);
-
-        //Fonts need to be embedded
-        PdfFont arial = PdfFontFactory.createFont("./Fonts/arial.ttf");
 
         //Setting some required parameters
         pdf.setTagged();
@@ -68,7 +85,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text title = new Text("Fortran Analyser");
 
-        Image coverImage = new Image(ImageDataFactory.create(COVER));
+        Image coverImage = new Image(ImageDataFactory.create(ICON_EPHYSLAB));
 
         coverImage.getAccessibilityProperties()
                 .setAlternateDescription("EphySLab");
@@ -78,17 +95,17 @@ public class PDF {
         p.add(coverImage.setTextAlignment(TextAlignment.CENTER));
         p.add("\n");
 
-        p.add(title.setFont(arial).setFontSize(36).setFontColor(Color.DARK_GRAY)).setTextAlignment(TextAlignment.CENTER);
+        p.add(title.setFont(PDF_FONT).setFontSize(36).setFontColor(Color.DARK_GRAY)).setTextAlignment(TextAlignment.CENTER);
         p.add("\n");
 
-        p.add(new Text("Quality report").setFont(arial).setFontSize(36).setFontColor(Color.DARK_GRAY).setTextAlignment(TextAlignment.CENTER));
+        p.add(new Text("Quality report").setFont(PDF_FONT).setFontSize(36).setFontColor(Color.DARK_GRAY).setTextAlignment(TextAlignment.CENTER));
         p.add("\n\n\n\n\n\n\n\n\n\n\n\n");
 
         this.document.add(p);
 
         Paragraph p2 = new Paragraph();
 
-        p2.add(new Text(PDF.AUTHOR).setFont(arial).setFontSize(11).setFontColor(Color.BLACK).setTextAlignment(TextAlignment.RIGHT));
+        p2.add(new Text(PDF.AUTHOR).setFont(PDF_FONT).setFontSize(11).setFontColor(Color.BLACK).setTextAlignment(TextAlignment.RIGHT));
 
         this.document.add(p2);
 
@@ -103,11 +120,10 @@ public class PDF {
     public void addParagraph(String text) throws IOException {
 
         //Fonts need to be embedded
-        PdfFont textFont = PdfFontFactory.createFont("./Fonts/arial.ttf");
         Paragraph p = new Paragraph();
         Text t = new Text(text);
 
-        p.add(t.setFont(textFont).setFontSize(12).setFontColor(Color.BLACK));
+        p.add(t.setFont(PDF_FONT).setFontSize(12).setFontColor(Color.BLACK));
         p.add("\n");
 
         this.document.add(p);
@@ -121,13 +137,10 @@ public class PDF {
      * @throws IOException
      */
     public void addSubSection(String text) throws IOException {
-
-        //Fonts need to be embedded
-        PdfFont textFont = PdfFontFactory.createFont("./Fonts/arial.ttf");
         Paragraph p = new Paragraph();
         Text t = new Text(text);
 
-        p.add(t.setFont(textFont).setFontSize(16).setFontColor(Color.BLACK));
+        p.add(t.setFont(PDF_FONT).setFontSize(16).setFontColor(Color.BLACK));
         p.add("\n");
 
         this.document.add(p);
@@ -141,13 +154,10 @@ public class PDF {
      * @throws IOException
      */
     public void addSection(String section) throws IOException {
-
-        //Fonts need to embedded
-        PdfFont textFont = PdfFontFactory.createFont("./Fonts/arial.ttf");
         Paragraph p = new Paragraph();
         Text sect = new Text(section);
 
-        p.add(sect.setFont(textFont).setFontSize(18).setFontColor(Color.GRAY));
+        p.add(sect.setFont(PDF_FONT).setFontSize(18).setFontColor(Color.GRAY));
         p.add("\n");
 
         this.document.add(p);
@@ -160,13 +170,10 @@ public class PDF {
      * @throws IOException
      */
     public void addResult(String result) throws IOException {
-
-        //Fonts need to be embedded
-        PdfFont textFont = PdfFontFactory.createFont("./Fonts/arial.ttf");
         Paragraph p = new Paragraph();
         Text t = new Text(result);
 
-        p.add(t.setFont(textFont).setFontSize(12).setFontColor(Color.BLACK));
+        p.add(t.setFont(PDF_FONT).setFontSize(12).setFontColor(Color.BLACK));
         p.add("\n");
 
         this.document.add(p);
@@ -177,6 +184,16 @@ public class PDF {
      */
     public void closePDF() {
         this.document.close();
+    }
+
+    public static byte[] readFully(InputStream input) throws IOException {
+        byte[] buffer = new byte[8192];
+        int bytesRead;
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        while ((bytesRead = input.read(buffer)) != -1) {
+            output.write(buffer, 0, bytesRead);
+        }
+        return output.toByteArray();
     }
 
 }
