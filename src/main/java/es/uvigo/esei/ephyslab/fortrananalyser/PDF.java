@@ -42,21 +42,9 @@ public class PDF {
      */
     private Document document;
     private final static String AUTHOR = "Michael García Rodríguez";
-    private final static PdfFont PDF_FONT = loadPdfFont();
+    private final PdfFont PDF_FONT = loadPdfFont();
     private final static String ICON_EPHYSLAB
             = PDF.class.getResource("ephyslab.png").toString();
-    
-    private static PdfFont loadPdfFont() {
-        try {
-            Path tmpFile = Files.createTempFile("fa-arial", ".ttf");
-            Files.copy(PDF.class.getResourceAsStream("arial.ttf"), tmpFile, StandardCopyOption.REPLACE_EXISTING);
-            
-            return PdfFontFactory.createFont(tmpFile.toString());
-        } catch (IOException ex) {
-            Logger.getLogger(PDF.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException(ex);
-        }
-    }
 
     /**
      * Method that create the cover from the report document
@@ -68,6 +56,8 @@ public class PDF {
 
         PdfDocument pdf = new PdfDocument(new PdfWriter(dest, new WriterProperties().addXmpMetadata()));
         this.document = new Document(pdf);
+        
+        this.document.setFont(PDF_FONT);
 
         //Setting some required parameters
         pdf.setTagged();
@@ -95,17 +85,17 @@ public class PDF {
         p.add(coverImage.setTextAlignment(TextAlignment.CENTER));
         p.add("\n");
 
-        p.add(title.setFont(PDF_FONT).setFontSize(36).setFontColor(Color.DARK_GRAY)).setTextAlignment(TextAlignment.CENTER);
+        p.add(title.setFontSize(36).setFontColor(Color.DARK_GRAY)).setTextAlignment(TextAlignment.CENTER);
         p.add("\n");
 
-        p.add(new Text("Quality report").setFont(PDF_FONT).setFontSize(36).setFontColor(Color.DARK_GRAY).setTextAlignment(TextAlignment.CENTER));
+        p.add(new Text("Quality report").setFontSize(36).setFontColor(Color.DARK_GRAY).setTextAlignment(TextAlignment.CENTER));
         p.add("\n\n\n\n\n\n\n\n\n\n\n\n");
 
         this.document.add(p);
 
         Paragraph p2 = new Paragraph();
 
-        p2.add(new Text(PDF.AUTHOR).setFont(PDF_FONT).setFontSize(11).setFontColor(Color.BLACK).setTextAlignment(TextAlignment.RIGHT));
+        p2.add(new Text(PDF.AUTHOR).setFontSize(11).setFontColor(Color.BLACK).setTextAlignment(TextAlignment.RIGHT));
 
         this.document.add(p2);
 
@@ -123,7 +113,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(text);
 
-        p.add(t.setFont(PDF_FONT).setFontSize(12).setFontColor(Color.BLACK));
+        p.add(t.setFontSize(12).setFontColor(Color.BLACK));
         p.add("\n");
 
         this.document.add(p);
@@ -140,7 +130,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(text);
 
-        p.add(t.setFont(PDF_FONT).setFontSize(16).setFontColor(Color.BLACK));
+        p.add(t.setFontSize(16).setFontColor(Color.BLACK));
         p.add("\n");
 
         this.document.add(p);
@@ -157,7 +147,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text sect = new Text(section);
 
-        p.add(sect.setFont(PDF_FONT).setFontSize(18).setFontColor(Color.GRAY));
+        p.add(sect.setFontSize(18).setFontColor(Color.GRAY));
         p.add("\n");
 
         this.document.add(p);
@@ -173,7 +163,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(result);
 
-        p.add(t.setFont(PDF_FONT).setFontSize(12).setFontColor(Color.BLACK));
+        p.add(t.setFontSize(12).setFontColor(Color.BLACK));
         p.add("\n");
 
         this.document.add(p);
@@ -196,4 +186,22 @@ public class PDF {
         return output.toByteArray();
     }
 
+    /**
+     * this method created a new font to write in the pdf document
+     *
+     * @return the font selected
+     */
+    private static PdfFont loadPdfFont() {
+
+        try {
+            Path tmpFile = Files.createTempFile("fa-arial", ".ttf");
+            Files.copy(PDF.class.getResourceAsStream("arial.ttf"), tmpFile, StandardCopyOption.REPLACE_EXISTING);
+
+            return PdfFontFactory.createFont(tmpFile.toString());
+        } catch (IOException ex) {
+            Logger.getLogger(PDF.class.getName()).log(Level.SEVERE, null, ex);
+            throw new RuntimeException(ex);
+        }
+    }
+    
 }

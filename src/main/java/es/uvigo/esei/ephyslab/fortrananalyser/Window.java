@@ -5,6 +5,7 @@
  */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
+import java.awt.Desktop;
 import java.util.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,7 +19,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -197,6 +197,15 @@ public class Window extends JFrame implements ActionListener {
         if (e.getSource().equals(buttonanalyse)) {
             if (!this.box.getText().isEmpty()) {
                 analizeDirectories(this.box.getText());
+
+                if (Desktop.isDesktopSupported()) {
+                    try {
+                        File myFile = new File(Window.DEST);
+                        Desktop.getDesktop().open(myFile);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
             } else {
                 JOptionPane.showMessageDialog(this, this.getErrorDirectoryEmpty());
             }
@@ -292,6 +301,7 @@ public class Window extends JFrame implements ActionListener {
             long timeStop = System.currentTimeMillis();
             timeStop = timeStop - timeStart;
             JOptionPane.showMessageDialog(this, this.getExitMessage() + getDurationAnalyse(timeStop));
+
         } catch (IOException ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
         }
