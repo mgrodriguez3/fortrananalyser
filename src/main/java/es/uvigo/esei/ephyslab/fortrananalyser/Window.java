@@ -5,6 +5,7 @@
  */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
+import java.awt.Color;
 import java.awt.Desktop;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -29,6 +30,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
 
 /**
  * Class that creates Jframe windows
@@ -42,7 +44,8 @@ public class Window extends JFrame implements ActionListener {
      * Variables from the class Window
      */
     private final static ImageIcon ICON_EPHYSLAB
-            = new ImageIcon(Window.class.getResource("ephyslab.png"));
+            = new ImageIcon(Window.class.getResource("ephysLab.png"));
+    private final static String APP_NAME = "Fortran Analyser tool";
     private final JFileChooser fc = new JFileChooser();
     private JLabel text;
     private JTextField box;
@@ -71,7 +74,9 @@ public class Window extends JFrame implements ActionListener {
     private final String nameButtonGalician = "Galego";
     private String nameMenu = "Idioma";
     private String errorDirectoryEmpty = "Seleccione un directorio";
-    private String exitMessage = "Análisis realizado.\nDocumento guardado en:\n" + Window.DEST + "\nTiempo: ";
+    private String exitMessage = "Análisis realizado.";
+    private String directoryMessage = "\nDocumento guardado en:\n" + Window.DEST;
+    private String timeMessage = "\nTiempo: ";
     private String numberOfLines = "Número de líneas: ";
     private final String implicitNone = "Implicit none: ";
     private String funtions = "Número de funciones: ";
@@ -85,8 +90,12 @@ public class Window extends JFrame implements ActionListener {
     private String variables = "declaración de variables:";
     private String nestedLoops = "Cumple con la complejidad máxima de anidamiento de los bucles y formato de los comentarios: ";
     private String commentSubroutines = "declaración de subrutinas: ";
+    private String commentControlStructures = "Estructuras de control: ";
     private String exit = "Utiliza la sentencia EXIT para salir de los bucles antes de tiempo: ";
     private String cycle = "Utiliza la sentencia CYCLE para evitar realizar determinadas sentencias, iterando al siguiente elemento: ";
+    private String arithmeticAverage = "Nota final: ";
+    private String headMessageDialog = "Información del análisis";
+    private String noteFile = "Nota del archivo: ";
 
     /**
      * Constructor from Class
@@ -107,7 +116,7 @@ public class Window extends JFrame implements ActionListener {
      */
     private void configureWindow() throws IOException {
 
-        this.setTitle("FortranAnalyser Tool");
+        this.setTitle(APP_NAME);
         this.setSize(400, 250);
         this.setContentPane(new JLabel(ICON_EPHYSLAB));
         this.setLocationRelativeTo(null);
@@ -115,7 +124,8 @@ public class Window extends JFrame implements ActionListener {
         this.setLayout(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        this.setIconImage(new ImageIcon(Window.class.getResource("fortranAnalyserIcon.png")).getImage());
+        
     }
 
     /**
@@ -256,6 +266,7 @@ public class Window extends JFrame implements ActionListener {
 
         PDF pdf;
         int countNumberOfFiles = 0;
+        double auxNote = 0.0;
 
         try {
 
@@ -291,16 +302,27 @@ public class Window extends JFrame implements ActionListener {
                     pdf.addSubSection(file.getName());
                     pdf.addResult(analyseFile(file.getAbsolutePath()));
                     countNumberOfFiles++;
-                    pdf.addResult("Nota del archivo: " + assesment);
+                    pdf.addResult(this.getNoteFile() + assesment);
                     finalCalification += assesment;
                 }
             }
-            pdf.addResult("Nota media: " + finalCalification / countNumberOfFiles);
+            auxNote = finalCalification / countNumberOfFiles;
+            pdf.addFinalNote(this.getArithmeticAverage() + auxNote);
             pdf.closePDF();
             finalCalification = 0.0;
             long timeStop = System.currentTimeMillis();
             timeStop = timeStop - timeStart;
-            JOptionPane.showMessageDialog(this, this.getExitMessage() + getDurationAnalyse(timeStop));
+
+            UIManager.put("OptionPane.background", Color.white);
+            UIManager.put("Panel.background", Color.white);
+            ImageIcon icon = new ImageIcon(Window.class.getResource("fortranAnalyserIcon.png"));
+            
+            
+            JOptionPane.showMessageDialog(this, "<html> <span style='color:#007A82'>" + this.getExitMessage() + "</span></html>"
+                    + this.getDirectoryMessage()
+                    + this.getTimeMessage() + Window.getDurationAnalyse(timeStop)
+                    + "\n<html> <span style='color:#089650'>" + this.getArithmeticAverage() + auxNote + "</span></html>",
+                    this.getHeadMessageDialog(), JOptionPane.INFORMATION_MESSAGE, icon);
 
         } catch (IOException ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
@@ -571,11 +593,13 @@ public class Window extends JFrame implements ActionListener {
         boolean goodCommentInitDoc = this.analyseGoodCommentInitDoc(filePath);
         boolean goodCommentVariables = this.analyseGoodCommentedVariables(filePath);
         boolean goodCommentSubroutines = this.analyseGoodCommentSubroutines(filePath);
+        boolean goodCommentControlStructures = this.analyseGoodCommentControlStructures(filePath);
 
         sb = "\n\t--> " + this.getFunction() + goodCommentFunctions;
         sb += "\n\t--> " + this.getInitDoc() + goodCommentInitDoc;
         sb += "\n\t--> " + this.getVariables() + goodCommentVariables;
         sb += "\n\t--> " + this.getCommentSubroutines() + goodCommentSubroutines;
+        sb += "\n\t--> " + this.getCommentControlStructures() + goodCommentControlStructures;
 
         if (goodCommentFunctions) {
             assesment += 0.5;
@@ -589,13 +613,68 @@ public class Window extends JFrame implements ActionListener {
         if (goodCommentSubroutines) {
             assesment += 0.5;
         }
+        if (goodCommentControlStructures) {
+            assesment += 0.5;
+        }
 
         return sb;
 
     }
 
     /**
-     * This method analyse if the declaration of subroutine is commented
+     * This method analyse if the Control Structures are commented: ifs and
+     * switch case
+     *
+     * @param filePath
+     * @return boolean
+     * @throws IOException
+     */
+    private boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
+        String chain = "";
+        String previousChain = "";
+        File file = new File(filePath);
+        int numControlStructures = 0;
+        int totalControlStructures = 0;
+        String nextLine = "";
+
+        FileReader fr = new FileReader(file);
+
+        try (BufferedReader b = new BufferedReader(fr)) {
+            while ((chain = b.readLine()) != null) {
+
+                //check if it is a if structure declaration
+                //or a select case structutre declaration
+                if ((!chain.contains("!")
+                        && !chain.contains("endif")
+                        && !chain.contains("ENDIF")
+                        && (chain.contains("if (")
+                        || chain.contains("IF (")))
+                        || (!chain.contains("!")
+                        && !chain.contains("end select")
+                        && !chain.contains("END SELECT")
+                        && (chain.contains("select case")
+                        || chain.contains("SELECT CASE")))) {
+                    totalControlStructures++;
+
+                    if (b.readLine() == null) {
+                        nextLine = "";
+                    }
+
+                    //check if the next line is a comment or the previous line
+                    //is a comment
+                    if (nextLine.contains("!") || previousChain.contains("!")) {
+                        numControlStructures++;
+                    }
+                }
+                previousChain = chain;
+            }
+        }
+
+        return totalControlStructures == numControlStructures;
+    }
+
+    /**
+     * This method analyse if the declaration of subroutines are commented
      *
      * @param filePath
      * @return boolean
@@ -953,7 +1032,9 @@ public class Window extends JFrame implements ActionListener {
                     setNameButtonExit("Salir");
                     setNameMenu("Idioma");
                     setErrorDirectoryEmpty("Seleccione un directorio");
-                    setExitMessage("Análisis realizado.\nDocumento guardado en:\n" + Window.DEST + "\nTiempo: ");
+                    setExitMessage("Análisis realizado.");
+                    setDirectoryMessage("\nDocumento guardado en:\n" + Window.DEST);
+                    setTimeMessage("\nTiempo: ");
                     setNumberOfLines("Número de líneas: ");
                     setMethod("Número de funciones: ");
                     setSelectDirectory("Seleccione un directorio: ");
@@ -968,8 +1049,12 @@ public class Window extends JFrame implements ActionListener {
                     setSubroutines("Número de subrutinas: ");
                     setVariables("declaración de variables: ");
                     setCommentSubroutines("declaración de subrutinas: ");
+                    setCommentControlStructures("estructuras de control: ");
                     setExit("Utiliza la sentencia EXIT para salir de los bucles antes de tiempo: ");
                     setCycle("Utiliza la sentencia CYCLE para evitar realizar determinadas sentencias, iterando al siguiente elemento: ");
+                    setArithmeticAverage("Nota final: ");
+                    setHeadMessageDialog("Información del análisis");
+                    setNoteFile("Nota del archivo: ");
 
                     //configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
@@ -1010,7 +1095,9 @@ public class Window extends JFrame implements ActionListener {
                     setNameButtonExit("Sortir");
                     setNameMenu("Langage");
                     setErrorDirectoryEmpty("Seleccioné un répertoire");
-                    setExitMessage("Analyse effectuée.\nDocument gardé dans la route:\n" + Window.DEST + "\nTemps: ");
+                    setExitMessage("Analyse effectuée.");
+                    setDirectoryMessage("\nDocument gardé dans la route:\n" + Window.DEST);
+                    setTimeMessage("\nTemps: ");
                     setNumberOfLines("Nombre de lignes: ");
                     setMethod("Nombre de fonctions: ");
                     setSelectDirectory("Seleccioné un répertoire: ");
@@ -1025,8 +1112,12 @@ public class Window extends JFrame implements ActionListener {
                     setSubroutines("Nombre de sous-routines: ");
                     setVariables("déclaration des variables: ");
                     setCommentSubroutines("déclaration des sous-routines: ");
+                    setCommentControlStructures("déclaration des structures de contrôle: ");
                     setExit("Utilization de EXIT pour sortir des boucles: ");
                     setCycle("Utilization de CYCLE pour eviter de realizer certains contrôles et itérer au element suivant: ");
+                    setArithmeticAverage("Note final: ");
+                    setHeadMessageDialog("information de  l`analyse");
+                    setNoteFile("Note du fichier: ");
 
                     //Configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
@@ -1067,7 +1158,9 @@ public class Window extends JFrame implements ActionListener {
                     setNameButtonExit("Saír");
                     setNameMenu("Idioma");
                     setErrorDirectoryEmpty("Seleccione un directorio");
-                    setExitMessage("Análise feito.\nGardado no directorio:\n" + Window.DEST + "\nTempo: ");
+                    setExitMessage("Análise feito.");
+                    setDirectoryMessage("\nGardado no directorio:\n" + Window.DEST);
+                    setTimeMessage("\nTempo: ");
                     setNumberOfLines("Número de liñas: ");
                     setMethod("Número de funcións: ");
                     setSelectDirectory("Seleccione un directorio: ");
@@ -1082,8 +1175,12 @@ public class Window extends JFrame implements ActionListener {
                     setSubroutines("Número de subrutinas: ");
                     setVariables("declaración das variables: ");
                     setCommentSubroutines("declaración das subrutinas: ");
+                    setCommentControlStructures("Estructuras de control: ");
                     setExit("Uso da sentencia EXIT para saír dos bucles: ");
                     setCycle("Uso da sentencia CYCLE para evitar realizar determinadas sentencias, iterando ao seguinte elemento: ");
+                    setArithmeticAverage("Nota final: ");
+                    setHeadMessageDialog("Información do análise");
+                    setNoteFile("Nota do arquivo: ");
 
                     //configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
@@ -1124,7 +1221,9 @@ public class Window extends JFrame implements ActionListener {
                     setNameButtonExit("Exit");
                     setNameMenu("Language");
                     setErrorDirectoryEmpty("Select a directory");
-                    setExitMessage("Analyse done\nFile saved in:\n" + Window.DEST + "\nTime: ");
+                    setExitMessage("Analyse done.");
+                    setDirectoryMessage("\nFile saved in:\n" + Window.DEST);
+                    setTimeMessage("\nTime: ");
                     setNumberOfLines("Number of lines: ");
                     setMethod("Number of functions: ");
                     setSelectDirectory("Select a directory: ");
@@ -1139,8 +1238,12 @@ public class Window extends JFrame implements ActionListener {
                     setSubroutines("Number of subroutines: ");
                     setVariables("declared variables: ");
                     setCommentSubroutines("declared subroutines: ");
+                    setCommentControlStructures("control structures: ");
                     setExit("Use the sentence EXIT to go out of loop: ");
                     setCycle("Use the sentence CYCLE to avoid making certain judgments, iterating to the next element: ");
+                    setArithmeticAverage("Final note: ");
+                    setHeadMessageDialog("Analysis information");
+                    setNoteFile("File note: ");
 
                     //configure buttons
                     this.buttonanalyse.setText(this.getNameButtonAnalyse());
@@ -1534,7 +1637,7 @@ public class Window extends JFrame implements ActionListener {
     }
 
     /**
-     * Getter commentSubroutines
+     * Getter commentSubroutinescommentControlStructures
      *
      * @return commentSubroutines
      */
@@ -1549,6 +1652,24 @@ public class Window extends JFrame implements ActionListener {
      */
     public void setCommentSubroutines(String commentSubroutines) {
         this.commentSubroutines = commentSubroutines;
+    }
+
+    /**
+     * Getter commentStructureControl
+     *
+     * @return commentControlStructures
+     */
+    public String getCommentControlStructures() {
+        return commentControlStructures;
+    }
+
+    /**
+     * Setter commentStructureControl
+     *
+     * @param commentControlStructures
+     */
+    public void setCommentControlStructures(String commentControlStructures) {
+        this.commentControlStructures = commentControlStructures;
     }
 
     /**
@@ -1587,4 +1708,94 @@ public class Window extends JFrame implements ActionListener {
         this.cycle = cycle;
     }
 
+    /**
+     * Getter of ArithmeticAverage
+     *
+     * @return arithmeticAverage
+     */
+    public String getArithmeticAverage() {
+        return arithmeticAverage;
+    }
+
+    /**
+     * Setter of arithmeticAverage
+     *
+     * @param arithmeticAverage
+     */
+    public void setArithmeticAverage(String arithmeticAverage) {
+        this.arithmeticAverage = arithmeticAverage;
+    }
+
+    /**
+     * Getter of HeadMessageDialog
+     *
+     * @return headMessageDialog
+     */
+    public String getHeadMessageDialog() {
+        return headMessageDialog;
+    }
+
+    /**
+     * Setter of headMessageDialog
+     *
+     * @param headMessageDialog
+     */
+    public void setHeadMessageDialog(String headMessageDialog) {
+        this.headMessageDialog = headMessageDialog;
+    }
+
+    /**
+     * Getter of DirectoryMessage
+     *
+     * @return directoryMessage
+     */
+    public String getDirectoryMessage() {
+        return directoryMessage;
+    }
+
+    /**
+     * Setter of directoryMessage
+     *
+     * @param directoryMessage
+     */
+    public void setDirectoryMessage(String directoryMessage) {
+        this.directoryMessage = directoryMessage;
+    }
+
+    /**
+     * Getter of TimeMessage
+     *
+     * @return timeMessage
+     */
+    public String getTimeMessage() {
+        return timeMessage;
+    }
+
+    /**
+     * Setter of TimeMessage
+     *
+     * @param timeMessage
+     */
+    public void setTimeMessage(String timeMessage) {
+        this.timeMessage = timeMessage;
+    }
+
+    /**
+     * Getter of noteFile
+     * 
+     * @return noteFile
+     */
+    public String getNoteFile()
+    {
+        return noteFile;
+    }
+    
+    /**
+     * Setter of noteFile
+     * 
+     * @param noteFile 
+     */
+    public void setNoteFile(String noteFile){
+        this.noteFile = noteFile;
+    }
 }

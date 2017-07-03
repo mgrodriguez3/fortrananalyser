@@ -1,9 +1,8 @@
 This is the README from FortranAnalyser
 
 Author: Michael García Rodríguez
-Environmental Physics Laboratory - University of Vigo, Ourense.
-
-Version: 1.0
+Environmental Physics Laboratory & Escuela Superior de Ingeniería Informática
+University of Vigo, Ourense.
 
 ================================================================================ 
 =                               DESCRIPTION                                    =

@@ -20,9 +20,7 @@ import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -43,8 +41,9 @@ public class PDF {
     private Document document;
     private final static String AUTHOR = "Michael García Rodríguez";
     private final PdfFont PDF_FONT = loadPdfFont();
-    private final static String ICON_EPHYSLAB
-            = PDF.class.getResource("ephyslab.png").toString();
+    private final static String ICON_FORTRAN_ANALYSER
+            = PDF.class.getResource("fortranAnalyser.png").toString();
+    
 
     /**
      * Method that create the cover from the report document
@@ -75,10 +74,10 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text title = new Text("Fortran Analyser");
 
-        Image coverImage = new Image(ImageDataFactory.create(ICON_EPHYSLAB));
+        Image coverImage = new Image(ImageDataFactory.create(ICON_FORTRAN_ANALYSER));
 
         coverImage.getAccessibilityProperties()
-                .setAlternateDescription("EphySLab");
+                .setAlternateDescription("FortranAnalyser");
         coverImage.setHeight(350);
         coverImage.setWidth(350);
 
@@ -94,8 +93,9 @@ public class PDF {
         this.document.add(p);
 
         Paragraph p2 = new Paragraph();
+        p2.setTextAlignment(TextAlignment.RIGHT);
 
-        p2.add(new Text(PDF.AUTHOR).setFontSize(11).setFontColor(Color.BLACK).setTextAlignment(TextAlignment.RIGHT));
+        p2.add(new Text(PDF.AUTHOR).setFontSize(11).setFontColor(Color.BLACK));
 
         this.document.add(p2);
 
@@ -168,22 +168,29 @@ public class PDF {
 
         this.document.add(p);
     }
+    
+    /**
+     * add the final note to the results from the PDF
+     * 
+     * @param result
+     * @throws IOException 
+     */
+    public void addFinalNote(String result) throws IOException {
+        Paragraph p = new Paragraph();
+        p.setTextAlignment(TextAlignment.RIGHT);
+        Text t = new Text(result);
+
+        p.add(t.setFontSize(18).setFontColor(Color.DARK_GRAY));
+        p.add("\n");
+
+        this.document.add(p);
+    }
 
     /**
      * Close the report document
      */
     public void closePDF() {
         this.document.close();
-    }
-
-    public static byte[] readFully(InputStream input) throws IOException {
-        byte[] buffer = new byte[8192];
-        int bytesRead;
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        while ((bytesRead = input.read(buffer)) != -1) {
-            output.write(buffer, 0, bytesRead);
-        }
-        return output.toByteArray();
     }
 
     /**
