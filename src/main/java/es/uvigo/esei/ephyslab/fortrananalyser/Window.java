@@ -29,6 +29,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JProgressBar;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
@@ -125,7 +126,7 @@ public class Window extends JFrame implements ActionListener {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setIconImage(new ImageIcon(Window.class.getResource("fortranAnalyserIcon.png")).getImage());
-        
+
     }
 
     /**
@@ -162,6 +163,8 @@ public class Window extends JFrame implements ActionListener {
         this.buttonFileExplorer.setText("...");
         this.buttonFileExplorer.setBounds(300, 50, 50, 25);
         this.buttonFileExplorer.addActionListener(this);
+        
+        
 
         this.fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -191,6 +194,8 @@ public class Window extends JFrame implements ActionListener {
         this.add(buttonanalyse);
         this.add(buttonExit);
         this.add(buttonFileExplorer);
+
+        
 
     }
 
@@ -276,7 +281,7 @@ public class Window extends JFrame implements ActionListener {
 
             //start the duration of the analysis
             long timeStart = System.currentTimeMillis();
-
+            
             pdf.createPdf(Window.DEST);
 
             filesInFolder = Files.walk(Paths.get(directory))
@@ -302,12 +307,12 @@ public class Window extends JFrame implements ActionListener {
                     pdf.addSubSection(file.getName());
                     pdf.addResult(analyseFile(file.getAbsolutePath()));
                     countNumberOfFiles++;
-                    pdf.addResult(this.getNoteFile() + assesment);
+                    pdf.addResult(this.getNoteFile() + String.format("%.2f", assesment));
                     finalCalification += assesment;
                 }
             }
             auxNote = finalCalification / countNumberOfFiles;
-            pdf.addFinalNote(this.getArithmeticAverage() + auxNote);
+            pdf.addFinalNote(this.getArithmeticAverage() + String.format("%.2f", auxNote));
             pdf.closePDF();
             finalCalification = 0.0;
             long timeStop = System.currentTimeMillis();
@@ -316,12 +321,11 @@ public class Window extends JFrame implements ActionListener {
             UIManager.put("OptionPane.background", Color.white);
             UIManager.put("Panel.background", Color.white);
             ImageIcon icon = new ImageIcon(Window.class.getResource("fortranAnalyserIcon.png"));
-            
-            
+
             JOptionPane.showMessageDialog(this, "<html> <span style='color:#007A82'>" + this.getExitMessage() + "</span></html>"
                     + this.getDirectoryMessage()
                     + this.getTimeMessage() + Window.getDurationAnalyse(timeStop)
-                    + "\n<html> <span style='color:#089650'>" + this.getArithmeticAverage() + auxNote + "</span></html>",
+                    + "\n<html> <span style='color:#089650'>" + this.getArithmeticAverage() + String.format("%.2f", auxNote) + "</span></html>",
                     this.getHeadMessageDialog(), JOptionPane.INFORMATION_MESSAGE, icon);
 
         } catch (IOException ex) {
@@ -347,7 +351,7 @@ public class Window extends JFrame implements ActionListener {
         boolean checkNestedLoops = this.analyseNestedLoops(pathFile);
         boolean useExit = this.analyseUseExit(pathFile);
         boolean useCycle = this.analyseUseCycle(pathFile);
-
+        
         //1.- count the number of lines in the file
         result += this.getNumberOfLines() + numLines;
         result += "\n";
@@ -359,7 +363,7 @@ public class Window extends JFrame implements ActionListener {
         if (useImplicitNone) {
             assesment += 2.0;
         }
-
+        
         //3.- count the number of functions declared
         result += this.getMethod() + this.analyseNumFunctions(pathFile);
         result += "\n";
@@ -375,7 +379,7 @@ public class Window extends JFrame implements ActionListener {
         if ((numComments * 100) / numLines > 20) {
             assesment += 2.0;
         }
-
+        
         //6.- count the number of variables declared
         result += this.getNumVariable() + this.analyseNumberOfDeclaredVariables(pathFile);
         result += "\n";
@@ -391,7 +395,7 @@ public class Window extends JFrame implements ActionListener {
         if (checkNestedLoops) {
             assesment += 2.0;
         }
-
+        
         //9.- check the number of declared subroutines
         result += this.getSubroutines() + this.analyseNumberSubroutines(pathFile);
         result += "\n";
@@ -403,7 +407,7 @@ public class Window extends JFrame implements ActionListener {
         if (useExit) {
             assesment += 1.0;
         }
-
+        
         //11.- check the use of CYCLE
         result += this.getCycle() + useCycle;
         result += "\n";
@@ -411,7 +415,7 @@ public class Window extends JFrame implements ActionListener {
         if (useCycle) {
             assesment += 1.0;
         }
-
+        
         return result;
 
     }
@@ -602,21 +606,20 @@ public class Window extends JFrame implements ActionListener {
         sb += "\n\t--> " + this.getCommentControlStructures() + goodCommentControlStructures;
 
         if (goodCommentFunctions) {
-            assesment += 0.5;
+            assesment += 0.4;
         }
         if (goodCommentInitDoc) {
-            assesment += 0.5;
+            assesment += 0.4;
         }
         if (goodCommentVariables) {
-            assesment += 0.5;
+            assesment += 0.4;
         }
         if (goodCommentSubroutines) {
-            assesment += 0.5;
+            assesment += 0.4;
         }
         if (goodCommentControlStructures) {
-            assesment += 0.5;
+            assesment += 0.4;
         }
-
         return sb;
 
     }
@@ -1782,20 +1785,19 @@ public class Window extends JFrame implements ActionListener {
 
     /**
      * Getter of noteFile
-     * 
+     *
      * @return noteFile
      */
-    public String getNoteFile()
-    {
+    public String getNoteFile() {
         return noteFile;
     }
-    
+
     /**
      * Setter of noteFile
-     * 
-     * @param noteFile 
+     *
+     * @param noteFile
      */
-    public void setNoteFile(String noteFile){
+    public void setNoteFile(String noteFile) {
         this.noteFile = noteFile;
     }
 }
