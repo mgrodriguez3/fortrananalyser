@@ -24,6 +24,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,7 +34,7 @@ import java.util.logging.Logger;
  * This class create the document PDF with the quality report
  *
  * @author Michael García Rodríguez
- * @version 1.0
+ * @version 1.9
  */
 public class PDF {
 
@@ -43,7 +46,8 @@ public class PDF {
     private final PdfFont PDF_FONT = loadPdfFont();
     private final static String ICON_FORTRAN_ANALYSER
             = PDF.class.getResource("fortranAnalyser.png").toString();
-    
+    private final static String TITLE_PDF = "FortranAnalyser: Quality report";
+    private final static String APP_NAME = "Fortran Analyser";
 
     /**
      * Method that create the cover from the report document
@@ -55,8 +59,9 @@ public class PDF {
 
         PdfDocument pdf = new PdfDocument(new PdfWriter(dest, new WriterProperties().addXmpMetadata()));
         this.document = new Document(pdf);
-        
+
         this.document.setFont(PDF_FONT);
+        
 
         //Setting some required parameters
         pdf.setTagged();
@@ -68,19 +73,31 @@ public class PDF {
                         new PdfViewerPreferences().setDisplayDocTitle(true));
         PdfDocumentInfo info = pdf.getDocumentInfo();
 
-        info.setTitle(
-                "FortranAnalyser: Quality report");
+        info.setTitle(TITLE_PDF);
 
+        info.addCreationDate();
+        info.setAuthor(AUTHOR);
+        info.setTitle(TITLE_PDF);
+
+        Paragraph par = new Paragraph();
+        Date date = new Date();
+        DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        
+        par.add(hourdateFormat.format(date));
+        
+        this.document.add(par);
+        
         Paragraph p = new Paragraph();
-        Text title = new Text("Fortran Analyser");
+        Text title = new Text(APP_NAME);
 
         Image coverImage = new Image(ImageDataFactory.create(ICON_FORTRAN_ANALYSER));
 
         coverImage.getAccessibilityProperties()
                 .setAlternateDescription("FortranAnalyser");
-        coverImage.setHeight(350);
-        coverImage.setWidth(350);
+        coverImage.setHeight(320);
+        coverImage.setWidth(320);
 
+        
         p.add(coverImage.setTextAlignment(TextAlignment.CENTER));
         p.add("\n");
 
@@ -168,12 +185,12 @@ public class PDF {
 
         this.document.add(p);
     }
-    
+
     /**
      * add the final note to the results from the PDF
-     * 
+     *
      * @param result
-     * @throws IOException 
+     * @throws IOException
      */
     public void addFinalNote(String result) throws IOException {
         Paragraph p = new Paragraph();
@@ -210,5 +227,5 @@ public class PDF {
             throw new RuntimeException(ex);
         }
     }
-    
+
 }
