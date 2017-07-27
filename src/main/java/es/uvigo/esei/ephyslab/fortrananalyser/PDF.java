@@ -39,18 +39,39 @@ import java.util.logging.Logger;
 public class PDF {
 
     /**
-     * Variables from the class
+     * the file with the report information.
      */
     private Document document;
+    
+    /**
+     * the name of the author.
+     */
     private final static String AUTHOR = "Michael García Rodríguez";
+    
+    /**
+     * the font type of the document.
+     */
     private final PdfFont PDF_FONT = loadPdfFont();
+    
+    /**
+     * The icon of the application.
+     */
     private final static String ICON_FORTRAN_ANALYSER
             = PDF.class.getResource("fortranAnalyser.png").toString();
+    
+    /**
+     * the title of the document.
+     */
     private final static String TITLE_PDF = "FortranAnalyser: Quality report";
+    
+    /**
+     * the name of the application.
+     */
     private final static String APP_NAME = "Fortran Analyser";
 
+    
     /**
-     * Method that create the cover from the report document
+     * Method that create the cover from the report document.
      *
      * @param dest
      * @throws IOException

@@ -31,29 +31,84 @@ import javax.swing.JTextField;
 public class Window extends JFrame implements ActionListener {
 
     /**
-     * Variables from the class Window
+     * application icon.
      */
     private final static ImageIcon ICON_EPHYSLAB
             = new ImageIcon(Window.class.getResource("ephysLab.png"));
+
+    /**
+     * name of the application.
+     */
     private final static String APP_NAME = "Fortran Analyser tool";
+
+    /**
+     * default country to initialice the user interface.
+     */
     private final static String DEFAULT_COUNTRY = "ES";
+
+    /**
+     * default language to initialice the user interface.
+     */
     private final static String DEFAULT_LANGUAGE = "es";
+
+    /**
+     * the name of the package where the messagesBundle i18n are.
+     */
     private final static String BUNDLE = "es.uvigo.esei.ephyslab.i18n.bundle.MessagesBundle";
 
+    /**
+     * the file choser from the computer where the application is open.
+     */
     private final JFileChooser fc = new JFileChooser();
+
+    /**
+     * the text that is show to select a directory.
+     */
     private JLabel text;
+
+    /**
+     * the box where is the path of the directory to analyse.
+     */
     private JTextField box;
+
+    /**
+     * define the button analyse.
+     */
     private JButton buttonanalyse;
+
+    /**
+     * define the button exit.
+     */
     private JButton buttonExit;
+
+    /**
+     * define the button file explorer.
+     */
     private JButton buttonFileExplorer;
+
+    /**
+     * define the menu bar in a window.
+     */
     private JMenuBar mb;
+
+    /**
+     * define the menu to select the language.
+     */
     private JMenu menuLanguages;
+
+    /**
+     * the posible language to select.
+     */
     private JMenuItem spanish, galician, english, french;
 
     /**
-     * By default, the selected language is Spanish
+     * By default, the selected language is Spanish.
      */
     Locale currentLocale;
+
+    /**
+     * the string resource of the application.
+     */
     ResourceBundle messages;
 
     /**
@@ -261,9 +316,9 @@ public class Window extends JFrame implements ActionListener {
                 }
                 break;
 
-                /**
-                 * Galician from Spain
-                 */
+            /**
+             * Galician from Spain
+             */
             case "gl":
                 if (!this.currentLocale.getLanguage().equals("gl")) {
 
@@ -273,9 +328,9 @@ public class Window extends JFrame implements ActionListener {
                 }
                 break;
 
-                /**
-                 * english from United Kingdom
-                 */
+            /**
+             * english from United Kingdom
+             */
             case "en":
                 if (!this.currentLocale.getLanguage().equals("en")) {
 

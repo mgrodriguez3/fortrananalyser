@@ -40,31 +40,72 @@ public class TasksBar extends
         SwingWorker<Void, Integer> {
 
     TasksBar(JTextArea textArea, int numbersToFind) {
-        //initialize
+
     }
 
     /**
-     * Define constants variables
+     * the extension file to search.
      */
     private static final String EXTENSION = "f90";
+
+    /**
+     * the second extension file to search.
+     */
     private static final String EXTENSION2 = "h90";
+
+    /**
+     * the path of the destination file.
+     */
     public static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
 
     /**
-     * Define variables of the class:
-     *
+     * the frame that represent the taskbar.
      */
     private JFrame taskbar;
+
+    /**
+     * the progressbar of the taskbar.
+     */
     private JProgressBar progreso;
+
+    /**
+     * the panel where is the progressbar.
+     */
     private JPanel pane;
+
+    /**
+     * the window of the progressbar.
+     */
     private Window w;
+
+    /**
+     * the path of the directory to analyse.
+     */
     private String path;
 
+    /**
+     * the assesment from file of the quality report.
+     */
     private double assesment = 0.0;
+
+    /**
+     * the final calification obtains by the directory.
+     */
     private double finalCalification = 0.0;
+
+    /**
+     * auxiliar variable to calcule the final calification.
+     */
     private double auxNote;
+
+    /**
+     * the time when the process started.
+     */
     private long timeStart;
 
+    /**
+     * the string resources i18n.
+     */
     ResourceBundle messages;
 
     TasksBar(Window w, String path, ResourceBundle messages) {
@@ -272,27 +313,40 @@ public class TasksBar extends
         boolean useExit = this.analyseUseExit(pathFile);
         boolean useCycle = this.analyseUseCycle(pathFile);
 
-        //1.- count the number of lines in the file
+        /**
+         * 1.- count the number of lines in the file
+         */
         result += this.messages.getString("numberOfLines") + numLines;
         result += "\n";
 
-        //2.- Use or not use  the sentence IMPLICIT NONE
+        /**
+         * Use or not use the sentence IMPLICIT NONE
+         */
         result += this.messages.getString("numberOfLines") + useImplicitNone;
         result += "\n";
 
+        /**
+         * in case the sentente IMPLICIT NONE is used
+         */
         if (useImplicitNone) {
             assesment += 2.0;
         }
 
-        //3.- count the number of functions declared
+        /**
+         * 3.- count the number of functions declared
+         */
         result += this.messages.getString("numFunctions") + this.analyseNumFunctions(pathFile);
         result += "\n";
 
-        //4.- count the number of subroutines calls
+        /**
+         * 4.- count the number of subroutines calls
+         */
         result += this.messages.getString("subroutinesCall") + this.analyseNumCalls(pathFile);
         result += "\n";
 
-        //5.- count the number of comments
+        /**
+         * 5.- count the number of comments
+         */
         result += this.messages.getString("comments") + numComments;
         result += " \n";
 
@@ -300,38 +354,59 @@ public class TasksBar extends
             assesment += 2.0;
         }
 
-        //6.- count the number of variables declared
+        /**
+         * 6.- count the number of variables declared
+         */
         result += this.messages.getString("numVariables") + this.analyseNumberOfDeclaredVariables(pathFile);
         result += "\n";
 
-        //7.- good comments in file
+        /**
+         * 7.- good comments in file
+         */
         result += this.messages.getString("goodComments") + this.analyseGoodComment(pathFile);
         result += "\n";
 
-        //8.- check the Nested loops
+        /**
+         * 8.- check the Nested loops
+         */
         result += this.messages.getString("nestedLoops") + checkNestedLoops;
         result += "\n";
 
+        /**
+         * in case the nestedLoop are ok
+         */
         if (checkNestedLoops) {
             assesment += 2.0;
         }
 
-        //9.- check the number of declared subroutines
+        /**
+         * 9.- check the number of declared subroutines
+         */
         result += this.messages.getString("subroutines") + this.analyseNumberSubroutines(pathFile);
         result += "\n";
 
-        //10.- check the use of EXIT
+        /**
+         * 10.- check the use of EXIT
+         */
         result += this.messages.getString("exit") + useExit;
         result += "\n";
 
+        /**
+         * in case the sentece EXIT is used
+         */
         if (useExit) {
             assesment += 1.0;
         }
 
-        //11.- check the use of CYCLE
+        /**
+         * 11.- check the use of CYCLE
+         */
         result += this.messages.getString("cycle") + useCycle;
         result += "\n";
 
+        /**
+         * in case the sentence CYCLE is used
+         */
         if (useCycle) {
             assesment += 1.0;
         }
@@ -365,7 +440,8 @@ public class TasksBar extends
     }
 
     /**
-     * This method analyse if the sentence implicit none is used
+     * This method analyse if the sentence implicit none is used in each line
+     * from a file
      *
      * @param filePath
      * @return boolean
@@ -485,8 +561,10 @@ public class TasksBar extends
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
 
-                //check if the chain is a declaration of a variable and
-                //it is not a comment 
+                /**
+                 * check if the chain is a declaration of a variable and it is
+                 * not a comment
+                 */
                 if ((chain.contains("CYCLE") || chain.contains("cycle"))
                         && !chain.contains("!")) {
 
@@ -908,8 +986,4 @@ public class TasksBar extends
         return sb.toString();
     }
 
-    private void signPDF(String pathName) {
-
-
-    }
 }
