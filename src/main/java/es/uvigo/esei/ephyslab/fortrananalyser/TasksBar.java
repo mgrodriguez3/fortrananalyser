@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
@@ -102,6 +103,11 @@ public class TasksBar extends
      * the time when the process started.
      */
     private long timeStart;
+
+    /**
+     * the list with the parcial score of each file.
+     */
+    private ArrayList<Double> scores = new ArrayList<>();
 
     /**
      * the string resources i18n.
@@ -196,6 +202,8 @@ public class TasksBar extends
                         || getFileExtension(file).equals(TasksBar.EXTENSION2.toUpperCase())) {
                     pdf.addSubSection(file.getName());
                     pdf.addResult(analyseFile(file.getAbsolutePath()));
+                    pdf.addTableScore(scores, this.messages);
+
                     countNumberOfFiles++;
                     pdf.addResult(this.messages.getString("noteFile") + String.format("%.2f", assesment));
                     finalCalification += assesment;
@@ -306,6 +314,7 @@ public class TasksBar extends
 
         String result = "";
         assesment = 0.0;
+        double percentage;
         int numLines = this.analyseNumberOfLines(pathFile);
         boolean useImplicitNone = this.analyseUseImplicitNone(pathFile);
         int numComments = this.analyseNumComments(pathFile);
@@ -330,6 +339,9 @@ public class TasksBar extends
          */
         if (useImplicitNone) {
             assesment += 2.0;
+            scores.add(2.0);
+        } else {
+            scores.add(0.0);
         }
 
         /**
@@ -350,8 +362,14 @@ public class TasksBar extends
         result += this.messages.getString("comments") + numComments;
         result += " \n";
 
-        if ((numComments * 100) / numLines > 20) {
+        percentage = (numComments * 100) / numLines;
+
+        if (percentage > 20) {
             assesment += 2.0;
+            scores.add(2.0);
+        } else {
+            double auxNum = (95.23 * percentage) / 20;
+            scores.add(auxNum);
         }
 
         /**
@@ -377,6 +395,9 @@ public class TasksBar extends
          */
         if (checkNestedLoops) {
             assesment += 2.0;
+            scores.add(2.0);
+        } else {
+            scores.add(0.0);
         }
 
         /**
@@ -396,6 +417,9 @@ public class TasksBar extends
          */
         if (useExit) {
             assesment += 1.0;
+            scores.add(1.0);
+        } else {
+            scores.add(0.0);
         }
 
         /**
@@ -409,6 +433,9 @@ public class TasksBar extends
          */
         if (useCycle) {
             assesment += 1.0;
+            scores.add(1.0);
+        } else {
+            scores.add(0.0);
         }
 
         return result;
@@ -731,18 +758,33 @@ public class TasksBar extends
 
         if (goodCommentFunctions) {
             assesment += 0.4;
+            scores.add(0.4);
+        } else {
+            scores.add(0.0);
         }
         if (goodCommentInitDoc) {
             assesment += 0.4;
+            scores.add(0.4);
+        } else {
+            scores.add(0.0);
         }
         if (goodCommentVariables) {
             assesment += 0.4;
+            scores.add(0.4);
+        } else {
+            scores.add(0.0);
         }
         if (goodCommentSubroutines) {
             assesment += 0.4;
+            scores.add(0.4);
+        } else {
+            scores.add(0.0);
         }
         if (goodCommentControlStructures) {
             assesment += 0.4;
+            scores.add(0.4);
+        } else {
+            scores.add(0.0);
         }
         return sb;
 

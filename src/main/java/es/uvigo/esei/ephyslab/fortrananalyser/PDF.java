@@ -3,6 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+ /*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import com.itextpdf.io.image.ImageDataFactory;
@@ -18,6 +23,7 @@ import com.itextpdf.kernel.pdf.WriterProperties;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
 import java.io.IOException;
@@ -26,7 +32,9 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,34 +50,33 @@ public class PDF {
      * the file with the report information.
      */
     private Document document;
-    
+
     /**
      * the name of the author.
      */
     private final static String AUTHOR = "Michael García Rodríguez";
-    
+
     /**
      * the font type of the document.
      */
     private final PdfFont PDF_FONT = loadPdfFont();
-    
+
     /**
      * The icon of the application.
      */
     private final static String ICON_FORTRAN_ANALYSER
             = PDF.class.getResource("fortranAnalyser.png").toString();
-    
+
     /**
      * the title of the document.
      */
     private final static String TITLE_PDF = "FortranAnalyser: Quality report";
-    
+
     /**
      * the name of the application.
      */
     private final static String APP_NAME = "Fortran Analyser";
 
-    
     /**
      * Method that create the cover from the report document.
      *
@@ -82,7 +89,6 @@ public class PDF {
         this.document = new Document(pdf);
 
         this.document.setFont(PDF_FONT);
-        
 
         //Setting some required parameters
         pdf.setTagged();
@@ -103,11 +109,11 @@ public class PDF {
         Paragraph par = new Paragraph();
         Date date = new Date();
         DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-        
+
         par.add(hourdateFormat.format(date));
-        
+
         this.document.add(par);
-        
+
         Paragraph p = new Paragraph();
         Text title = new Text(APP_NAME);
 
@@ -118,7 +124,6 @@ public class PDF {
         coverImage.setHeight(320);
         coverImage.setWidth(320);
 
-        
         p.add(coverImage.setTextAlignment(TextAlignment.CENTER));
         p.add("\n");
 
@@ -247,6 +252,45 @@ public class PDF {
             Logger.getLogger(PDF.class.getName()).log(Level.SEVERE, null, ex);
             throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * this methos add the summary score table
+     *
+     * @param scores
+     * @param messages
+     */
+    public void addTableScore(ArrayList<Double> scores, ResourceBundle messages) {   
+        
+        Table table = new Table(2);
+        table.addHeaderCell(messages.getString("headerLeft_table"));
+        table.addHeaderCell(messages.getString("headerRight_table"));
+
+        table.addCell(messages.getString("implicitNone_table"));
+        table.addCell(scores.get(0).toString());
+        table.addCell(messages.getString("percentLines_table"));
+        table.addCell(scores.get(1).toString());
+        table.addCell(messages.getString("useNestedLoops_table"));
+        table.addCell(scores.get(2).toString());
+        table.addCell(messages.getString("CommentsBeginning_table"));
+        table.addCell(scores.get(3).toString());
+        table.addCell(messages.getString("CommentsVariables_table"));
+        table.addCell(scores.get(4).toString());
+        table.addCell(messages.getString("CommentsFunctions_table"));
+        table.addCell(scores.get(5).toString());
+        table.addCell(messages.getString("CommentsSubroutines_table"));
+        table.addCell(scores.get(6).toString());
+        table.addCell(messages.getString("CommentsControlStructures_table"));
+        table.addCell(scores.get(7).toString());
+        table.addCell(messages.getString("UseExit_table"));
+        table.addCell(scores.get(8).toString());
+        table.addCell(messages.getString("UseCycle_table"));
+        table.addCell(scores.get(9).toString());
+         
+        
+
+        this.document.add(table);
+
     }
 
 }
