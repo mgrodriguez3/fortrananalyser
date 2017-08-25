@@ -107,7 +107,57 @@ public class TasksBar extends
     /**
      * the list with the parcial score of each file.
      */
-    private ArrayList<Double> scores = new ArrayList<>();
+    private ArrayList<Double> scores;
+
+    /**
+     * the list with all scores obtain by implicit none metric.
+     */
+    private ArrayList<Double> scoresImplicitNone;
+    
+    /**
+     * the list with all scores obtain by percentage of comments metric.
+     */
+    private ArrayList<Double> scoreCommentsPercentage;
+    
+    /**
+     * the list with all scores obtain by nested loops metric.
+     */
+    private ArrayList<Double> scoreNestedLoops;
+    
+    /**
+     * the list with all scores obtain by comments metric at the beginning.
+     */
+    private ArrayList<Double> scoreCommentsBeginning;
+    
+    /**
+     * the list with all scores obtain by comments metric in variables.
+     */
+    private ArrayList<Double> scoreCommentsVariables;
+    
+    /**
+     * the list with all scores obtain by comments metric in functions.
+     */
+    private ArrayList<Double> scoreCommentsfunction;
+    
+    /**
+     * the list with all scores obtain by comments metric in subroutine.
+     */
+    private ArrayList<Double> scoreCommentsSubroutine;
+    
+    /**
+     * the list with all scores obtain by control structures metric.
+     */
+    private ArrayList<Double> scorecommentsControlStructutes;
+    
+    /**
+     * the list with scores obtain by exit metric.
+     */
+    private ArrayList<Double> scoreExit;
+    
+    /**
+     * the list with scores obtain by cycle metric.
+     */
+    private ArrayList<Double> scoreCycle;
 
     /**
      * the string resources i18n.
@@ -115,6 +165,18 @@ public class TasksBar extends
     ResourceBundle messages;
 
     TasksBar(Window w, String path, ResourceBundle messages) {
+
+        this.scores = new ArrayList<>();
+        this.scoresImplicitNone = new ArrayList<>();
+        this.scoreCommentsPercentage = new ArrayList<>();
+        this.scoreNestedLoops = new ArrayList<>();
+        this.scoreCommentsBeginning = new ArrayList<>();
+        this.scoreCommentsVariables = new ArrayList<>();
+        this.scoreCommentsfunction = new ArrayList<>();
+        this.scoreCommentsSubroutine = new ArrayList<>();
+        this.scorecommentsControlStructutes = new ArrayList<>();
+        this.scoreExit = new ArrayList<>();
+        this.scoreCycle = new ArrayList<>();
 
         this.w = w;
         this.messages = messages;
@@ -151,6 +213,17 @@ public class TasksBar extends
     @Override
     protected Void doInBackground() throws Exception {
 
+        this.scoresImplicitNone.clear();
+        this.scoreCommentsPercentage.clear();
+        this.scoreNestedLoops.clear();
+        this.scoreCommentsBeginning.clear();
+        this.scoreCommentsVariables.clear();
+        this.scoreCommentsfunction.clear();
+        this.scoreCommentsSubroutine.clear();
+        this.scorecommentsControlStructutes.clear();
+        this.scoreExit.clear();
+        this.scoreCycle.clear();
+        
         PDF pdf;
         int countNumberOfFiles = 0;
         auxNote = 0.0;
@@ -180,6 +253,8 @@ public class TasksBar extends
              */
             for (File file : filesInFolder) {
 
+                this.scores.clear();
+                
                 /**
                  * If it is a new directory, the path is added into the report.
                  */
@@ -203,7 +278,6 @@ public class TasksBar extends
                     pdf.addSubSection(file.getName());
                     pdf.addResult(analyseFile(file.getAbsolutePath()));
                     pdf.addTableScore(scores, this.messages);
-
                     countNumberOfFiles++;
                     pdf.addResult(this.messages.getString("noteFile") + String.format("%.2f", assesment));
                     finalCalification += assesment;
@@ -212,8 +286,26 @@ public class TasksBar extends
                 percentage += 98.0 / filesInFolder.size();
                 publish((int) percentage);
             }
+            
+            /**
+             * the list scores is reused to stock the average of all metrics.
+             */
+            this.scores.clear();
+            this.scores.add(this.calculateAverage(this.scoresImplicitNone));
+            this.scores.add(this.calculateAverage(this.scoreCommentsBeginning));
+            this.scores.add(this.calculateAverage(this.scoreNestedLoops));
+            this.scores.add(this.calculateAverage(this.scoreCommentsBeginning));
+            this.scores.add(this.calculateAverage(this.scoreCommentsVariables));
+            this.scores.add(this.calculateAverage(this.scoreCommentsfunction));
+            this.scores.add(this.calculateAverage(this.scoreCommentsSubroutine));
+            this.scores.add(this.calculateAverage(this.scorecommentsControlStructutes));
+            this.scores.add(this.calculateAverage(this.scoreExit));
+            this.scores.add(this.calculateAverage(this.scoreCycle));
+            
+            pdf.addSection(this.messages.getString("finalTable"));
+            pdf.addFinalTableScore(this.scores, this.messages);
             auxNote = finalCalification / countNumberOfFiles;
-            pdf.addFinalNote(this.messages.getString("arithmeticAverage") + String.format("%.2f", auxNote));
+            pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format("%.2f", auxNote));
             pdf.closePDF();
             finalCalification = 0.0;
 
@@ -339,9 +431,12 @@ public class TasksBar extends
          */
         if (useImplicitNone) {
             assesment += 2.0;
-            scores.add(2.0);
+            this.scores.add(2.0);
+            this.scoresImplicitNone.add(2.0);
+           
         } else {
-            scores.add(0.0);
+            this.scores.add(0.0);
+            this.scoresImplicitNone.add(0.0);
         }
 
         /**
@@ -366,10 +461,12 @@ public class TasksBar extends
 
         if (percentage > 20) {
             assesment += 2.0;
-            scores.add(2.0);
+            this.scores.add(2.0);
+            this.scoreCommentsPercentage.add(2.0);
         } else {
             double auxNum = (95.23 * percentage) / 20;
-            scores.add(auxNum);
+            this.scores.add(auxNum);
+            this.scoreCommentsPercentage.add(auxNum);
         }
 
         /**
@@ -395,9 +492,11 @@ public class TasksBar extends
          */
         if (checkNestedLoops) {
             assesment += 2.0;
-            scores.add(2.0);
+            this.scores.add(2.0);
+            this.scoreNestedLoops.add(2.0);
         } else {
-            scores.add(0.0);
+            this.scores.add(0.0);
+            this.scoreNestedLoops.add(0.0);
         }
 
         /**
@@ -417,9 +516,11 @@ public class TasksBar extends
          */
         if (useExit) {
             assesment += 1.0;
-            scores.add(1.0);
+            this.scores.add(1.0);
+            this.scoreExit.add(1.0);
         } else {
-            scores.add(0.0);
+            this.scores.add(0.0);
+            this.scoreExit.add(0.0);
         }
 
         /**
@@ -433,9 +534,11 @@ public class TasksBar extends
          */
         if (useCycle) {
             assesment += 1.0;
-            scores.add(1.0);
+            this.scores.add(1.0);
+            this.scoreCycle.add(1.0);
         } else {
-            scores.add(0.0);
+            this.scores.add(0.0);
+            this.scoreCycle.add(0.0);
         }
 
         return result;
@@ -758,33 +861,43 @@ public class TasksBar extends
 
         if (goodCommentFunctions) {
             assesment += 0.4;
-            scores.add(0.4);
+            this.scores.add(0.4);
+            this.scoreCommentsfunction.add(0.4);
         } else {
-            scores.add(0.0);
+            this.scores.add(0.0);
+            this.scoreCommentsfunction.add(0.0);
         }
         if (goodCommentInitDoc) {
             assesment += 0.4;
-            scores.add(0.4);
+            this.scores.add(0.4);
+            this.scoreCommentsBeginning.add(0.4);
         } else {
-            scores.add(0.0);
+            this.scores.add(0.0);
+            //this.scoreCommentsBeginning.add(0.4);
         }
         if (goodCommentVariables) {
             assesment += 0.4;
-            scores.add(0.4);
+            this.scores.add(0.4);
+            this.scoreCommentsVariables.add(0.4);
         } else {
-            scores.add(0.0);
+            this.scores.add(0.0);
+            this.scoreCommentsVariables.add(0.0);
         }
         if (goodCommentSubroutines) {
             assesment += 0.4;
-            scores.add(0.4);
+            this.scores.add(0.4);
+            this.scoreCommentsSubroutine.add(0.4);
         } else {
-            scores.add(0.0);
+            this.scores.add(0.0);
+            this.scoreCommentsSubroutine.add(0.0);
         }
         if (goodCommentControlStructures) {
             assesment += 0.4;
-            scores.add(0.4);
+            this.scores.add(0.4);
+            this.scorecommentsControlStructutes.add(0.4);
         } else {
-            scores.add(0.0);
+            this.scores.add(0.0);
+            this.scorecommentsControlStructutes.add(0.0);
         }
         return sb;
 
@@ -1026,6 +1139,23 @@ public class TasksBar extends
         sb.append(" s");
 
         return sb.toString();
+    }
+    
+    /**
+     * this method calculate the average of the values in a list.
+     * 
+     * @param l
+     * @return 
+     */
+    private Double calculateAverage(ArrayList<Double> l){
+        
+        Double aux = 0.0;
+        
+        for(int i=0; i<l.size();i++){
+            aux+=l.get(i);
+        }
+        
+        return aux/l.size();
     }
 
 }
