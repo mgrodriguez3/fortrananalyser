@@ -23,20 +23,37 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.kernel.pdf.WriterProperties;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.border.Border;
+import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Image;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfSignatureAppearance;
+import com.itextpdf.text.pdf.PdfStamper;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.security.Certificate;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.UnrecoverableKeyException;
+import java.security.cert.CertificateException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,14 +67,24 @@ import java.util.logging.Logger;
 public class PDF {
 
     /**
-     * Define the color of headers of the table.
+     * Define the color of headers of the main table.
      */
     private final static com.itextpdf.kernel.color.Color HEADER_COLOR = new DeviceRgb(0, 130, 130);
+
+    /**
+     * Define the color of header of the table.
+     */
+    private final static com.itextpdf.kernel.color.Color HEADER_2_COLOR = new DeviceRgb(0, 69, 69);
 
     /**
      * Define the color of sections.
      */
     private final static com.itextpdf.kernel.color.Color SECTION_COLOR = new DeviceRgb(207, 106, 11);
+
+    /**
+     * Define the color of the results.
+     */
+    private final static com.itextpdf.kernel.color.Color RESULT_COLOR = new DeviceRgb(38, 50, 61);
 
     /**
      * Define the color of the subsections.
@@ -104,11 +131,14 @@ public class PDF {
      * Method that create the cover from the report document.
      *
      * @param dest
+     * @param l
      * @throws IOException
      */
-    public void createPdf(String dest) throws IOException {
+    public void createPdf(String dest, Locale l) throws IOException {
 
-        PdfDocument pdf = new PdfDocument(new PdfWriter(dest, new WriterProperties().addXmpMetadata()));
+        PdfWriter writer = new PdfWriter(dest, new WriterProperties().addXmpMetadata());
+        PdfDocument pdf = new PdfDocument(writer);
+
         this.document = new Document(pdf);
 
         this.document.setFont(PDF_FONT);
@@ -131,9 +161,10 @@ public class PDF {
 
         Paragraph par = new Paragraph();
         Date date = new Date();
-        DateFormat hourdateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
-        par.add(hourdateFormat.format(date));
+        DateFormat hourdateFormat = new SimpleDateFormat("EEEE, dd MMMM yyyy HH:mm:ss", l);
+
+        par.add(hourdateFormat.format(date)).setTextAlignment(TextAlignment.RIGHT);
 
         this.document.add(par);
 
@@ -157,13 +188,7 @@ public class PDF {
         p.add("\n\n\n\n\n\n\n\n\n\n\n\n");
 
         this.document.add(p);
-
-        Paragraph p2 = new Paragraph();
-        p2.setTextAlignment(TextAlignment.RIGHT);
-
-        p2.add(new Text(PDF.AUTHOR).setFontSize(11).setFontColor(Color.BLACK));
-
-        this.document.add(p2);
+        this.document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 
     }
 
@@ -171,7 +196,7 @@ public class PDF {
      * add a paragraph in the report document
      *
      * @param text the text to add in a paragraph
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public void addParagraph(String text) throws IOException {
 
@@ -231,10 +256,27 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(result);
 
-        p.add(t.setFontSize(12).setFontColor(Color.BLACK));
+        p.add(t.setFontSize(12).setFontColor(RESULT_COLOR));
         p.add("\n");
 
         this.document.add(p);
+    }
+
+    /**
+     * add the result from a specific analysis
+     *
+     * @param result the text to insert as a result
+     * @throws IOException
+     */
+    public void addScoreResult(String result) throws IOException {
+        Paragraph p = new Paragraph();
+        Text t = new Text(result);
+
+        p.add(t.setFontSize(12).setFontColor(RESULT_COLOR)).setBold();
+        p.add("\n");
+
+        this.document.add(p);
+        this.document.add(new AreaBreak(AreaBreakType.NEXT_PAGE));
     }
 
     /**
@@ -244,6 +286,7 @@ public class PDF {
      * @throws IOException
      */
     public void addFinalNote(String result) throws IOException {
+
         Paragraph p = new Paragraph();
         p.setTextAlignment(TextAlignment.RIGHT);
         Text t = new Text(result);
@@ -256,8 +299,10 @@ public class PDF {
 
     /**
      * Close the report document
+     *
+     * @throws java.io.IOException
      */
-    public void closePDF() {
+    public void closePDF() throws IOException {
         this.document.close();
     }
 
@@ -280,7 +325,7 @@ public class PDF {
     }
 
     /**
-     * this methos add the summary score table
+     * this methos add the summary score table.
      *
      * @param scores
      * @param messages
@@ -288,29 +333,120 @@ public class PDF {
     public void addTableScore(ArrayList<Double> scores, ResourceBundle messages) {
 
         Table table = new Table(2);
-        table.addHeaderCell(messages.getString("headerLeft_table"));
-        table.addHeaderCell(messages.getString("headerRight_table"));
+        Cell headerCellLeft = new Cell();
+        Cell headerCellRight = new Cell();
+        Cell leftCell = new Cell();
+        Cell rightCell = new Cell();
 
-        table.addCell(messages.getString("implicitNone_table"));
-        table.addCell(scores.get(0).toString());
-        table.addCell(messages.getString("percentLines_table"));
-        table.addCell(scores.get(1).toString());
-        table.addCell(messages.getString("useNestedLoops_table"));
-        table.addCell(scores.get(2).toString());
-        table.addCell(messages.getString("CommentsBeginning_table"));
-        table.addCell(scores.get(3).toString());
-        table.addCell(messages.getString("CommentsVariables_table"));
-        table.addCell(scores.get(4).toString());
-        table.addCell(messages.getString("CommentsFunctions_table"));
-        table.addCell(scores.get(5).toString());
-        table.addCell(messages.getString("CommentsSubroutines_table"));
-        table.addCell(scores.get(6).toString());
-        table.addCell(messages.getString("CommentsControlStructures_table"));
-        table.addCell(scores.get(7).toString());
-        table.addCell(messages.getString("UseExit_table"));
-        table.addCell(scores.get(8).toString());
-        table.addCell(messages.getString("UseCycle_table"));
-        table.addCell(scores.get(9).toString());
+        /**
+         * configuration of the left header of the table
+         */
+        headerCellLeft.add(messages.getString("headerLeft_table"));
+        headerCellLeft.setFontSize(13);
+        headerCellLeft.setFontColor(HEADER_2_COLOR);
+        headerCellLeft.setBorder(Border.NO_BORDER);
+
+        headerCellLeft.setTextAlignment(TextAlignment.CENTER);
+        table.addHeaderCell(headerCellLeft);
+
+        /**
+         * configuration of the right header of the table
+         */
+        headerCellRight.add(messages.getString("headerRight_table"));
+        headerCellRight.setFontSize(13);
+        headerCellRight.setFontColor(HEADER_2_COLOR);
+        headerCellRight.setBorder(Border.NO_BORDER);
+
+        headerCellRight.setTextAlignment(TextAlignment.CENTER);
+        table.addHeaderCell(headerCellRight);
+
+        leftCell.add(messages.getString("implicitNone_table"));
+        table.addCell(leftCell);
+
+        rightCell.add(scores.get(0).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        leftCell = new Cell();
+        leftCell.add(messages.getString("percentLines_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(1).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        leftCell = new Cell();
+        leftCell.add(messages.getString("useNestedLoops_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(2).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        leftCell = new Cell();
+        leftCell.add(messages.getString("CommentsBeginning_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(3).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        leftCell = new Cell();
+        leftCell.add(messages.getString("CommentsVariables_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(4).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        leftCell = new Cell();
+        leftCell.add(messages.getString("CommentsFunctions_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(5).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        leftCell = new Cell();
+        leftCell.add(messages.getString("CommentsSubroutines_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(6).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        leftCell = new Cell();
+        leftCell.add(messages.getString("CommentsControlStructures_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(7).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        leftCell = new Cell();
+        leftCell.add(messages.getString("UseExit_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(8).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        leftCell = new Cell();
+        leftCell.add(messages.getString("UseCycle_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(9).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
 
         this.document.add(table);
 
@@ -318,7 +454,7 @@ public class PDF {
 
     /**
      * this method add the final score table with a diferent style from the
-     * addTableScore method (previously implemented)
+     * addTableScore method (previously implemented).
      *
      * @param scores
      * @param messages

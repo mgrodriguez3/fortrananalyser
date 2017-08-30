@@ -241,7 +241,7 @@ public class TasksBar extends
             percentage += 1.0;
             publish((int) percentage);
 
-            pdf.createPdf(TasksBar.DEST);
+            pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
 
             filesInFolder = Files.walk(Paths.get(this.path))
                     .filter(Files::isRegularFile)
@@ -279,7 +279,7 @@ public class TasksBar extends
                     pdf.addResult(analyseFile(file.getAbsolutePath()));
                     pdf.addTableScore(scores, this.messages);
                     countNumberOfFiles++;
-                    pdf.addResult(this.messages.getString("noteFile") + String.format("%.2f", assesment));
+                    pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.2f", assesment));
                     finalCalification += assesment;
                 }
 
@@ -290,6 +290,7 @@ public class TasksBar extends
             /**
              * the list scores is reused to stock the average of all metrics.
              */
+            
             this.scores.clear();
             this.scores.add(this.calculateAverage(this.scoresImplicitNone));
             this.scores.add(this.calculateAverage(this.scoreCommentsBeginning));
