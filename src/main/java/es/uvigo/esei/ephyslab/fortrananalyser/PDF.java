@@ -13,8 +13,10 @@ package es.uvigo.esei.ephyslab.fortrananalyser;
 import com.itextpdf.io.image.ImageDataFactory;
 import com.itextpdf.kernel.color.Color;
 import com.itextpdf.kernel.color.DeviceRgb;
+import com.itextpdf.kernel.events.PdfDocumentEvent;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfDocumentInfo;
 import com.itextpdf.kernel.pdf.PdfString;
@@ -31,24 +33,10 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.AreaBreakType;
 import com.itextpdf.layout.property.TextAlignment;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.PdfSignatureAppearance;
-import com.itextpdf.text.pdf.PdfStamper;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.security.Certificate;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.UnrecoverableKeyException;
-import java.security.cert.CertificateException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,9 +127,13 @@ public class PDF {
         PdfWriter writer = new PdfWriter(dest, new WriterProperties().addXmpMetadata());
         PdfDocument pdf = new PdfDocument(writer);
 
-        this.document = new Document(pdf);
+        this.document = new Document(pdf, PageSize.A4);
 
         this.document.setFont(PDF_FONT);
+        
+        PageEvent evento = new PageEvent(this.document);
+        
+        pdf.addEventHandler(PdfDocumentEvent.END_PAGE, evento);
 
         //Setting some required parameters
         pdf.setTagged();
@@ -221,8 +213,6 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(text);
 
-        p.add("\n");
-        p.add("\n");
         p.add(t.setFontSize(16).setFontColor(FINAL_NOTE_COLOR));
         p.add("\n");
 
