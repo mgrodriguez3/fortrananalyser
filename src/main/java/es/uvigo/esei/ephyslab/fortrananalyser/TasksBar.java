@@ -424,7 +424,7 @@ public class TasksBar extends
         /**
          * Use or not use the sentence IMPLICIT NONE
          */
-        result += this.messages.getString("numberOfLines") + useImplicitNone;
+        result += this.messages.getString("implicitNone") + useImplicitNone;
         result += "\n";
 
         /**
@@ -465,7 +465,8 @@ public class TasksBar extends
             this.scores.add(2.0);
             this.scoreCommentsPercentage.add(2.0);
         } else {
-            double auxNum = (95.23 * percentage) / 20;
+            double auxNum = (1.9 * percentage) / 100;  
+            assesment +=auxNum;
             this.scores.add(auxNum);
             this.scoreCommentsPercentage.add(auxNum);
         }
