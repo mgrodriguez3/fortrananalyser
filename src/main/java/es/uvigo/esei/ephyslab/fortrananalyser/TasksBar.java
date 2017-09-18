@@ -16,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -113,47 +114,47 @@ public class TasksBar extends
      * the list with all scores obtain by implicit none metric.
      */
     private ArrayList<Double> scoresImplicitNone;
-    
+
     /**
      * the list with all scores obtain by percentage of comments metric.
      */
     private ArrayList<Double> scoreCommentsPercentage;
-    
+
     /**
      * the list with all scores obtain by nested loops metric.
      */
     private ArrayList<Double> scoreNestedLoops;
-    
+
     /**
      * the list with all scores obtain by comments metric at the beginning.
      */
     private ArrayList<Double> scoreCommentsBeginning;
-    
+
     /**
      * the list with all scores obtain by comments metric in variables.
      */
     private ArrayList<Double> scoreCommentsVariables;
-    
+
     /**
      * the list with all scores obtain by comments metric in functions.
      */
     private ArrayList<Double> scoreCommentsfunction;
-    
+
     /**
      * the list with all scores obtain by comments metric in subroutine.
      */
     private ArrayList<Double> scoreCommentsSubroutine;
-    
+
     /**
      * the list with all scores obtain by control structures metric.
      */
     private ArrayList<Double> scorecommentsControlStructutes;
-    
+
     /**
      * the list with scores obtain by exit metric.
      */
     private ArrayList<Double> scoreExit;
-    
+
     /**
      * the list with scores obtain by cycle metric.
      */
@@ -223,7 +224,7 @@ public class TasksBar extends
         this.scorecommentsControlStructutes.clear();
         this.scoreExit.clear();
         this.scoreCycle.clear();
-        
+
         PDF pdf;
         int countNumberOfFiles = 0;
         auxNote = 0.0;
@@ -254,7 +255,7 @@ public class TasksBar extends
             for (File file : filesInFolder) {
 
                 this.scores.clear();
-                
+
                 /**
                  * If it is a new directory, the path is added into the report.
                  */
@@ -286,11 +287,10 @@ public class TasksBar extends
                 percentage += 98.0 / filesInFolder.size();
                 publish((int) percentage);
             }
-            
+
             /**
              * the list scores is reused to stock the average of all metrics.
              */
-            
             this.scores.clear();
             this.scores.add(this.calculateAverage(this.scoresImplicitNone));
             this.scores.add(this.calculateAverage(this.scoreCommentsBeginning));
@@ -302,11 +302,11 @@ public class TasksBar extends
             this.scores.add(this.calculateAverage(this.scorecommentsControlStructutes));
             this.scores.add(this.calculateAverage(this.scoreExit));
             this.scores.add(this.calculateAverage(this.scoreCycle));
-            
+
             pdf.addSection(this.messages.getString("finalTable"));
             pdf.addFinalTableScore(this.scores, this.messages);
             auxNote = finalCalification / countNumberOfFiles;
-            pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format("%.2f", auxNote));
+            pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT,"%.2f", auxNote));
             pdf.closePDF();
             finalCalification = 0.0;
 
@@ -434,7 +434,7 @@ public class TasksBar extends
             assesment += 2.0;
             this.scores.add(2.0);
             this.scoresImplicitNone.add(2.0);
-           
+
         } else {
             this.scores.add(0.0);
             this.scoresImplicitNone.add(0.0);
@@ -465,8 +465,8 @@ public class TasksBar extends
             this.scores.add(2.0);
             this.scoreCommentsPercentage.add(2.0);
         } else {
-            double auxNum = (1.9 * percentage) / 100;  
-            assesment +=auxNum;
+            double auxNum = (1.9 * percentage) / 100;
+            assesment += auxNum;
             this.scores.add(auxNum);
             this.scoreCommentsPercentage.add(auxNum);
         }
@@ -478,13 +478,7 @@ public class TasksBar extends
         result += "\n";
 
         /**
-         * 7.- good comments in file
-         */
-        result += this.messages.getString("goodComments") + this.analyseGoodComment(pathFile);
-        result += "\n";
-
-        /**
-         * 8.- check the Nested loops
+         * 7.- check the Nested loops
          */
         result += this.messages.getString("nestedLoops") + checkNestedLoops;
         result += "\n";
@@ -500,6 +494,12 @@ public class TasksBar extends
             this.scores.add(0.0);
             this.scoreNestedLoops.add(0.0);
         }
+
+        /**
+         * 8.- good comments in file
+         */
+        result += this.messages.getString("goodComments") + this.analyseGoodComment(pathFile);
+        result += "\n";
 
         /**
          * 9.- check the number of declared subroutines
@@ -687,6 +687,8 @@ public class TasksBar extends
 
         String chain = "";
         File file = new File(filePath);
+        int numCycles = 0;
+        int numLoops = 0;
 
         FileReader fr = new FileReader(file);
 
@@ -694,17 +696,26 @@ public class TasksBar extends
             while ((chain = b.readLine()) != null) {
 
                 /**
+                 * check if there are a loop.
+                 */
+                if (!chain.contains("!")
+                        && !chain.contains("END DO")
+                        && chain.contains("DO")) {
+                    numLoops++;
+                }
+                /**
                  * check if the chain is a declaration of a variable and it is
-                 * not a comment
+                 * not a comment.
                  */
                 if ((chain.contains("CYCLE") || chain.contains("cycle"))
                         && !chain.contains("!")) {
 
-                    return true;
+                    numCycles++;
                 }
             }
         }
-        return false;
+
+        return numLoops == numCycles;
     }
 
     /**
@@ -719,22 +730,35 @@ public class TasksBar extends
 
         String chain = "";
         File file = new File(filePath);
-
+        int numLoops = 0;
+        int numExit = 0;
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
 
-                //check if the chain is a declaration of a variable and
-                //it is not a comment 
+                /**
+                 * check if they are a loop.
+                 */
+                if (!chain.contains("!")
+                        && !chain.contains("END DO")
+                        && chain.contains("DO")) {
+                    numLoops++;
+                }
+
+                /**
+                 * check if the chain is a declaration of a variable and it is
+                 * not a comment.
+                 */
                 if ((chain.contains("EXIT") || chain.contains("exit"))
                         && !chain.contains("!")) {
 
-                    return true;
+                    numExit++;
                 }
+
             }
         }
-        return false;
+        return numLoops == numExit;
     }
 
     /**
@@ -807,7 +831,12 @@ public class TasksBar extends
 
         }
 
-        return true;
+        /**
+         * In case there are not nested loops in file, Else there are nested
+         * loops within close sentence.
+         */
+        return nestedLoops == 0;
+
     }
 
     /**
@@ -1088,7 +1117,7 @@ public class TasksBar extends
 
                 //check if it is a declaration of a function
                 if (!chain.contains("!")
-                        && !chain.contains(" end function")
+                        && !chain.contains("end function")
                         && !chain.contains("END FUNCTION")
                         && (chain.contains("function")
                         || chain.contains("FUNCTION"))) {
@@ -1142,22 +1171,22 @@ public class TasksBar extends
 
         return sb.toString();
     }
-    
+
     /**
      * this method calculate the average of the values in a list.
-     * 
+     *
      * @param l
-     * @return 
+     * @return
      */
-    private Double calculateAverage(ArrayList<Double> l){
-        
+    private Double calculateAverage(ArrayList<Double> l) {
+
         Double aux = 0.0;
-        
-        for(int i=0; i<l.size();i++){
-            aux+=l.get(i);
+
+        for (int i = 0; i < l.size(); i++) {
+            aux += l.get(i);
         }
-        
-        return aux/l.size();
+
+        return aux / l.size();
     }
 
 }

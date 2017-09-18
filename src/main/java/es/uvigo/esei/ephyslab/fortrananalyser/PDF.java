@@ -130,9 +130,9 @@ public class PDF {
         this.document = new Document(pdf, PageSize.A4);
 
         this.document.setFont(PDF_FONT);
-        
+
         PageEvent evento = new PageEvent(this.document);
-        
+
         pdf.addEventHandler(PdfDocumentEvent.END_PAGE, evento);
 
         //Setting some required parameters
@@ -350,6 +350,9 @@ public class PDF {
         headerCellRight.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(headerCellRight);
 
+        /**
+         * 1. Implicit None
+         */
         leftCell.add(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
 
@@ -357,15 +360,21 @@ public class PDF {
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 2. Percentage comments
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("percentLines_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(1).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(1)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 3. Nested Loops
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("useNestedLoops_table"));
         table.addCell(leftCell);
@@ -375,17 +384,23 @@ public class PDF {
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 4. Comments in functions
+         */
         leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsBeginning_table"));
+        leftCell.add(messages.getString("CommentsFunctions_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
         rightCell.add(scores.get(3).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
-
+        
+        /**
+         * 5. Comments beginning
+         */
         leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsVariables_table"));
+        leftCell.add(messages.getString("CommentsBeginning_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
@@ -393,8 +408,12 @@ public class PDF {
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        
+        /**
+         * 6. Comments variables
+         */
         leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsFunctions_table"));
+        leftCell.add(messages.getString("CommentsVariables_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
@@ -402,6 +421,9 @@ public class PDF {
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 7. Comments subroutines
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsSubroutines_table"));
         table.addCell(leftCell);
@@ -411,6 +433,9 @@ public class PDF {
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 8. Comments control structures
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsControlStructures_table"));
         table.addCell(leftCell);
@@ -420,6 +445,9 @@ public class PDF {
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 9. Use sentence EXIT
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("UseExit_table"));
         table.addCell(leftCell);
@@ -429,6 +457,9 @@ public class PDF {
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 10. Use sentence CYCLE
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("UseCycle_table"));
         table.addCell(leftCell);
@@ -456,6 +487,7 @@ public class PDF {
         Cell headerCellRight = new Cell();
         Cell leftCell = new Cell();
         Cell rightCell = new Cell();
+        
 
         /**
          * configuration of the left header of the table
@@ -479,91 +511,123 @@ public class PDF {
         headerCellRight.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(headerCellRight);
 
+        
+        /**
+         * 1. Implicit None
+         */
         leftCell.add(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
 
-        rightCell.add(scores.get(0).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(0)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 2. Percentage comments
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("percentLines_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(1).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(1)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 3. Nested Loops
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("useNestedLoops_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(2).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(2)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsBeginning_table"));
-        table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(scores.get(3).toString());
-        rightCell.setTextAlignment(TextAlignment.CENTER);
-        table.addCell(rightCell);
-
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsVariables_table"));
-        table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(scores.get(4).toString());
-        rightCell.setTextAlignment(TextAlignment.CENTER);
-        table.addCell(rightCell);
-
+        /**
+         * 4. Comments in functions
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsFunctions_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(5).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(3)));
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+        
+        /**
+         * 5. Comments beginning
+         */
+        leftCell = new Cell();
+        leftCell.add(messages.getString("CommentsBeginning_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(4)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        
+        /**
+         * 6. Comments variables
+         */
+        leftCell = new Cell();
+        leftCell.add(messages.getString("CommentsVariables_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(5)));
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        /**
+         * 7. Comments subroutines
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsSubroutines_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(6).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(6)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 8. Comments control structures
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsControlStructures_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(7).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(7)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 9. Use sentence EXIT
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("UseExit_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(8).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(8)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        /**
+         * 10. Use sentence CYCLE
+         */
         leftCell = new Cell();
         leftCell.add(messages.getString("UseCycle_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(9).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(9)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
