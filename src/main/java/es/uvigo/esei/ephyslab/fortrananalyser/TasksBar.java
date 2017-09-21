@@ -56,6 +56,11 @@ public class TasksBar extends
     private static final String EXTENSION2 = "h90";
 
     /**
+     * the third extension file to search.
+     */
+    private static final String EXTENSION3 = "f";
+
+    /**
      * the path of the destination file.
      */
     public static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
@@ -181,7 +186,6 @@ public class TasksBar extends
 
         this.w = w;
         this.messages = messages;
-
         this.taskbar = new JFrame();
         this.pane = new JPanel();
         this.path = path;
@@ -197,7 +201,6 @@ public class TasksBar extends
         this.taskbar.pack();
         this.taskbar.setLocationRelativeTo(null);
         this.taskbar.setResizable(false);
-        //this.taskbar.setUndecorated(true);
         this.taskbar.setVisible(true);
 
     }
@@ -235,6 +238,7 @@ public class TasksBar extends
             List<File> filesInFolder;
             String auxDir = "";
             pdf = new PDF();
+            String extensionFile = "";
 
             //start the duration of the analysis
             timeStart = System.currentTimeMillis();
@@ -255,37 +259,42 @@ public class TasksBar extends
             for (File file : filesInFolder) {
 
                 this.scores.clear();
+                extensionFile = getFileExtension(file).toLowerCase();
 
                 /**
-                 * If it is a new directory, the path is added into the report.
+                 * Check if the file is not empty
                  */
-                if (!auxDir.equals(getPathFromFile(file))
-                        && (getFileExtension(file).equals(TasksBar.EXTENSION)
-                        || getFileExtension(file).equals(TasksBar.EXTENSION2)
-                        || getFileExtension(file).equals(TasksBar.EXTENSION.toUpperCase())
-                        || getFileExtension(file).equals(TasksBar.EXTENSION2.toUpperCase()))) {
-                    auxDir = getPathFromFile(file);
-                    pdf.addSection(auxDir);
-                }
+                if (file.length() > 0) {
+                    /**
+                     * If it is a new directory, the path is added into the
+                     * report.
+                     */
+                    if (!auxDir.equals(getPathFromFile(file))
+                            && (extensionFile.equals(TasksBar.EXTENSION)
+                            || extensionFile.equals(TasksBar.EXTENSION2)
+                            || extensionFile.equals(TasksBar.EXTENSION3))) {
+                        auxDir = getPathFromFile(file);
+                        pdf.addSection(auxDir);
+                    }
 
-                /**
-                 * If it is a new file of fortran code, the path is added into
-                 * the report.
-                 */
-                if (getFileExtension(file).equals(TasksBar.EXTENSION)
-                        || getFileExtension(file).equals(TasksBar.EXTENSION2)
-                        || getFileExtension(file).equals(TasksBar.EXTENSION.toUpperCase())
-                        || getFileExtension(file).equals(TasksBar.EXTENSION2.toUpperCase())) {
-                    pdf.addSubSection(file.getName());
-                    pdf.addResult(analyseFile(file.getAbsolutePath()));
-                    pdf.addTableScore(scores, this.messages);
-                    countNumberOfFiles++;
-                    pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.2f", assesment));
-                    finalCalification += assesment;
-                }
+                    /**
+                     * If it is a new file of fortran code, the path is added
+                     * into the report.
+                     */
+                    if (extensionFile.equals(TasksBar.EXTENSION)
+                            || extensionFile.equals(TasksBar.EXTENSION2)
+                            || extensionFile.equals(TasksBar.EXTENSION3)) {
+                        pdf.addSubSection(file.getName());
+                        pdf.addResult(analyseFile(file.getAbsolutePath()));
+                        pdf.addTableScore(scores, this.messages);
+                        countNumberOfFiles++;
+                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.2f", assesment));
+                        finalCalification += assesment;
+                    }
 
-                percentage += 98.0 / filesInFolder.size();
-                publish((int) percentage);
+                    percentage += 98.0 / filesInFolder.size();
+                    publish((int) percentage);
+                }
             }
 
             /**
@@ -306,7 +315,7 @@ public class TasksBar extends
             pdf.addSection(this.messages.getString("finalTable"));
             pdf.addFinalTableScore(this.scores, this.messages);
             auxNote = finalCalification / countNumberOfFiles;
-            pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT,"%.2f", auxNote));
+            pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.2f", auxNote));
             pdf.closePDF();
             finalCalification = 0.0;
 
@@ -317,6 +326,7 @@ public class TasksBar extends
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        this.w.setEnabled(true);
         return null;
     }
 

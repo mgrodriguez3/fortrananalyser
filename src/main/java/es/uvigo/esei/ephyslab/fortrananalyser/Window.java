@@ -202,6 +202,8 @@ public class Window extends JFrame implements ActionListener {
         this.french = new JMenuItem(this.messages.getString("nameButtonFrench"));
         this.french.addActionListener(this);
         this.menuLanguages.add(french);
+        
+        this.setUndecorated(true);
 
         // add all components in the JFrame
         this.add(text);
@@ -275,6 +277,7 @@ public class Window extends JFrame implements ActionListener {
     private void executeAnalyse(String pathFile) {
 
         TasksBar t = new TasksBar(Window.this, pathFile, Window.this.messages);
+        this.setEnabled(false);
         t.execute();
 
     }
