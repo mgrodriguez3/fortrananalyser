@@ -8,8 +8,7 @@ University of Vigo, Ourense.
 =                               DESCRIPTION                                    =
 ================================================================================
    This application analyse all files from a specific directory and search all
- FORTRAN files. This files extension are ".f90" and ".h90". For each files the
- program:
+ FORTRAN files. For each files the program:
 
     - count the number of lines from the file.
         It is a question of verifying the magnitude of the file, since the 
