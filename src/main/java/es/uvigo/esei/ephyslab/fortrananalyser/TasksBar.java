@@ -169,6 +169,7 @@ public class TasksBar extends
      * the string resources i18n.
      */
     ResourceBundle messages;
+    
 
     TasksBar(Window w, String path, ResourceBundle messages) {
 
@@ -203,6 +204,13 @@ public class TasksBar extends
         this.taskbar.setResizable(false);
         this.taskbar.setVisible(true);
 
+    }
+
+    /**
+     * Empty constructor
+     */
+    public TasksBar() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -564,7 +572,7 @@ public class TasksBar extends
      * @return the number of lines from file
      * @throws IOException
      */
-    private int analyseNumberOfLines(String filePath) throws IOException {
+    public int analyseNumberOfLines(String filePath) throws IOException {
 
         int count = 0;
         String chain = "";
@@ -589,7 +597,7 @@ public class TasksBar extends
      * @return boolean
      * @throws IOException
      */
-    private boolean analyseUseImplicitNone(String filePath) throws IOException {
+    public boolean analyseUseImplicitNone(String filePath) throws IOException {
 
         String chain = "";
         File file = new File(filePath);
@@ -613,7 +621,7 @@ public class TasksBar extends
      * @return the number of functions in this file
      * @throws IOException
      */
-    private int analyseNumFunctions(String filePath) throws IOException {
+    public int analyseNumFunctions(String filePath) throws IOException {
 
         int count = 0;
         String chain = "";
@@ -641,7 +649,7 @@ public class TasksBar extends
      * @return the number of subroutines calls
      * @throws IOException
      */
-    private int analyseNumCalls(String filePath) throws IOException {
+    public int analyseNumCalls(String filePath) throws IOException {
         int count = 0;
         String chain = "";
         File file = new File(filePath);
@@ -666,7 +674,7 @@ public class TasksBar extends
      * @return the number of comments
      * @throws IOException
      */
-    private int analyseNumComments(String filePath) throws IOException {
+    public int analyseNumComments(String filePath) throws IOException {
         int count = 0;
         String chain = "";
         File file = new File(filePath);
@@ -693,7 +701,7 @@ public class TasksBar extends
      * @return
      * @throws IOException
      */
-    private boolean analyseUseCycle(String filePath) throws IOException {
+    public boolean analyseUseCycle(String filePath) throws IOException {
 
         String chain = "";
         File file = new File(filePath);
@@ -736,7 +744,7 @@ public class TasksBar extends
      * @return boolean
      * @throws IOException
      */
-    private boolean analyseUseExit(String filePath) throws IOException {
+    public boolean analyseUseExit(String filePath) throws IOException {
 
         String chain = "";
         File file = new File(filePath);
@@ -778,7 +786,7 @@ public class TasksBar extends
      * @return the number of subroutines
      * @throws IOException
      */
-    private int analyseNumberSubroutines(String filePath) throws IOException {
+    public int analyseNumberSubroutines(String filePath) throws IOException {
 
         String chain = "";
         int count = 0;
@@ -808,7 +816,7 @@ public class TasksBar extends
      * @return boolean
      * @throws IOException
      */
-    private boolean analyseNestedLoops(String filePath) throws IOException {
+    public boolean analyseNestedLoops(String filePath) throws IOException {
 
         String chain = "";
         int nestedLoops = 0;
@@ -856,7 +864,7 @@ public class TasksBar extends
      * @return the number of declared variables
      * @throws IOException
      */
-    private int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
+    public int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
         String chain = "";
         int count = 0;
         File file = new File(filePath);
@@ -952,7 +960,7 @@ public class TasksBar extends
      * @return boolean
      * @throws IOException
      */
-    private boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
+    public boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
         String chain = "";
         String previousChain = "";
         File file = new File(filePath);
@@ -1003,7 +1011,7 @@ public class TasksBar extends
      * @return boolean
      * @throws IOException
      */
-    private boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
+    public boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
         String chain = "";
         String previousChain = "";
         File file = new File(filePath);
@@ -1048,7 +1056,7 @@ public class TasksBar extends
      * @return boolean
      * @throws IOException
      */
-    private boolean analyseGoodCommentedVariables(String filePath) throws IOException {
+    public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
         String chain = "";
         File file = new File(filePath);
         int variablesCommented = 0;
@@ -1082,20 +1090,23 @@ public class TasksBar extends
      * @return boolean
      * @throws IOException
      */
-    private boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
+    public boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
 
         String chain = "";
         int count = 0;
+        int ite = 0;
         File file = new File(filePath);
 
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null && count < 2) {
+            while ((chain = b.readLine()) != null && count < 2 && ite < 3) {
 
                 if (chain.contains("!")) {
                     count++;
                 }
+                
+                ite++;
             }
         }
 
@@ -1111,7 +1122,7 @@ public class TasksBar extends
      * @return boolean
      * @throws IOException
      */
-    private boolean analyseGoodCommentFunctions(String filePath) throws IOException {
+    public boolean analyseGoodCommentFunctions(String filePath) throws IOException {
 
         String chain = "";
         String previousChain = "";
