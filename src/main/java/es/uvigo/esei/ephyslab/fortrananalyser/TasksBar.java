@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,9 +62,14 @@ public class TasksBar extends
     private static final String EXTENSION3 = "f";
 
     /**
-     * the path of the destination file.
+     * the path and the name of the file.
      */
     public static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
+    
+    /**
+     * the path of the destination of the file
+     */
+    public static final String PATH = System.getProperty("user.home") + "/temp";
 
     /**
      * the frame that represent the taskbar.
@@ -253,6 +259,12 @@ public class TasksBar extends
 
             percentage += 1.0;
             publish((int) percentage);
+            
+            /**
+             * In case the temp folder doesn't exits
+             */
+            if(!Files.exists(Paths.get(TasksBar.DEST)))
+                new File(TasksBar.PATH).mkdirs();
 
             pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
 
