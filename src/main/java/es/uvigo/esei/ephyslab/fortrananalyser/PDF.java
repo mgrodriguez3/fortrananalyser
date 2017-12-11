@@ -482,13 +482,14 @@ public class PDF {
      */
     public void addFinalTableScore(ArrayList<Double> scores, ResourceBundle messages) {
 
+        
         Table table = new Table(2);
         Cell headerCellLeft = new Cell();
         Cell headerCellRight = new Cell();
         Cell leftCell = new Cell();
         Cell rightCell = new Cell();
         
-
+        
         /**
          * configuration of the left header of the table
          */

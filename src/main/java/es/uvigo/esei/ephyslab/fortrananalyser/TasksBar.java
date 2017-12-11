@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +64,7 @@ public class TasksBar extends
      * the path and the name of the file.
      */
     public static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
-    
+
     /**
      * the path of the destination of the file
      */
@@ -175,7 +174,6 @@ public class TasksBar extends
      * the string resources i18n.
      */
     ResourceBundle messages;
-    
 
     TasksBar(Window w, String path, ResourceBundle messages) {
 
@@ -259,12 +257,13 @@ public class TasksBar extends
 
             percentage += 1.0;
             publish((int) percentage);
-            
+
             /**
              * In case the temp folder doesn't exits
              */
-            if(!Files.exists(Paths.get(TasksBar.DEST)))
+            if (!Files.exists(Paths.get(TasksBar.DEST))) {
                 new File(TasksBar.PATH).mkdirs();
+            }
 
             pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
 
@@ -332,13 +331,15 @@ public class TasksBar extends
             this.scores.add(this.calculateAverage(this.scoreExit));
             this.scores.add(this.calculateAverage(this.scoreCycle));
 
-            pdf.addSection(this.messages.getString("finalTable"));
-            pdf.addFinalTableScore(this.scores, this.messages);
-            auxNote = finalCalification / countNumberOfFiles;
-            pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.2f", auxNote));
+            if (!this.scores.get(0).isNaN()) {
+                pdf.addSection(this.messages.getString("finalTable"));
+                pdf.addFinalTableScore(this.scores, this.messages);
+                auxNote = finalCalification / countNumberOfFiles;
+                pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.2f", auxNote));
+            }
+
             pdf.closePDF();
             finalCalification = 0.0;
-
             percentage = 100;
             publish((int) percentage);
 
@@ -1117,7 +1118,7 @@ public class TasksBar extends
                 if (chain.contains("!")) {
                     count++;
                 }
-                
+
                 ite++;
             }
         }
