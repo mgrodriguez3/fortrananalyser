@@ -129,7 +129,7 @@ public class TasksBar extends
     /**
      * the list with all scores obtain by percentage of comments metric.
      */
-    private ArrayList<Double> scoreCommentsPercentage;
+    private ArrayList<Double> scoreRatio;
 
     /**
      * the list with all scores obtain by nested loops metric.
@@ -159,7 +159,7 @@ public class TasksBar extends
     /**
      * the list with all scores obtain by control structures metric.
      */
-    private ArrayList<Double> scorecommentsControlStructutes;
+    private ArrayList<Double> scoreCommentsControlStructures;
 
     /**
      * the list with scores obtain by exit metric.
@@ -185,13 +185,13 @@ public class TasksBar extends
 
         this.scores = new ArrayList<>();
         this.scoresImplicitNone = new ArrayList<>();
-        this.scoreCommentsPercentage = new ArrayList<>();
+        this.scoreRatio = new ArrayList<>();
         this.scoreNestedLoops = new ArrayList<>();
         this.scoreCommentsBeginning = new ArrayList<>();
         this.scoreCommentsVariables = new ArrayList<>();
         this.scoreCommentsfunction = new ArrayList<>();
         this.scoreCommentsSubroutine = new ArrayList<>();
-        this.scorecommentsControlStructutes = new ArrayList<>();
+        this.scoreCommentsControlStructures = new ArrayList<>();
         this.scoreExit = new ArrayList<>();
         this.scoreCycle = new ArrayList<>();
 
@@ -236,13 +236,13 @@ public class TasksBar extends
     protected Void doInBackground() throws Exception {
 
         this.scoresImplicitNone.clear();
-        this.scoreCommentsPercentage.clear();
+        this.scoreRatio.clear();
         this.scoreNestedLoops.clear();
         this.scoreCommentsBeginning.clear();
         this.scoreCommentsVariables.clear();
         this.scoreCommentsfunction.clear();
         this.scoreCommentsSubroutine.clear();
-        this.scorecommentsControlStructutes.clear();
+        this.scoreCommentsControlStructures.clear();
         this.scoreExit.clear();
         this.scoreCycle.clear();
 
@@ -313,7 +313,7 @@ public class TasksBar extends
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
                         pdf.addTableScore(scores, this.messages);
                         countNumberOfFiles++;
-                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.2f", assesment));
+                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format(Locale.ROOT,"%.2f", assesment));
                         finalCalification += assesment;
                     }
 
@@ -327,15 +327,15 @@ public class TasksBar extends
              */
             this.scores.clear();
             this.scores.add(this.calculateAverage(this.scoresImplicitNone));
-            this.scores.add(this.calculateAverage(this.scoreCommentsBeginning));
             this.scores.add(this.calculateAverage(this.scoreNestedLoops));
+            this.scores.add(this.calculateAverage(this.scoreCommentsfunction));
             this.scores.add(this.calculateAverage(this.scoreCommentsBeginning));
             this.scores.add(this.calculateAverage(this.scoreCommentsVariables));
-            this.scores.add(this.calculateAverage(this.scoreCommentsfunction));
             this.scores.add(this.calculateAverage(this.scoreCommentsSubroutine));
-            this.scores.add(this.calculateAverage(this.scorecommentsControlStructutes));
+            this.scores.add(this.calculateAverage(this.scoreCommentsControlStructures));
             this.scores.add(this.calculateAverage(this.scoreExit));
             this.scores.add(this.calculateAverage(this.scoreCycle));
+            this.scores.add(this.calculateAverage(this.scoreRatio));
 
             if (!this.scores.get(0).isNaN()) {
                 pdf.addSection(this.messages.getString("finalTable"));
@@ -387,8 +387,10 @@ public class TasksBar extends
 
         JOptionPane.showMessageDialog(taskbar, "<html> <span style='color:#007A82'>" + messages.getString("exitMessage") + "</span></html>"
                 + messages.getString("directoryMessage") + "\n" + TasksBar.DEST + "\n"
+                + "\n<html> <span style='color:#cf6a0b'>"
                 + messages.getString("timeMessage") + TasksBar.getDurationAnalyse(timeStop)
-                + "\n<html> <span style='color:#089650'>" + messages.getString("arithmeticAverage") + String.format("%.2f", auxNote) + "</span></html>",
+                + "</span></html>"+ "\n"
+                + "\n<html> <span style='color:#089650'>" + messages.getString("arithmeticAverage") + String.format(Locale.ROOT,"%.2f", auxNote) + "</span></html>",
                 this.messages.getString("headMessageDialog"), JOptionPane.INFORMATION_MESSAGE, icon);
 
         /**
@@ -564,12 +566,12 @@ public class TasksBar extends
          * 11.- ratio of number of lines with comments against computable
          * elements
          */
-        result += this.messages.getString("ratio") + (ratio * 100) +" %";
+        result += this.messages.getString("ratio") + ((ratio * 100) / 2.0) +" %";
         result += " \n";
 
         assesment += ratio;
         this.scores.add(ratio);
-        this.scoreCommentsPercentage.add(ratio);
+        this.scoreRatio.add(ratio);
 
         return result;
 
@@ -946,7 +948,7 @@ public class TasksBar extends
             this.scoreCommentsBeginning.add(0.4);
         } else {
             this.scores.add(0.0);
-            //this.scoreCommentsBeginning.add(0.4);
+            this.scoreCommentsBeginning.add(0.0);
         }
         if (goodCommentVariables) {
             assesment += 0.4;
@@ -967,10 +969,10 @@ public class TasksBar extends
         if (goodCommentControlStructures) {
             assesment += 0.4;
             this.scores.add(0.4);
-            this.scorecommentsControlStructutes.add(0.4);
+            this.scoreCommentsControlStructures.add(0.4);
         } else {
             this.scores.add(0.0);
-            this.scorecommentsControlStructutes.add(0.0);
+            this.scoreCommentsControlStructures.add(0.0);
         }
         return sb;
 
@@ -989,7 +991,6 @@ public class TasksBar extends
         String previousChain = "";
         File file = new File(filePath);
         int numControlStructures = 0;
-        String nextLine = "";
 
         FileReader fr = new FileReader(file);
 
@@ -1011,7 +1012,7 @@ public class TasksBar extends
 
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (nextLine.contains("!") || previousChain.contains("!")) {
+                    if (previousChain.contains("!")) {
                         numControlStructures++;
                     }
                 }
@@ -1036,7 +1037,6 @@ public class TasksBar extends
         File file = new File(filePath);
         int numSubroutines = 0;
         int totalSubroutines = 0;
-        String nextLine = "";
 
         FileReader fr = new FileReader(file);
 
@@ -1051,7 +1051,7 @@ public class TasksBar extends
 
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (nextLine.contains("!") || previousChain.contains("!")) {
+                    if (previousChain.contains("!")) {
                         numSubroutines++;
                     }
                 }
@@ -1145,7 +1145,6 @@ public class TasksBar extends
         File file = new File(filePath);
         int numFunction = 0;
         int totalFunctions = 0;
-        String nextLine = "";
 
         FileReader fr = new FileReader(file);
 
@@ -1158,9 +1157,8 @@ public class TasksBar extends
                         && chain.contains("FUNCTION")) {
                     totalFunctions++;
 
-                    //check if the next line is a comment or the previous line
-                    //is a comment
-                    if (nextLine.contains("!") || previousChain.contains("!")) {
+                    //check if the previous line is a comment
+                    if (previousChain.contains("!")) {
                         numFunction++;
                     }
                 }
@@ -1232,7 +1230,6 @@ public class TasksBar extends
         File file = new File(filePath);
         int numElementscomentable = 0;
         int comentableElements = 0;
-        String nextLine = "";
 
         FileReader fr = new FileReader(file);
 
@@ -1250,7 +1247,7 @@ public class TasksBar extends
 
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (nextLine.contains("!") || previousChain.contains("!")) {
+                    if (previousChain.contains("!")) {
                         numElementscomentable++;
                     }
 

@@ -356,7 +356,7 @@ public class PDF {
         leftCell.add(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
 
-        rightCell.add(scores.get(0).toString());
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(0)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -368,7 +368,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(1).toString());
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(1)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -380,7 +380,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(2).toString());
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(2)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -392,7 +392,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(3).toString());
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(3)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -404,7 +404,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(4).toString());
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(4)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -416,7 +416,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(5).toString());
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(5)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -428,7 +428,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(6).toString());
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(6)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -440,7 +440,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(7).toString());
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(7)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -452,7 +452,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(8).toString());
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(8)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
