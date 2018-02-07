@@ -10,7 +10,6 @@ import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -229,8 +228,8 @@ public class TasksBar extends
      * ".f90" or ".h90"
      *
      *
-     * @return the note of the
-     * @throws java.lang.Exception
+     * @return null
+     * @throws java.lang.Exception in case a lists can not be cleared
      */
     @Override
     protected Void doInBackground() throws Exception {
@@ -313,7 +312,7 @@ public class TasksBar extends
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
                         pdf.addTableScore(scores, this.messages);
                         countNumberOfFiles++;
-                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format(Locale.ROOT,"%.2f", assesment));
+                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format(Locale.ROOT, "%.2f", assesment));
                         finalCalification += assesment;
                     }
 
@@ -361,7 +360,7 @@ public class TasksBar extends
      * This override method update the value of the progressBar when publish
      * method is called.
      *
-     * @param chunks
+     * @param chunks the value of the progress bar
      */
     @Override
     protected void process(List<Integer> chunks) {
@@ -389,8 +388,8 @@ public class TasksBar extends
                 + messages.getString("directoryMessage") + "\n" + TasksBar.DEST + "\n"
                 + "\n<html> <span style='color:#cf6a0b'>"
                 + messages.getString("timeMessage") + TasksBar.getDurationAnalyse(timeStop)
-                + "</span></html>"+ "\n"
-                + "\n<html> <span style='color:#089650'>" + messages.getString("arithmeticAverage") + String.format(Locale.ROOT,"%.2f", auxNote) + "</span></html>",
+                + "</span></html>" + "\n"
+                + "\n<html> <span style='color:#089650'>" + messages.getString("arithmeticAverage") + String.format(Locale.ROOT, "%.2f", auxNote) + "</span></html>",
                 this.messages.getString("headMessageDialog"), JOptionPane.INFORMATION_MESSAGE, icon);
 
         /**
@@ -410,7 +409,7 @@ public class TasksBar extends
      * This method obtains the path from file without it name
      *
      * @param file the file that you want to get the path without it name
-     * @return the path from a file
+     * @return String
      */
     private static String getPathFromFile(File file) {
 
@@ -423,7 +422,7 @@ public class TasksBar extends
      * This method obtains the extension of a file
      *
      * @param file the file that we want to check the extension
-     * @return the extension of the file
+     * @return String
      */
     private static String getFileExtension(File file) {
 
@@ -440,7 +439,7 @@ public class TasksBar extends
      *
      * @param pathFile the path from the file to analyse
      * @return the result with all the output data
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public String analyseFile(String pathFile) throws IOException {
 
@@ -566,7 +565,7 @@ public class TasksBar extends
          * 11.- ratio of number of lines with comments against computable
          * elements
          */
-        result += this.messages.getString("ratio") + ((ratio * 100) / 2.0) +" %";
+        result += this.messages.getString("ratio") + ((ratio * 100) / 2.0) + " %";
         result += " \n";
 
         assesment += ratio;
@@ -582,7 +581,7 @@ public class TasksBar extends
      *
      * @param filePath the path of the file
      * @return the number of lines from file
-     * @throws IOException
+     * @throws IOException  when file can not open
      */
     public int analyseNumberOfLines(String filePath) throws IOException {
 
@@ -606,9 +605,9 @@ public class TasksBar extends
      * This method analyse if the sentence implicit none is used in each line
      * from a file
      *
-     * @param filePath
+     * @param filePath is the path from file to analyse
      * @return boolean
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public boolean analyseUseImplicitNone(String filePath) throws IOException {
 
@@ -620,7 +619,7 @@ public class TasksBar extends
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
-                if ( !chain.contains("!") && chain.contains("IMPLICIT NONE") ) {
+                if (!chain.contains("!") && chain.contains("IMPLICIT NONE")) {
                     return true;
                 }
             }
@@ -633,8 +632,8 @@ public class TasksBar extends
      * This method analyse the number of functions in file filePath
      *
      * @param filePath The path from file to analyse
-     * @return the number of functions in this file
-     * @throws IOException
+     * @return int
+     * @throws IOException when file can not open
      */
     public int analyseNumFunctions(String filePath) throws IOException {
 
@@ -648,8 +647,8 @@ public class TasksBar extends
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
                 if (!chain.contains("!")
-                        && (!chain.contains("END FUNCTION") 
-                        && chain.contains("FUNCTION")) ) {
+                        && (!chain.contains("END FUNCTION")
+                        && chain.contains("FUNCTION"))) {
                     count++;
                 }
             }
@@ -663,8 +662,8 @@ public class TasksBar extends
      * This method analyse the number of subroutines are called in this file
      *
      * @param filePath the absolute path from file
-     * @return the number of subroutines calls
-     * @throws IOException
+     * @return int
+     * @throws IOException when file can not open
      */
     public int analyseNumCalls(String filePath) throws IOException {
         int count = 0;
@@ -676,7 +675,7 @@ public class TasksBar extends
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
-                if (!chain.contains("!") && chain.contains("CALL") ) {
+                if (!chain.contains("!") && chain.contains("CALL")) {
                     count++;
                 }
             }
@@ -690,8 +689,8 @@ public class TasksBar extends
      * This methos analyse the number of comments are in a file
      *
      * @param filePath the absolute path of the file
-     * @return the number of comments
-     * @throws IOException
+     * @return int
+     * @throws IOException when file can not open
      */
     public int analyseNumComments(String filePath) throws IOException {
         int count = 0;
@@ -717,9 +716,9 @@ public class TasksBar extends
      * in loops to avoid making a certain sentence, so that it continues to
      * iterate to the next element. With they use, the code is more efficient.
      *
-     * @param filePath
-     * @return
-     * @throws IOException
+     * @param filePath is the path from file to analyse
+     * @return boolean
+     * @throws IOException when file can not open
      */
     public boolean analyseUseCycle(String filePath) throws IOException {
 
@@ -745,7 +744,7 @@ public class TasksBar extends
                  * check if the chain is a declaration of a variable and it is
                  * not a comment.
                  */
-                if ( chain.contains("CYCLE")
+                if (chain.contains("CYCLE")
                         && !chain.contains("!")) {
 
                     numCycles++;
@@ -761,9 +760,9 @@ public class TasksBar extends
      * This method check if the EXIT sentence is used in the file. EXIT sentence
      * is used to go out of a loop, so the code is more efficient
      *
-     * @param filePath
+     * @param filePath is the path from file to analyse
      * @return boolean
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public boolean analyseUseExit(String filePath) throws IOException {
 
@@ -804,9 +803,9 @@ public class TasksBar extends
     /**
      * This method analyse the number of subroutines declared in a file
      *
-     * @param filePath
-     * @return the number of subroutines
-     * @throws IOException
+     * @param filePath is the path from file to analyse
+     * @return int
+     * @throws IOException when file can not open
      */
     public int analyseNumberSubroutines(String filePath) throws IOException {
 
@@ -819,9 +818,9 @@ public class TasksBar extends
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
-                if ( chain.contains("SUBROUTINE") 
+                if (chain.contains("SUBROUTINE")
                         && !chain.contains("!")
-                        && chain.contains("END SUBROUTINE") ) {
+                        && chain.contains("END SUBROUTINE")) {
                     count++;
                 }
             }
@@ -836,9 +835,9 @@ public class TasksBar extends
      * is greater than 3 or smaller than 0 AND this line don't have a comment ,
      * it is consider a bad programming practice.
      *
-     * @param filePath
+     * @param filePath is the path from file to analyse
      * @return boolean
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public boolean analyseNestedLoops(String filePath) throws IOException {
 
@@ -885,9 +884,9 @@ public class TasksBar extends
     /**
      * This method count the number of declared variables in a file
      *
-     * @param filePath
-     * @return the number of declared variables
-     * @throws IOException
+     * @param filePath is the path from file to analyse
+     * @return int
+     * @throws IOException when file can not open
      */
     public int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
         String chain = "";
@@ -915,9 +914,9 @@ public class TasksBar extends
      * commented after or befor the declaration. 4.- the three first or more
      * lines of a file are commented.
      *
-     * @param filePath
-     * @return the paragraph to add to the pdf file
-     * @throws IOException
+     * @param filePath is the path from file to analyse
+     * @return String
+     * @throws IOException when file can not open
      */
     private String analyseGoodComment(String filePath) throws IOException {
 
@@ -982,9 +981,9 @@ public class TasksBar extends
      * This method analyse if the Control Structures are commented: ifs and
      * switch case
      *
-     * @param filePath
+     * @param filePath is the path from file to analyse
      * @return boolean
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
         String chain = "";
@@ -999,7 +998,7 @@ public class TasksBar extends
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
-                
+
                 //check if it is a if structure declaration
                 //or a select case structutre declaration
                 if ((!chain.contains("!")
@@ -1027,9 +1026,9 @@ public class TasksBar extends
     /**
      * This method analyse if the declaration of subroutines are commented
      *
-     * @param filePath
+     * @param filePath is the path from file to analyse
      * @return boolean
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
         String chain = "";
@@ -1066,9 +1065,9 @@ public class TasksBar extends
      * This method analyse if for each variable, there is a comment to describe
      * what it done.
      *
-     * @param filePath
+     * @param filePath is the path from file to analyse
      * @return boolean
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
         String chain = "";
@@ -1101,9 +1100,9 @@ public class TasksBar extends
     /**
      * This method analyse if there is a good comment at the beginning of a file
      *
-     * @param filePath
+     * @param filePath is the path from file to analyse
      * @return boolean
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
 
@@ -1134,9 +1133,9 @@ public class TasksBar extends
      * comment. The comment can be after or before the declaration of the
      * function. In addition, at the end of functions there are no comments.
      *
-     * @param filePath
+     * @param filePath is the path from file to analyse
      * @return boolean
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public boolean analyseGoodCommentFunctions(String filePath) throws IOException {
 
@@ -1174,7 +1173,7 @@ public class TasksBar extends
      * seconds
      *
      * @param millis the time to transform
-     * @return the time in days, hours, minutes and seconds
+     * @return String
      */
     public static String getDurationAnalyse(long millis) {
 
@@ -1209,12 +1208,12 @@ public class TasksBar extends
     /**
      * this method calculate the average of the values in a list.
      *
-     * @param l
-     * @return
+     * @param l list of scores to calculate the average
+     * @return double 
      */
-    private Double calculateAverage(ArrayList<Double> l) {
+    private double calculateAverage(ArrayList<Double> l) {
 
-        Double aux = 0.0;
+        double aux = 0.0;
 
         for (int i = 0; i < l.size(); i++) {
             aux += l.get(i);
@@ -1223,7 +1222,15 @@ public class TasksBar extends
         return aux / l.size();
     }
 
-    private double analyseRatio(String filePath) throws IOException {
+    /**
+     * this method analyse the relation between the number of coments in file
+     * and the number of comentable elements.
+     *
+     * @param filePath is the path of file to analyse the ratio
+     * @return double
+     * @throws IOException when file can not open
+     */
+    public double analyseRatio(String filePath) throws IOException {
 
         String chain = "";
         String previousChain = "";
@@ -1258,7 +1265,6 @@ public class TasksBar extends
             }
             b.close();
         }
-        System.out.println("elementos comentados: "+numElementscomentable+"---- elementos comentables: "+comentableElements);
         return (numElementscomentable / comentableElements) * 2.0;
 
     }

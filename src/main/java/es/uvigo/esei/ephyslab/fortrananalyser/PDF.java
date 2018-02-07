@@ -118,9 +118,9 @@ public class PDF {
     /**
      * Method that create the cover from the report document.
      *
-     * @param dest
-     * @param l
-     * @throws IOException
+     * @param dest is the destination path of the report document
+     * @param l is the language selected by user
+     * @throws IOException when file can not open
      */
     public void createPdf(String dest, Locale l) throws IOException {
 
@@ -188,7 +188,7 @@ public class PDF {
      * add a paragraph in the report document
      *
      * @param text the text to add in a paragraph
-     * @throws java.io.IOException
+     * @throws java.io.IOException when file can not open
      */
     public void addParagraph(String text) throws IOException {
 
@@ -207,7 +207,7 @@ public class PDF {
      * add a subsection in the report document
      *
      * @param text the name of the subsection
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public void addSubSection(String text) throws IOException {
         Paragraph p = new Paragraph();
@@ -223,8 +223,8 @@ public class PDF {
     /**
      * add a section in the report document
      *
-     * @param section
-     * @throws IOException
+     * @param section is the text to added as section in PDF
+     * @throws IOException when file can not open
      */
     public void addSection(String section) throws IOException {
         Paragraph p = new Paragraph();
@@ -240,7 +240,7 @@ public class PDF {
      * add the result from a specific analysis
      *
      * @param result the text to insert as a result
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public void addResult(String result) throws IOException {
         Paragraph p = new Paragraph();
@@ -256,7 +256,7 @@ public class PDF {
      * add the result from a specific analysis
      *
      * @param result the text to insert as a result
-     * @throws IOException
+     * @throws IOException when file can not open
      */
     public void addScoreResult(String result) throws IOException {
         Paragraph p = new Paragraph();
@@ -272,8 +272,8 @@ public class PDF {
     /**
      * add the final note to the results from the PDF
      *
-     * @param result
-     * @throws IOException
+     * @param result is the final note of the report
+     * @throws IOException when file can not open
      */
     public void addFinalNote(String result) throws IOException {
 
@@ -290,7 +290,7 @@ public class PDF {
     /**
      * Close the report document
      *
-     * @throws java.io.IOException
+     * @throws java.io.IOException when file can not closed
      */
     public void closePDF() throws IOException {
         this.document.close();
@@ -299,7 +299,7 @@ public class PDF {
     /**
      * this method created a new font to write in the pdf document
      *
-     * @return the font selected
+     * @return PdfFont
      */
     private static PdfFont loadPdfFont() {
 
@@ -317,8 +317,8 @@ public class PDF {
     /**
      * this methos add the summary score table.
      *
-     * @param scores
-     * @param messages
+     * @param scores is the list of scores to be added
+     * @param messages is the resource bundle object
      */
     public void addTableScore(ArrayList<Double> scores, ResourceBundle messages) {
 
@@ -477,8 +477,8 @@ public class PDF {
      * this method add the final score table with a diferent style from the
      * addTableScore method (previously implemented).
      *
-     * @param scores
-     * @param messages
+     * @param scores is the list of scores obtain in the analysis
+     * @param messages is the resource bundle object
      */
     public void addFinalTableScore(ArrayList<Double> scores, ResourceBundle messages) {
 
