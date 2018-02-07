@@ -101,11 +101,6 @@ public class TasksBar extends
     private double assesment = 0.0;
 
     /**
-     * the final calification obtains by the directory.
-     */
-    private double finalCalification = 0.0;
-
-    /**
      * auxiliar variable to calcule the final calification.
      */
     private double auxNote;
@@ -171,6 +166,21 @@ public class TasksBar extends
     private ArrayList<Double> scoreCycle;
 
     /**
+     * the scores obtains by the directories.
+     */
+    private ArrayList<Double> scoresFiles;
+
+    /**
+     * number of lines from each files
+     */
+    private ArrayList<Integer> linesFromFiles;
+
+    /**
+     * total lines from the software analysed
+     */
+    private int totalLines = 0;
+
+    /**
      * Number of control structure
      */
     private int totalControlStructures = 0;
@@ -193,6 +203,8 @@ public class TasksBar extends
         this.scoreCommentsControlStructures = new ArrayList<>();
         this.scoreExit = new ArrayList<>();
         this.scoreCycle = new ArrayList<>();
+        this.linesFromFiles = new ArrayList<>();
+        this.scoresFiles = new ArrayList<>();
 
         this.w = w;
         this.messages = messages;
@@ -244,9 +256,10 @@ public class TasksBar extends
         this.scoreCommentsControlStructures.clear();
         this.scoreExit.clear();
         this.scoreCycle.clear();
+        this.linesFromFiles.clear();
+        this.scoresFiles.clear();
 
         PDF pdf;
-        int countNumberOfFiles = 0;
         auxNote = 0.0;
         double percentage = 0.0;
 
@@ -311,9 +324,8 @@ public class TasksBar extends
                         pdf.addSubSection(file.getName());
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
                         pdf.addTableScore(scores, this.messages);
-                        countNumberOfFiles++;
                         pdf.addScoreResult(this.messages.getString("noteFile") + String.format(Locale.ROOT, "%.2f", assesment));
-                        finalCalification += assesment;
+                        this.scoresFiles.add(assesment);
                     }
 
                     percentage += 98.0 / filesInFolder.size();
@@ -339,14 +351,15 @@ public class TasksBar extends
             if (!this.scores.get(0).isNaN()) {
                 pdf.addSection(this.messages.getString("finalTable"));
                 pdf.addFinalTableScore(this.scores, this.messages);
-                auxNote = finalCalification / countNumberOfFiles;
+                auxNote = this.sumatoryFinalCalification(this.scoresFiles, this.linesFromFiles, this.totalLines);
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.2f", auxNote));
             }
 
             pdf.closePDF();
-            finalCalification = 0.0;
             percentage = 100;
             publish((int) percentage);
+
+            this.totalLines = 0;
 
         } catch (IOException ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
@@ -444,19 +457,23 @@ public class TasksBar extends
     public String analyseFile(String pathFile) throws IOException {
 
         String result = "";
-        assesment = 0.0;
         double ratio = this.analyseRatio(pathFile);
-        int numLines = this.analyseNumberOfLines(pathFile);
         boolean useImplicitNone = this.analyseUseImplicitNone(pathFile);
         boolean checkNestedLoops = this.analyseNestedLoops(pathFile);
         boolean useExit = this.analyseUseExit(pathFile);
         boolean useCycle = this.analyseUseCycle(pathFile);
+        int numLinesFile = this.analyseNumberOfLines(pathFile);
+
+        assesment = 0.0;
 
         /**
          * 1.- count the number of lines in the file
          */
-        result += this.messages.getString("numberOfLines") + numLines;
+        result += this.messages.getString("numberOfLines") + numLinesFile;
         result += "\n";
+
+        this.linesFromFiles.add(numLinesFile);
+        this.totalLines += numLinesFile;
 
         /**
          * 2. Use or not use the sentence IMPLICIT NONE
@@ -581,7 +598,7 @@ public class TasksBar extends
      *
      * @param filePath the path of the file
      * @return the number of lines from file
-     * @throws IOException  when file can not open
+     * @throws IOException when file can not open
      */
     public int analyseNumberOfLines(String filePath) throws IOException {
 
@@ -1209,7 +1226,7 @@ public class TasksBar extends
      * this method calculate the average of the values in a list.
      *
      * @param l list of scores to calculate the average
-     * @return double 
+     * @return double
      */
     private double calculateAverage(ArrayList<Double> l) {
 
@@ -1267,6 +1284,31 @@ public class TasksBar extends
         }
         return (numElementscomentable / comentableElements) * 2.0;
 
+    }
+
+    /**
+     * This method calculate the proportional final note according to the score
+     * and the number of lines from each file divided by the total lines
+     *
+     * @param scoresFiles the score from each file
+     * @param linesFromFiles number of lines from each file
+     * @param totalLines number of lines from the software analysed
+     * @return Double
+     */
+    private Double sumatoryFinalCalification(ArrayList<Double> scoresFiles, ArrayList<Integer> linesFromFiles, int totalLines) {
+
+        Double finalScore = 0.0;
+
+        /**
+         * iterate on the lists scoresFiles and linesFromFiles at the same time
+         * to obtain the value of each file and calculate the final calification
+         */
+        for (int i = 0; i < scoresFiles.size(); i++) {
+
+            finalScore += (scoresFiles.get(i) * linesFromFiles.get(i)) / totalLines;
+        }
+
+        return finalScore;
     }
 
 }
