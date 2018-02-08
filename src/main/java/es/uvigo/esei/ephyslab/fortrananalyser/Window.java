@@ -114,7 +114,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Constructor from Class
      *
-     * @throws IOException when component can not initialice
+     * @throws IOException
      */
     public Window() throws IOException {
 

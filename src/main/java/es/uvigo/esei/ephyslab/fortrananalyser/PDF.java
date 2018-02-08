@@ -118,9 +118,9 @@ public class PDF {
     /**
      * Method that create the cover from the report document.
      *
-     * @param dest is the destination path of the report document
-     * @param l is the language selected by user
-     * @throws IOException when file can not open
+     * @param dest
+     * @param l
+     * @throws IOException
      */
     public void createPdf(String dest, Locale l) throws IOException {
 
@@ -188,7 +188,7 @@ public class PDF {
      * add a paragraph in the report document
      *
      * @param text the text to add in a paragraph
-     * @throws java.io.IOException when file can not open
+     * @throws java.io.IOException
      */
     public void addParagraph(String text) throws IOException {
 
@@ -207,7 +207,7 @@ public class PDF {
      * add a subsection in the report document
      *
      * @param text the name of the subsection
-     * @throws IOException when file can not open
+     * @throws IOException
      */
     public void addSubSection(String text) throws IOException {
         Paragraph p = new Paragraph();
@@ -223,8 +223,8 @@ public class PDF {
     /**
      * add a section in the report document
      *
-     * @param section is the text to added as section in PDF
-     * @throws IOException when file can not open
+     * @param section
+     * @throws IOException
      */
     public void addSection(String section) throws IOException {
         Paragraph p = new Paragraph();
@@ -240,7 +240,7 @@ public class PDF {
      * add the result from a specific analysis
      *
      * @param result the text to insert as a result
-     * @throws IOException when file can not open
+     * @throws IOException
      */
     public void addResult(String result) throws IOException {
         Paragraph p = new Paragraph();
@@ -256,7 +256,7 @@ public class PDF {
      * add the result from a specific analysis
      *
      * @param result the text to insert as a result
-     * @throws IOException when file can not open
+     * @throws IOException
      */
     public void addScoreResult(String result) throws IOException {
         Paragraph p = new Paragraph();
@@ -272,8 +272,8 @@ public class PDF {
     /**
      * add the final note to the results from the PDF
      *
-     * @param result is the final note of the report
-     * @throws IOException when file can not open
+     * @param result
+     * @throws IOException
      */
     public void addFinalNote(String result) throws IOException {
 
@@ -290,7 +290,7 @@ public class PDF {
     /**
      * Close the report document
      *
-     * @throws java.io.IOException when file can not closed
+     * @throws java.io.IOException
      */
     public void closePDF() throws IOException {
         this.document.close();
@@ -299,7 +299,7 @@ public class PDF {
     /**
      * this method created a new font to write in the pdf document
      *
-     * @return PdfFont
+     * @return the font selected
      */
     private static PdfFont loadPdfFont() {
 
@@ -317,8 +317,8 @@ public class PDF {
     /**
      * this methos add the summary score table.
      *
-     * @param scores is the list of scores to be added
-     * @param messages is the resource bundle object
+     * @param scores
+     * @param messages
      */
     public void addTableScore(ArrayList<Double> scores, ResourceBundle messages) {
 
@@ -356,116 +356,116 @@ public class PDF {
         leftCell.add(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
 
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(0)));
+        rightCell.add(scores.get(0).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 2. Nested Loops
+         * 2. Percentage comments
+         */
+        leftCell = new Cell();
+        leftCell.add(messages.getString("percentLines_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(1)));
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        /**
+         * 3. Nested Loops
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("useNestedLoops_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(1)));
+        rightCell.add(scores.get(2).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 3. Comments in functions
+         * 4. Comments in functions
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsFunctions_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(2)));
+        rightCell.add(scores.get(3).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
-
+        
         /**
-         * 4. Comments beginning
+         * 5. Comments beginning
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsBeginning_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(3)));
+        rightCell.add(scores.get(4).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        
         /**
-         * 5. Comments variables
+         * 6. Comments variables
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsVariables_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(4)));
+        rightCell.add(scores.get(5).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 6. Comments subroutines
+         * 7. Comments subroutines
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsSubroutines_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(5)));
+        rightCell.add(scores.get(6).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 7. Comments control structures
+         * 8. Comments control structures
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsControlStructures_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(6)));
+        rightCell.add(scores.get(7).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 8. Use sentence EXIT
+         * 9. Use sentence EXIT
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("UseExit_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(7)));
+        rightCell.add(scores.get(8).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 9. Use sentence CYCLE
+         * 10. Use sentence CYCLE
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("UseCycle_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(8)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
-        table.addCell(rightCell);
-
-        /**
-         * 10. Ratio of number of lines with comments against computable
-         * elements
-         */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("ratio_table"));
-        table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(9)));
+        rightCell.add(scores.get(9).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -477,17 +477,19 @@ public class PDF {
      * this method add the final score table with a diferent style from the
      * addTableScore method (previously implemented).
      *
-     * @param scores is the list of scores obtain in the analysis
-     * @param messages is the resource bundle object
+     * @param scores
+     * @param messages
      */
     public void addFinalTableScore(ArrayList<Double> scores, ResourceBundle messages) {
 
+        
         Table table = new Table(2);
         Cell headerCellLeft = new Cell();
         Cell headerCellRight = new Cell();
         Cell leftCell = new Cell();
         Cell rightCell = new Cell();
-
+        
+        
         /**
          * configuration of the left header of the table
          */
@@ -510,121 +512,123 @@ public class PDF {
         headerCellRight.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(headerCellRight);
 
+        
         /**
          * 1. Implicit None
          */
         leftCell.add(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
 
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(0)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(0)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 2. Nested Loops
+         * 2. Percentage comments
+         */
+        leftCell = new Cell();
+        leftCell.add(messages.getString("percentLines_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(1)));
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+
+        /**
+         * 3. Nested Loops
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("useNestedLoops_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(1)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(2)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 3. Comments in functions
+         * 4. Comments in functions
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsFunctions_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(2)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(3)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
-
+        
         /**
-         * 4. Comments beginning
+         * 5. Comments beginning
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsBeginning_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(3)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(4)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
+        
         /**
-         * 5. Comments variables
+         * 6. Comments variables
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsVariables_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(4)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(5)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 6. Comments subroutines
+         * 7. Comments subroutines
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsSubroutines_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(5)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(6)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 7. Comments control structures
+         * 8. Comments control structures
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsControlStructures_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(6)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(7)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 8. Use sentence EXIT
+         * 9. Use sentence EXIT
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("UseExit_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(7)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(8)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         /**
-         * 9. Use sentence CYCLE
+         * 10. Use sentence CYCLE
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("UseCycle_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(8)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
-        table.addCell(rightCell);
-
-        /**
-         * 10. Percentage comments
-         */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("ratio_table"));
-        table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(9)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(9)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
