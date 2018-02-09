@@ -128,47 +128,51 @@ public class TasksBar extends
     /**
      * the list with all scores obtain by percentage of comments metric.
      */
-    private ArrayList<Double> scoreCommentsPercentage;
+    private ArrayList<Double> scoresRatio;
 
     /**
      * the list with all scores obtain by nested loops metric.
      */
-    private ArrayList<Double> scoreNestedLoops;
+    private ArrayList<Double> scoresNestedLoops;
 
     /**
      * the list with all scores obtain by comments metric at the beginning.
      */
-    private ArrayList<Double> scoreCommentsBeginning;
+    private ArrayList<Double> scoresCommentsBeginning;
 
     /**
      * the list with all scores obtain by comments metric in variables.
      */
-    private ArrayList<Double> scoreCommentsVariables;
+    private ArrayList<Double> scoresCommentsVariables;
 
     /**
      * the list with all scores obtain by comments metric in functions.
      */
-    private ArrayList<Double> scoreCommentsfunction;
+    private ArrayList<Double> scoresCommentsfunction;
 
     /**
      * the list with all scores obtain by comments metric in subroutine.
      */
-    private ArrayList<Double> scoreCommentsSubroutine;
+    private ArrayList<Double> scoresCommentsSubroutine;
 
     /**
      * the list with all scores obtain by control structures metric.
      */
-    private ArrayList<Double> scorecommentsControlStructutes;
+    private ArrayList<Double> scoresCommentsControlStructures;
 
     /**
      * the list with scores obtain by exit metric.
      */
-    private ArrayList<Double> scoreExit;
+    private ArrayList<Double> scoresExit;
 
     /**
      * the list with scores obtain by cycle metric.
      */
-    private ArrayList<Double> scoreCycle;
+    private ArrayList<Double> scoresCycle;
+
+    private double commentableElements;
+    
+    private double commentedElements;
 
     /**
      * the string resources i18n.
@@ -179,15 +183,17 @@ public class TasksBar extends
 
         this.scores = new ArrayList<>();
         this.scoresImplicitNone = new ArrayList<>();
-        this.scoreCommentsPercentage = new ArrayList<>();
-        this.scoreNestedLoops = new ArrayList<>();
-        this.scoreCommentsBeginning = new ArrayList<>();
-        this.scoreCommentsVariables = new ArrayList<>();
-        this.scoreCommentsfunction = new ArrayList<>();
-        this.scoreCommentsSubroutine = new ArrayList<>();
-        this.scorecommentsControlStructutes = new ArrayList<>();
-        this.scoreExit = new ArrayList<>();
-        this.scoreCycle = new ArrayList<>();
+        this.scoresRatio = new ArrayList<>();
+        this.scoresNestedLoops = new ArrayList<>();
+        this.scoresCommentsBeginning = new ArrayList<>();
+        this.scoresCommentsVariables = new ArrayList<>();
+        this.scoresCommentsfunction = new ArrayList<>();
+        this.scoresCommentsSubroutine = new ArrayList<>();
+        this.scoresCommentsControlStructures = new ArrayList<>();
+        this.scoresExit = new ArrayList<>();
+        this.scoresCycle = new ArrayList<>();
+        this.commentableElements = 0.0;
+        this.commentedElements = 0.0;
 
         this.w = w;
         this.messages = messages;
@@ -229,16 +235,21 @@ public class TasksBar extends
     @Override
     protected Void doInBackground() throws Exception {
 
+        /**
+         * initialice all arrayList and global variables
+         */
         this.scoresImplicitNone.clear();
-        this.scoreCommentsPercentage.clear();
-        this.scoreNestedLoops.clear();
-        this.scoreCommentsBeginning.clear();
-        this.scoreCommentsVariables.clear();
-        this.scoreCommentsfunction.clear();
-        this.scoreCommentsSubroutine.clear();
-        this.scorecommentsControlStructutes.clear();
-        this.scoreExit.clear();
-        this.scoreCycle.clear();
+        this.scoresRatio.clear();
+        this.scoresNestedLoops.clear();
+        this.scoresCommentsBeginning.clear();
+        this.scoresCommentsVariables.clear();
+        this.scoresCommentsfunction.clear();
+        this.scoresCommentsSubroutine.clear();
+        this.scoresCommentsControlStructures.clear();
+        this.scoresExit.clear();
+        this.scoresCycle.clear();
+        this.commentableElements = 0.0;
+        this.commentedElements = 0.0;
 
         PDF pdf;
         int countNumberOfFiles = 0;
@@ -321,16 +332,19 @@ public class TasksBar extends
              */
             this.scores.clear();
             this.scores.add(this.calculateAverage(this.scoresImplicitNone));
-            this.scores.add(this.calculateAverage(this.scoreCommentsBeginning));
-            this.scores.add(this.calculateAverage(this.scoreNestedLoops));
-            this.scores.add(this.calculateAverage(this.scoreCommentsBeginning));
-            this.scores.add(this.calculateAverage(this.scoreCommentsVariables));
-            this.scores.add(this.calculateAverage(this.scoreCommentsfunction));
-            this.scores.add(this.calculateAverage(this.scoreCommentsSubroutine));
-            this.scores.add(this.calculateAverage(this.scorecommentsControlStructutes));
-            this.scores.add(this.calculateAverage(this.scoreExit));
-            this.scores.add(this.calculateAverage(this.scoreCycle));
+            this.scores.add(this.calculateAverage(this.scoresRatio));
+            this.scores.add(this.calculateAverage(this.scoresNestedLoops));
+            this.scores.add(this.calculateAverage(this.scoresCommentsBeginning));
+            this.scores.add(this.calculateAverage(this.scoresCommentsVariables));
+            this.scores.add(this.calculateAverage(this.scoresCommentsfunction));
+            this.scores.add(this.calculateAverage(this.scoresCommentsSubroutine));
+            this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
+            this.scores.add(this.calculateAverage(this.scoresExit));
+            this.scores.add(this.calculateAverage(this.scoresCycle));
 
+            /**
+             * Check if the software analysed have not Fortran files
+             */
             if (!this.scores.get(0).isNaN()) {
                 pdf.addSection(this.messages.getString("finalTable"));
                 pdf.addFinalTableScore(this.scores, this.messages);
@@ -382,7 +396,7 @@ public class TasksBar extends
         JOptionPane.showMessageDialog(taskbar, "<html> <span style='color:#007A82'>" + messages.getString("exitMessage") + "</span></html>"
                 + messages.getString("directoryMessage") + "\n" + TasksBar.DEST + "\n"
                 + messages.getString("timeMessage") + TasksBar.getDurationAnalyse(timeStop)
-                + "\n<html> <span style='color:#089650'>" + messages.getString("arithmeticAverage") + String.format("%.2f", auxNote) + "</span></html>",
+                + "\n<html> <span style='color:#089650'>" + messages.getString("arithmeticAverage") + String.format(Locale.ROOT, "%.2f", auxNote) + "</span></html>",
                 this.messages.getString("headMessageDialog"), JOptionPane.INFORMATION_MESSAGE, icon);
 
         /**
@@ -438,22 +452,29 @@ public class TasksBar extends
 
         String result = "";
         assesment = 0.0;
-        double percentage;
+        double ratio = 0.0;
         int numLines = this.analyseNumberOfLines(pathFile);
         boolean useImplicitNone = this.analyseUseImplicitNone(pathFile);
-        int numComments = this.analyseNumComments(pathFile);
         boolean checkNestedLoops = this.analyseNestedLoops(pathFile);
         boolean useExit = this.analyseUseExit(pathFile);
         boolean useCycle = this.analyseUseCycle(pathFile);
+        int numFunctions = this.analyseNumFunctions(pathFile);
+        int numSubroutines = this.analyseNumberSubroutines(pathFile);
+        int numVariables = this.analyseNumberOfDeclaredVariables(pathFile);
+        String goodComments = this.analyseGoodComment(pathFile);
+        
+        this.commentableElements += numFunctions;
+        this.commentableElements += numSubroutines;
+        this.commentableElements += numVariables;
 
         /**
-         * 1.- count the number of lines in the file
+         * count the number of lines in the file
          */
         result += this.messages.getString("numberOfLines") + numLines;
         result += "\n";
 
         /**
-         * Use or not use the sentence IMPLICIT NONE
+         * 1. Use or not use the sentence IMPLICIT NONE
          */
         result += this.messages.getString("implicitNone") + useImplicitNone;
         result += "\n";
@@ -472,44 +493,42 @@ public class TasksBar extends
         }
 
         /**
-         * 3.- count the number of functions declared
+         * count the number of functions declared
          */
-        result += this.messages.getString("numFunctions") + this.analyseNumFunctions(pathFile);
+        result += this.messages.getString("numFunctions") + numFunctions;
         result += "\n";
 
         /**
-         * 4.- count the number of subroutines calls
+         * count the number of subroutines calls
          */
         result += this.messages.getString("subroutinesCall") + this.analyseNumCalls(pathFile);
         result += "\n";
 
         /**
-         * 5.- count the number of comments
+         * 7. calcule the ratio and show it in percentage in the report
          */
-        result += this.messages.getString("comments") + numComments;
+        if(commentableElements > 0.0)
+            ratio = (commentedElements / commentableElements);
+        
+
+        result += this.messages.getString("ratio") + String.format(Locale.ROOT, "%.2f", (ratio * 100)) + "%";
         result += " \n";
 
-        percentage = (numComments * 100) / numLines;
+        ratio = ratio * 2.0;
 
-        if (percentage > 20) {
-            assesment += 2.0;
-            this.scores.add(2.0);
-            this.scoreCommentsPercentage.add(2.0);
-        } else {
-            double auxNum = (1.9 * percentage) / 100;
-            assesment += auxNum;
-            this.scores.add(auxNum);
-            this.scoreCommentsPercentage.add(auxNum);
-        }
+        assesment += ratio;
+        this.scores.add(ratio);
+        System.out.println("añadiendo resultado del RATIO = "+ratio +"añadido al array---> "+scores);
+        this.scoresRatio.add(ratio);
 
         /**
-         * 6.- count the number of variables declared
+         * count the number of variables declared
          */
-        result += this.messages.getString("numVariables") + this.analyseNumberOfDeclaredVariables(pathFile);
+        result += this.messages.getString("numVariables") + numVariables;
         result += "\n";
 
         /**
-         * 7.- check the Nested loops
+         * 8. check the Nested loops
          */
         result += this.messages.getString("nestedLoops") + checkNestedLoops;
         result += "\n";
@@ -520,44 +539,44 @@ public class TasksBar extends
         if (checkNestedLoops) {
             assesment += 2.0;
             this.scores.add(2.0);
-            this.scoreNestedLoops.add(2.0);
+            this.scoresNestedLoops.add(2.0);
         } else {
             this.scores.add(0.0);
-            this.scoreNestedLoops.add(0.0);
+            this.scoresNestedLoops.add(0.0);
         }
 
         /**
-         * 8.- good comments in file
+         * Good comments in file
          */
-        result += this.messages.getString("goodComments") + this.analyseGoodComment(pathFile);
+        result += this.messages.getString("goodComments") + goodComments;
         result += "\n";
 
         /**
-         * 9.- check the number of declared subroutines
+         * Check the number of declared subroutines
          */
-        result += this.messages.getString("subroutines") + this.analyseNumberSubroutines(pathFile);
+        result += this.messages.getString("subroutines") + numSubroutines;
         result += "\n";
 
         /**
-         * 10.- check the use of EXIT
+         * 9. Check the use of EXIT
          */
         result += this.messages.getString("exit") + useExit;
         result += "\n";
 
         /**
-         * in case the sentece EXIT is used
+         * In case the sentece EXIT is used
          */
         if (useExit) {
             assesment += 1.0;
             this.scores.add(1.0);
-            this.scoreExit.add(1.0);
+            this.scoresExit.add(1.0);
         } else {
             this.scores.add(0.0);
-            this.scoreExit.add(0.0);
+            this.scoresExit.add(0.0);
         }
 
         /**
-         * 11.- check the use of CYCLE
+         * 10. Check the use of CYCLE
          */
         result += this.messages.getString("cycle") + useCycle;
         result += "\n";
@@ -568,12 +587,13 @@ public class TasksBar extends
         if (useCycle) {
             assesment += 1.0;
             this.scores.add(1.0);
-            this.scoreCycle.add(1.0);
+            this.scoresCycle.add(1.0);
         } else {
             this.scores.add(0.0);
-            this.scoreCycle.add(0.0);
+            this.scoresCycle.add(0.0);
         }
-
+        
+        System.out.println(scores);
         return result;
 
     }
@@ -588,13 +608,12 @@ public class TasksBar extends
     public int analyseNumberOfLines(String filePath) throws IOException {
 
         int count = 0;
-        String chain = "";
         File file = new File(filePath);
 
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
+            while (b.readLine() != null) {
                 count++;
             }
         }
@@ -619,7 +638,8 @@ public class TasksBar extends
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-                if (!chain.contains("!") && (chain.contains("IMPLICIT NONE")) || (chain.contains("implicit none"))) {
+                chain = chain.toUpperCase();
+                if (!chain.contains("!") && chain.contains("IMPLICIT NONE")) {
                     return true;
                 }
             }
@@ -644,9 +664,10 @@ public class TasksBar extends
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
+                chain = chain.toUpperCase();
                 if (!chain.contains("!")
-                        && (!chain.contains("END FUNCTION") || !chain.contains("end function"))
-                        && (chain.contains("FUNCTION") || chain.contains("function"))) {
+                        && !chain.contains("END FUNCTION")
+                        && chain.contains("FUNCTION") ) {
                     count++;
                 }
             }
@@ -671,32 +692,8 @@ public class TasksBar extends
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-                if (!chain.contains("!") && (chain.contains("CALL") || chain.contains("call"))) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
-    }
-
-    /**
-     * This methos analyse the number of comments are in a file
-     *
-     * @param filePath the absolute path of the file
-     * @return the number of comments
-     * @throws IOException
-     */
-    public int analyseNumComments(String filePath) throws IOException {
-        int count = 0;
-        String chain = "";
-        File file = new File(filePath);
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-                if (chain.contains("!")) {
+                chain = chain.toUpperCase();
+                if (!chain.contains("!") && chain.contains("CALL") ) {
                     count++;
                 }
             }
@@ -726,6 +723,8 @@ public class TasksBar extends
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
 
+                chain = chain.toUpperCase();
+                
                 /**
                  * check if there are a loop.
                  */
@@ -738,7 +737,7 @@ public class TasksBar extends
                  * check if the chain is a declaration of a variable and it is
                  * not a comment.
                  */
-                if ((chain.contains("CYCLE") || chain.contains("cycle"))
+                if ( chain.contains("CYCLE")
                         && !chain.contains("!")) {
 
                     numCycles++;
@@ -768,6 +767,7 @@ public class TasksBar extends
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
 
+                chain = chain.toUpperCase();
                 /**
                  * check if they are a loop.
                  */
@@ -781,7 +781,7 @@ public class TasksBar extends
                  * check if the chain is a declaration of a variable and it is
                  * not a comment.
                  */
-                if ((chain.contains("EXIT") || chain.contains("exit"))
+                if ((chain.contains("EXIT"))
                         && !chain.contains("!")) {
 
                     numExit++;
@@ -809,9 +809,10 @@ public class TasksBar extends
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-                if ((chain.contains("subroutine") || chain.contains("SUBROUTINE"))
+                chain = chain.toUpperCase();
+                if (chain.contains("SUBROUTINE")
                         && !chain.contains("!")
-                        && (chain.contains("end subroutine") || chain.contains("END SUBROUTINE"))) {
+                        && chain.contains("END SUBROUTINE")) {
                     count++;
                 }
             }
@@ -838,12 +839,15 @@ public class TasksBar extends
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
+                
+                chain = chain.toUpperCase();
 
                 if (!chain.contains("!")
                         && !chain.contains("END DO")
                         && chain.contains("DO")) {
 
                     nestedLoops++;
+                    
                     if (nestedLoops > 3) {
                         return false;
                     }
@@ -915,24 +919,43 @@ public class TasksBar extends
         boolean goodCommentSubroutines = this.analyseGoodCommentSubroutines(filePath);
         boolean goodCommentControlStructures = this.analyseGoodCommentControlStructures(filePath);
 
+        /**
+         * 2. good comment in functions
+         */
         sb = "\n\t--> " + this.messages.getString("function") + goodCommentFunctions;
+
+        /**
+         * 3. good comment at the begining of the document
+         */
         sb += "\n\t--> " + this.messages.getString("initDoc") + goodCommentInitDoc;
+
+        /**
+         * 4. good comment at variables declaration
+         */
         sb += "\n\t--> " + this.messages.getString("variables") + goodCommentVariables;
+
+        /**
+         * 5. good comment soubroutines declaration
+         */
         sb += "\n\t--> " + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
+
+        /**
+         * 6. good comment in control structures
+         */
         sb += "\n\t--> " + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
 
         if (goodCommentFunctions) {
             assesment += 0.4;
             this.scores.add(0.4);
-            this.scoreCommentsfunction.add(0.4);
+            this.scoresCommentsfunction.add(0.4);
         } else {
             this.scores.add(0.0);
-            this.scoreCommentsfunction.add(0.0);
+            this.scoresCommentsfunction.add(0.0);
         }
         if (goodCommentInitDoc) {
             assesment += 0.4;
             this.scores.add(0.4);
-            this.scoreCommentsBeginning.add(0.4);
+            this.scoresCommentsBeginning.add(0.4);
         } else {
             this.scores.add(0.0);
             //this.scoreCommentsBeginning.add(0.4);
@@ -940,26 +963,26 @@ public class TasksBar extends
         if (goodCommentVariables) {
             assesment += 0.4;
             this.scores.add(0.4);
-            this.scoreCommentsVariables.add(0.4);
+            this.scoresCommentsVariables.add(0.4);
         } else {
             this.scores.add(0.0);
-            this.scoreCommentsVariables.add(0.0);
+            this.scoresCommentsVariables.add(0.0);
         }
         if (goodCommentSubroutines) {
             assesment += 0.4;
             this.scores.add(0.4);
-            this.scoreCommentsSubroutine.add(0.4);
+            this.scoresCommentsSubroutine.add(0.4);
         } else {
             this.scores.add(0.0);
-            this.scoreCommentsSubroutine.add(0.0);
+            this.scoresCommentsSubroutine.add(0.0);
         }
         if (goodCommentControlStructures) {
             assesment += 0.4;
             this.scores.add(0.4);
-            this.scorecommentsControlStructutes.add(0.4);
+            this.scoresCommentsControlStructures.add(0.4);
         } else {
             this.scores.add(0.0);
-            this.scorecommentsControlStructutes.add(0.0);
+            this.scoresCommentsControlStructures.add(0.0);
         }
         return sb;
 
@@ -979,34 +1002,28 @@ public class TasksBar extends
         File file = new File(filePath);
         int numControlStructures = 0;
         int totalControlStructures = 0;
-        String nextLine = "";
 
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
 
+                chain = chain.toUpperCase();
+                
                 //check if it is a if structure declaration
                 //or a select case structutre declaration
                 if ((!chain.contains("!")
-                        && !chain.contains("endif")
                         && !chain.contains("ENDIF")
-                        && (chain.contains("if (")
-                        || chain.contains("IF (")))
+                        && chain.contains("IF ("))
                         || (!chain.contains("!")
-                        && !chain.contains("end select")
                         && !chain.contains("END SELECT")
-                        && (chain.contains("select case")
-                        || chain.contains("SELECT CASE")))) {
+                        && chain.contains("SELECT CASE"))) {
                     totalControlStructures++;
 
-                    if (b.readLine() == null) {
-                        nextLine = "";
-                    }
 
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (nextLine.contains("!") || previousChain.contains("!")) {
+                    if (previousChain.contains("!")) {
                         numControlStructures++;
                     }
                 }
@@ -1025,34 +1042,32 @@ public class TasksBar extends
      * @throws IOException
      */
     public boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
+
         String chain = "";
         String previousChain = "";
         File file = new File(filePath);
         int numSubroutines = 0;
         int totalSubroutines = 0;
-        String nextLine = "";
 
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
+                
+                chain = chain.toUpperCase();
 
                 //check if it is a declaration of a function
                 if (!chain.contains("!")
-                        && !chain.contains(" end subroutine")
                         && !chain.contains("END SUBROUTINE")
-                        && (chain.contains("subroutine")
-                        || chain.contains("SUBROUTINE"))) {
+                        && chain.contains("SUBROUTINE")) {
                     totalSubroutines++;
 
-                    if (b.readLine() == null) {
-                        nextLine = "";
-                    }
 
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (nextLine.contains("!") || previousChain.contains("!")) {
+                    if (previousChain.contains("!")) {
                         numSubroutines++;
+                        this.commentedElements++;
                     }
                 }
                 previousChain = chain;
@@ -1088,6 +1103,7 @@ public class TasksBar extends
 
                     if (chain.contains("!")) {
                         variablesCommented++;
+                        this.commentedElements++;
                     }
 
                 }
@@ -1142,28 +1158,25 @@ public class TasksBar extends
         File file = new File(filePath);
         int numFunction = 0;
         int totalFunctions = 0;
-        String nextLine = "";
 
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
-
+                
+                chain = chain.toUpperCase();
                 //check if it is a declaration of a function
                 if (!chain.contains("!")
-                        && !chain.contains("end function")
                         && !chain.contains("END FUNCTION")
-                        && (chain.contains("function")
-                        || chain.contains("FUNCTION"))) {
+                        && chain.contains("FUNCTION")) {
                     totalFunctions++;
+                    
 
-                    if (b.readLine() == null) {
-                        nextLine = "";
-                    }
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (nextLine.contains("!") || previousChain.contains("!")) {
+                    if (previousChain.contains("!")) {
                         numFunction++;
+                        this.commentedElements++;
                     }
                 }
                 previousChain = chain;

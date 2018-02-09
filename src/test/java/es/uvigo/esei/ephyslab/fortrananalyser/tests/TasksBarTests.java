@@ -9,18 +9,11 @@ import es.uvigo.esei.ephyslab.fortrananalyser.TasksBar;
 import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Assert;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
@@ -114,22 +107,6 @@ public class TasksBarTests {
         }
 
         assertEquals(0, numCalls);
-    }
-
-    @Test
-    public void TestAnalyseNumComments() {
-
-        int numComments = 0;
-
-        try {
-
-            numComments = tb.analyseNumComments(file.getPath());
-
-        } catch (IOException ex) {
-            Logger.getLogger(TasksBarTests.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        assertEquals(3, numComments);
     }
 
     @Test

@@ -361,14 +361,14 @@ public class PDF {
         table.addCell(rightCell);
 
         /**
-         * 2. Percentage comments
+         * 2. Ratio
          */
         leftCell = new Cell();
-        leftCell.add(messages.getString("percentLines_table"));
+        leftCell.add(messages.getString("ratio_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(1)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(6)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -380,15 +380,28 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(2).toString());
+        rightCell.add(scores.get(7).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
-        /**
-         * 4. Comments in functions
+         /**
+         * 4. Comments beginning
          */
         leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsFunctions_table"));
+        leftCell.add(messages.getString("CommentsBeginning_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(scores.get(2).toString());
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);
+        
+        
+        /**
+         * 5. Comments variables
+         */
+        leftCell = new Cell();
+        leftCell.add(messages.getString("CommentsVariables_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
@@ -396,30 +409,19 @@ public class PDF {
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
         
-        /**
-         * 5. Comments beginning
-         */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsBeginning_table"));
-        table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(scores.get(4).toString());
-        rightCell.setTextAlignment(TextAlignment.CENTER);
-        table.addCell(rightCell);
-
         
         /**
-         * 6. Comments variables
+         * 6. Comments in functions
          */
         leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsVariables_table"));
+        leftCell.add(messages.getString("CommentsFunctions_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(5).toString());
+        rightCell.add(scores.get(1).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
+        
 
         /**
          * 7. Comments subroutines
@@ -429,7 +431,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(6).toString());
+        rightCell.add(scores.get(4).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -441,7 +443,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(7).toString());
+        rightCell.add(scores.get(5).toString());
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -524,10 +526,10 @@ public class PDF {
         table.addCell(rightCell);
 
         /**
-         * 2. Percentage comments
+         * 2. Ratio
          */
         leftCell = new Cell();
-        leftCell.add(messages.getString("percentLines_table"));
+        leftCell.add(messages.getString("ratio_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
