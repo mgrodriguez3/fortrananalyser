@@ -101,11 +101,6 @@ public class TasksBar extends
     private double assesment = 0.0;
 
     /**
-     * the final calification obtains by the directory.
-     */
-    private double finalCalification = 0.0;
-
-    /**
      * auxiliar variable to calcule the final calification.
      */
     private double auxNote;
@@ -170,9 +165,22 @@ public class TasksBar extends
      */
     private ArrayList<Double> scoresCycle;
 
+    /**
+     * number of comentable elements in file
+     */
     private double commentableElements;
     
+    /**
+     * number of comented elements in file
+     */
     private double commentedElements;
+    
+    /**
+     * total number of lines of the analysed software
+     */
+    private int totalNumLines;
+    
+    private double partialCalification;
 
     /**
      * the string resources i18n.
@@ -194,6 +202,7 @@ public class TasksBar extends
         this.scoresCycle = new ArrayList<>();
         this.commentableElements = 0.0;
         this.commentedElements = 0.0;
+        this.partialCalification = 0.0;
 
         this.w = w;
         this.messages = messages;
@@ -250,10 +259,13 @@ public class TasksBar extends
         this.scoresCycle.clear();
         this.commentableElements = 0.0;
         this.commentedElements = 0.0;
+        this.totalNumLines = 0;
+        this.partialCalification = 0.0;
 
         PDF pdf;
         int countNumberOfFiles = 0;
         auxNote = 0.0;
+        
         double percentage = 0.0;
 
         try {
@@ -318,8 +330,7 @@ public class TasksBar extends
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
                         pdf.addTableScore(scores, this.messages);
                         countNumberOfFiles++;
-                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.2f", assesment));
-                        finalCalification += assesment;
+                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
                     }
 
                     percentage += 98.0 / filesInFolder.size();
@@ -341,6 +352,8 @@ public class TasksBar extends
             this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
             this.scores.add(this.calculateAverage(this.scoresExit));
             this.scores.add(this.calculateAverage(this.scoresCycle));
+            
+
 
             /**
              * Check if the software analysed have not Fortran files
@@ -348,13 +361,14 @@ public class TasksBar extends
             if (!this.scores.get(0).isNaN()) {
                 pdf.addSection(this.messages.getString("finalTable"));
                 pdf.addFinalTableScore(this.scores, this.messages);
-                auxNote = finalCalification / countNumberOfFiles;
-                pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.2f", auxNote));
+                auxNote = partialCalification / this.totalNumLines;
+                pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
             }
 
             pdf.closePDF();
-            finalCalification = 0.0;
+            partialCalification = 0.0;
             percentage = 100;
+            this.totalNumLines = 0;
             publish((int) percentage);
 
         } catch (IOException ex) {
@@ -395,8 +409,10 @@ public class TasksBar extends
 
         JOptionPane.showMessageDialog(taskbar, "<html> <span style='color:#007A82'>" + messages.getString("exitMessage") + "</span></html>"
                 + messages.getString("directoryMessage") + "\n" + TasksBar.DEST + "\n"
-                + messages.getString("timeMessage") + TasksBar.getDurationAnalyse(timeStop)
-                + "\n<html> <span style='color:#089650'>" + messages.getString("arithmeticAverage") + String.format(Locale.ROOT, "%.2f", auxNote) + "</span></html>",
+                + "\n<html> <span style='color:#cf6a0b'>"+
+                messages.getString("timeMessage") + TasksBar.getDurationAnalyse(timeStop)
+                + "</span></html>\n"
+                + "\n<html> <span style='color:#089650'>" + messages.getString("arithmeticAverage") + String.format(Locale.ROOT, "%.3f", auxNote) + "</span></html>",
                 this.messages.getString("headMessageDialog"), JOptionPane.INFORMATION_MESSAGE, icon);
 
         /**
@@ -472,9 +488,11 @@ public class TasksBar extends
          */
         result += this.messages.getString("numberOfLines") + numLines;
         result += "\n";
+        
+        this.totalNumLines += numLines;
 
         /**
-         * 1. Use or not use the sentence IMPLICIT NONE
+         * 6. Use or not use the sentence IMPLICIT NONE
          */
         result += this.messages.getString("implicitNone") + useImplicitNone;
         result += "\n";
@@ -518,7 +536,6 @@ public class TasksBar extends
 
         assesment += ratio;
         this.scores.add(ratio);
-        System.out.println("añadiendo resultado del RATIO = "+ratio +"añadido al array---> "+scores);
         this.scoresRatio.add(ratio);
 
         /**
@@ -593,7 +610,8 @@ public class TasksBar extends
             this.scoresCycle.add(0.0);
         }
         
-        System.out.println(scores);
+        this.partialCalification += this.assesment * numLines;
+        
         return result;
 
     }
@@ -920,30 +938,33 @@ public class TasksBar extends
         boolean goodCommentControlStructures = this.analyseGoodCommentControlStructures(filePath);
 
         /**
-         * 2. good comment in functions
+         *  good comment in functions
          */
         sb = "\n\t--> " + this.messages.getString("function") + goodCommentFunctions;
 
         /**
-         * 3. good comment at the begining of the document
+         * good comment at the begining of the document
          */
         sb += "\n\t--> " + this.messages.getString("initDoc") + goodCommentInitDoc;
 
         /**
-         * 4. good comment at variables declaration
+         * good comment at variables declaration
          */
         sb += "\n\t--> " + this.messages.getString("variables") + goodCommentVariables;
 
         /**
-         * 5. good comment soubroutines declaration
+         * good comment soubroutines declaration
          */
         sb += "\n\t--> " + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
 
         /**
-         * 6. good comment in control structures
+         * good comment in control structures
          */
         sb += "\n\t--> " + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
 
+        /**
+         * 1. comments in functions
+         */
         if (goodCommentFunctions) {
             assesment += 0.4;
             this.scores.add(0.4);
@@ -952,14 +973,20 @@ public class TasksBar extends
             this.scores.add(0.0);
             this.scoresCommentsfunction.add(0.0);
         }
+        /**
+         * 2. comments at the begining of the document
+         */
         if (goodCommentInitDoc) {
             assesment += 0.4;
             this.scores.add(0.4);
             this.scoresCommentsBeginning.add(0.4);
         } else {
             this.scores.add(0.0);
-            //this.scoreCommentsBeginning.add(0.4);
+            this.scoresCommentsBeginning.add(0.0);
         }
+        /**
+         * 3. comments in variables
+         */
         if (goodCommentVariables) {
             assesment += 0.4;
             this.scores.add(0.4);
@@ -968,6 +995,9 @@ public class TasksBar extends
             this.scores.add(0.0);
             this.scoresCommentsVariables.add(0.0);
         }
+        /**
+         * 4. comments in subroutines
+         */
         if (goodCommentSubroutines) {
             assesment += 0.4;
             this.scores.add(0.4);
@@ -976,6 +1006,9 @@ public class TasksBar extends
             this.scores.add(0.0);
             this.scoresCommentsSubroutine.add(0.0);
         }
+        /**
+         * 5. comments in control structures
+         */
         if (goodCommentControlStructures) {
             assesment += 0.4;
             this.scores.add(0.4);
@@ -984,6 +1017,7 @@ public class TasksBar extends
             this.scores.add(0.0);
             this.scoresCommentsControlStructures.add(0.0);
         }
+        
         return sb;
 
     }
@@ -1205,6 +1239,7 @@ public class TasksBar extends
         long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
         millis -= TimeUnit.MINUTES.toMillis(minutes);
         long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+        millis -= TimeUnit.MILLISECONDS.toMillis(seconds);
 
         StringBuilder sb = new StringBuilder(64);
         sb.append(days);
@@ -1214,7 +1249,9 @@ public class TasksBar extends
         sb.append(minutes);
         sb.append(" min ");
         sb.append(seconds);
-        sb.append(" s");
+        sb.append(" s ");
+        sb.append(millis);
+        sb.append(" ms");
 
         return sb.toString();
     }

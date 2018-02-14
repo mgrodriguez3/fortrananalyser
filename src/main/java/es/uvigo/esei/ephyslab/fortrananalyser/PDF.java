@@ -356,7 +356,7 @@ public class PDF {
         leftCell.add(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
 
-        rightCell.add(scores.get(0).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(5)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -380,7 +380,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(7).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(7)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -392,7 +392,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(2).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(1)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
         
@@ -405,7 +405,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(3).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(2)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
         
@@ -418,7 +418,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(1).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(0)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
         
@@ -431,7 +431,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(4).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(3)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -443,7 +443,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(5).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(4)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -455,7 +455,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(8).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(8)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -467,7 +467,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(scores.get(9).toString());
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(9)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -548,43 +548,44 @@ public class PDF {
         rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(2)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
-
-        /**
-         * 4. Comments in functions
-         */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsFunctions_table"));
-        table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(3)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
-        table.addCell(rightCell);
         
-        /**
-         * 5. Comments beginning
+         /**
+         * 4. Comments beginning
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsBeginning_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(4)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(3)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
         
         /**
-         * 6. Comments variables
+         * 5. Comments variables
          */
         leftCell = new Cell();
         leftCell.add(messages.getString("CommentsVariables_table"));
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(5)));
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(4)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
+        
+        
+        /**
+         * 6. Comments in functions
+         */
+        leftCell = new Cell();
+        leftCell.add(messages.getString("CommentsFunctions_table"));
+        table.addCell(leftCell);
+
+        rightCell = new Cell();
+        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(5)));
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        table.addCell(rightCell);       
 
         /**
          * 7. Comments subroutines
