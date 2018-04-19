@@ -7,6 +7,8 @@ package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
@@ -28,15 +30,22 @@ public class Principal {
     public static void main(String[] args) throws IOException, InterruptedException, InvocationTargetException {
         org.apache.log4j.BasicConfigurator.configure();
 
-        SwingUtilities.invokeLater(() -> {
-            Window w;
-            try {
-                w = new Window();
-                w.setVisible(true);
-            } catch (IOException ex) {
-                Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        });
+        if (args.length == 0) {
+            SwingUtilities.invokeLater(() -> {
+                Window w;
+                try {
+                    w = new Window();
+                    w.setVisible(true);
+                } catch (IOException ex) {
+                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+        } else {
+            SwingUtilities.invokeLater(() -> {
+                Window w;
+                w = new Window(args[0], args[1]);
+            });
+        }
 
     }
 }

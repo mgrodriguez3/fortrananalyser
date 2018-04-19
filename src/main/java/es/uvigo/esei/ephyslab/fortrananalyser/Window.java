@@ -44,12 +44,12 @@ public class Window extends JFrame implements ActionListener {
     /**
      * default country to initialice the user interface.
      */
-    private final static String DEFAULT_COUNTRY = "ES";
+    private final static String DEFAULT_COUNTRY = "GB";
 
     /**
      * default language to initialice the user interface.
      */
-    private final static String DEFAULT_LANGUAGE = "es";
+    private final static String DEFAULT_LANGUAGE = "en";
 
     /**
      * the name of the package where the messagesBundle i18n are.
@@ -102,7 +102,7 @@ public class Window extends JFrame implements ActionListener {
     private JMenuItem spanish, galician, english, french;
 
     /**
-     * By default, the selected language is Spanish.
+     * By default, the selected language is Enslish.
      */
     Locale currentLocale;
 
@@ -121,6 +121,15 @@ public class Window extends JFrame implements ActionListener {
         super();
         configureWindow();
         initialiceComponents();
+    }
+    
+    public Window(String language, String path){
+        initialiceComponentsNoGUI();
+        this.changeLanguageNoGUI(language);
+        System.out.println("Starting...");
+        NoGUI noGUI = new NoGUI(path, Window.this.messages);
+
+       
     }
 
     /**
@@ -211,6 +220,15 @@ public class Window extends JFrame implements ActionListener {
         this.add(buttonanalyse);
         this.add(buttonExit);
         this.add(buttonFileExplorer);
+
+    }
+    
+     private void initialiceComponentsNoGUI() {
+
+        this.currentLocale = new Locale(Window.DEFAULT_LANGUAGE, Window.DEFAULT_COUNTRY);
+        Locale.setDefault(currentLocale);
+        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+
 
     }
 
@@ -370,6 +388,64 @@ public class Window extends JFrame implements ActionListener {
         this.french = new JMenuItem(this.messages.getString("nameButtonFrench"));
         this.french.addActionListener(this);
         this.menuLanguages.add(french);
+
+    }
+    
+    private void changeLanguageNoGUI(String lang) {
+
+        /**
+         * configuring the language
+         */
+        switch (lang) {
+
+            /**
+             * spanish from Spain
+             */
+            case "es":
+                if (!this.currentLocale.getLanguage().equals("es")) {
+
+                    //translate the text and update the value of strings in the messages variable
+                    currentLocale = new Locale("es", "ES");
+                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                }
+
+                break;
+            /**
+             * french from France
+             */
+            case "fr":
+                if (!this.currentLocale.getLanguage().equals("fr")) {
+
+                    //translate the text and update the value of strings in the messages variable
+                    this.currentLocale = new Locale("fr", "FR");
+                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                }
+                break;
+
+            /**
+             * Galician from Spain
+             */
+            case "gl":
+                if (!this.currentLocale.getLanguage().equals("gl")) {
+
+                    //translate the text and update the value of strings in the messages variable
+                    this.currentLocale = new Locale("gl", "ES");
+                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                }
+                break;
+
+            /**
+             * english from United Kingdom
+             */
+            case "en":
+                if (!this.currentLocale.getLanguage().equals("en")) {
+
+                    //translate the text and update the value of strings in the messages variable
+                    this.currentLocale = new Locale("en", "GB");
+                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                }
+                break;
+        }
 
     }
 
