@@ -123,7 +123,6 @@ public class PDF {
      * @throws IOException
      */
     public void createPdf(String dest, Locale l) throws IOException {
-
         PdfWriter writer = new PdfWriter(dest, new WriterProperties().addXmpMetadata());
         PdfDocument pdf = new PdfDocument(writer);
 

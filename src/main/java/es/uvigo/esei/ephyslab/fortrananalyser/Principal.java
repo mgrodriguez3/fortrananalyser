@@ -7,8 +7,6 @@ package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Locale;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
@@ -41,10 +39,10 @@ public class Principal {
                 }
             });
         } else {
-            SwingUtilities.invokeLater(() -> {
-                Window w;
-                w = new Window(args[0], args[1]);
-            });
+           
+                WindowNOGUI w;
+                w = new WindowNOGUI(args[0], args[1]);
+         
         }
 
     }

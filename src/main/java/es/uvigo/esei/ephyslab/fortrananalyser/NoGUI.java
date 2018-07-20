@@ -49,12 +49,12 @@ public class NoGUI  {
     /**
      * the path and the name of the file.
      */
-    public static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
+    public static final String DEST = System.getProperty("user.home") + "/html/FortranAnalyser/results/temp/QualityReport.pdf";
 
     /**
      * the path of the destination of the file
      */
-    public static final String PATH = System.getProperty("user.home") + "/temp";
+    public static final String PATH = System.getProperty("user.home") + "/html/FortranAnalyser/results/temp";
 
 
     /**
@@ -228,11 +228,11 @@ public class NoGUI  {
             /**
              * In case the temp folder doesn't exits
              */
-            if (!Files.exists(Paths.get(TasksBar.DEST))) {
-                new File(TasksBar.PATH).mkdirs();
+            if (!Files.exists(Paths.get(NoGUI.DEST))) {
+                new File(NoGUI.PATH).mkdirs();
             }
 
-            pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
+            pdf.createPdf(NoGUI.DEST, this.messages.getLocale());
 
             filesInFolder = Files.walk(Paths.get(this.path))
                     .filter(Files::isRegularFile)
@@ -309,7 +309,6 @@ public class NoGUI  {
             this.partialCalification = 0.0;
             this.totalNumLines = 0;
 
-            System.out.println("done.");
             System.exit(1);
 
         } catch (IOException ex) {
