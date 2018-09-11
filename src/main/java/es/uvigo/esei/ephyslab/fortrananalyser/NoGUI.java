@@ -49,12 +49,12 @@ public class NoGUI  {
     /**
      * the path and the name of the file.
      */
-    public static final String DEST = System.getProperty("user.home") + "/html/FortranAnalyser/results/temp/QualityReport.pdf";
+    public static final String DEST = "/var/www/html/results/temp/QualityReport.pdf";
 
     /**
      * the path of the destination of the file
      */
-    public static final String PATH = System.getProperty("user.home") + "/html/FortranAnalyser/results/temp";
+    public static final String PATH = "/var/www/html/results/temp";
 
 
     /**

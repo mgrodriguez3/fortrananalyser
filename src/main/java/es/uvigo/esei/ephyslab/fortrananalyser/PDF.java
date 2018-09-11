@@ -113,7 +113,7 @@ public class PDF {
     /**
      * the name of the application.
      */
-    private final static String APP_NAME = "Fortran Analyser";
+    private final static String APP_NAME = "FortranAnalyser";
 
     /**
      * Method that create the cover from the report document.
@@ -286,6 +286,16 @@ public class PDF {
         this.document.add(p);
     }
 
+    public void addSummaryInformation(String result) throws IOException {
+        Paragraph p = new Paragraph();
+        Text t = new Text(result);
+
+        p.add(t.setFontSize(12).setFontColor(RESULT_COLOR)).setBold();
+        p.add("\n");
+
+        this.document.add(p);
+    }
+
     /**
      * Close the report document
      *
@@ -355,7 +365,7 @@ public class PDF {
         leftCell.add(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
 
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(5)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(5)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -367,7 +377,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(6)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(6)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -379,11 +389,11 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(7)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(7)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
-         /**
+        /**
          * 4. Comments beginning
          */
         leftCell = new Cell();
@@ -391,11 +401,10 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(1)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(1)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
-        
-        
+
         /**
          * 5. Comments variables
          */
@@ -404,11 +413,10 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(2)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(2)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
-        
-        
+
         /**
          * 6. Comments in functions
          */
@@ -417,10 +425,9 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(0)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(0)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
-        
 
         /**
          * 7. Comments subroutines
@@ -430,7 +437,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(3)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(3)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -442,7 +449,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(4)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(4)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -454,7 +461,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(8)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(8)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -466,7 +473,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(9)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(9)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -483,14 +490,12 @@ public class PDF {
      */
     public void addFinalTableScore(ArrayList<Double> scores, ResourceBundle messages) {
 
-        
         Table table = new Table(2);
         Cell headerCellLeft = new Cell();
         Cell headerCellRight = new Cell();
         Cell leftCell = new Cell();
         Cell rightCell = new Cell();
-        
-        
+
         /**
          * configuration of the left header of the table
          */
@@ -513,14 +518,13 @@ public class PDF {
         headerCellRight.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(headerCellRight);
 
-        
         /**
          * 1. Implicit None
          */
         leftCell.add(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
 
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(0)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(0)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -532,7 +536,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(1)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(1)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -544,11 +548,11 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(2)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(2)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
-        
-         /**
+
+        /**
          * 4. Comments beginning
          */
         leftCell = new Cell();
@@ -556,11 +560,10 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(3)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(3)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
-        
         /**
          * 5. Comments variables
          */
@@ -569,11 +572,10 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(4)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(4)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
-        
-        
+
         /**
          * 6. Comments in functions
          */
@@ -582,9 +584,9 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(5)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(5)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
-        table.addCell(rightCell);       
+        table.addCell(rightCell);
 
         /**
          * 7. Comments subroutines
@@ -594,7 +596,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(6)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(6)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -606,7 +608,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(7)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(7)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -618,7 +620,7 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(8)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(8)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
 
@@ -630,9 +632,62 @@ public class PDF {
         table.addCell(leftCell);
 
         rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT,"%.3f", scores.get(9)));
+        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(9)));
         rightCell.setTextAlignment(TextAlignment.CENTER);
         table.addCell(rightCell);
+
+        this.document.add(table);
+
+    }
+
+    /**
+     * This method add a summary information about the file names with the
+     * scores obtains by each file of analysed software.
+     *
+     * @param fileScores
+     * @param fileNames
+     * @param messages
+     */
+    public void addFinalSummary(ArrayList<Double> fileScores, ArrayList<String> fileNames, ResourceBundle messages) {
+
+        Table table = new Table(2, true);
+        Cell headerCellLeft = new Cell().setKeepTogether(true);
+        Cell headerCellRight = new Cell().setKeepTogether(true);
+
+        /**
+         * configuration of the left header of the table
+         */
+        headerCellLeft.add(messages.getString("headerLeft_table"));
+        headerCellLeft.setFontSize(15);
+        headerCellLeft.setFontColor(HEADER_COLOR);
+        headerCellLeft.setBorder(Border.NO_BORDER);
+
+        headerCellLeft.setTextAlignment(TextAlignment.CENTER);
+        table.addHeaderCell(headerCellLeft);
+
+        /**
+         * configuration of the right header of the table
+         */
+        headerCellRight.add(messages.getString("headerRight_table"));
+        headerCellRight.setFontSize(15);
+        headerCellRight.setFontColor(HEADER_COLOR);
+        headerCellRight.setBorder(Border.NO_BORDER);
+
+        headerCellRight.setTextAlignment(TextAlignment.CENTER);
+        table.addHeaderCell(headerCellRight);
+
+        //table.addHeaderCell(new Cell().setKeepTogether(true).add(new Paragraph(messages.getString("headerLeftSummaryTable")))).setFontColor(HEADER_COLOR).setFontSize(15).setBorder(Border.NO_BORDER);
+        //table.addHeaderCell(new Cell().setKeepTogether(true).add(new Paragraph(messages.getString("headerRightSummaryTable")))).setFontColor(HEADER_COLOR).setFontSize(15).setBorder(Border.NO_BORDER);
+        this.document.add(table);
+
+        for (int i = 0; i < fileNames.size(); i++) {
+            
+            table.addCell(new Cell().setKeepTogether(true).add(new Paragraph(fileNames.get(i))));
+            table.addCell(new Cell().setKeepTogether(true).add(new Paragraph(String.format(Locale.ROOT, "%.3f", fileScores.get(i)))));
+
+        }
+
+        table.complete();
 
         this.document.add(table);
 

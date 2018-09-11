@@ -180,7 +180,20 @@ public class TasksBar extends
      */
     private int totalNumLines;
 
+    /**
+     * Sum of all scores for each file analysed
+     */
     private double partialCalification;
+    
+    /**
+     * Names of each file
+     */
+    private ArrayList<String> fileNames;
+    
+    /**
+     * Scores obtain by each file
+     */
+    private ArrayList<Double> fileScores;
 
     /**
      * the string resources i18n.
@@ -200,6 +213,8 @@ public class TasksBar extends
         this.scoresCommentsControlStructures = new ArrayList<>();
         this.scoresExit = new ArrayList<>();
         this.scoresCycle = new ArrayList<>();
+        this.fileNames = new ArrayList<>();
+        this.fileScores = new ArrayList<>();
         this.commentableElements = 0.0;
         this.commentedElements = 0.0;
         this.partialCalification = 0.0;
@@ -237,6 +252,8 @@ public class TasksBar extends
         this.scoresCommentsControlStructures = new ArrayList<>();
         this.scoresExit = new ArrayList<>();
         this.scoresCycle = new ArrayList<>();
+        this.fileNames = new ArrayList<>();
+        this.fileScores = new ArrayList<>();
         this.commentableElements = 0.0;
         this.commentedElements = 0.0;
         this.partialCalification = 0.0;
@@ -278,6 +295,8 @@ public class TasksBar extends
         this.scoresCommentsControlStructures.clear();
         this.scoresExit.clear();
         this.scoresCycle.clear();
+        this.fileNames.clear();
+        this.fileScores.clear();
         this.commentableElements = 0.0;
         this.commentedElements = 0.0;
         this.totalNumLines = 0;
@@ -348,9 +367,11 @@ public class TasksBar extends
                             || extensionFile.equals(TasksBar.EXTENSION2)
                             || extensionFile.equals(TasksBar.EXTENSION3)) {
                         pdf.addSubSection(file.getName());
+                        this.fileNames.add(file.getName());
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
                         pdf.addTableScore(scores, this.messages);
                         countNumberOfFiles++;
+                        this.fileScores.add(assesment);
                         pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
                     }
 
@@ -378,7 +399,11 @@ public class TasksBar extends
              * Check if the software analysed have not Fortran files
              */
             if (!this.scores.get(0).isNaN()) {
-                pdf.addSection(this.messages.getString("finalTable"));
+                pdf.addSection(this.messages.getString("summary"));
+                pdf.addFinalSummary(this.fileScores, this.fileNames, this.messages);
+                pdf.addSummaryInformation(this.messages.getString("totalNumberOfFiles") + " " + countNumberOfFiles);
+                pdf.addSummaryInformation(this.messages.getString("totalNumberOfLines") + " " + this.totalNumLines);
+                pdf.addSubSection(this.messages.getString("finalTable"));
                 pdf.addFinalTableScore(this.scores, this.messages);
                 auxNote = partialCalification / this.totalNumLines;
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
