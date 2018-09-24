@@ -218,6 +218,24 @@ public class PDF {
         this.document.add(p);
 
     }
+    
+    /**
+     * add a subsection in the report document
+     *
+     * @param text the name of the subsection
+     * @throws IOException
+     */
+    public void addSubSectionInBold(String text) throws IOException {
+        Paragraph p = new Paragraph();
+        Text t = new Text(text);
+
+        p.add(t.setFontSize(16).setFontColor(FINAL_NOTE_COLOR)).setBold();
+        p.add("\n");
+
+        this.document.add(p);
+
+    }
+    
 
     /**
      * add a section in the report document
@@ -676,20 +694,15 @@ public class PDF {
         headerCellRight.setTextAlignment(TextAlignment.CENTER);
         table.addHeaderCell(headerCellRight);
 
-        //table.addHeaderCell(new Cell().setKeepTogether(true).add(new Paragraph(messages.getString("headerLeftSummaryTable")))).setFontColor(HEADER_COLOR).setFontSize(15).setBorder(Border.NO_BORDER);
-        //table.addHeaderCell(new Cell().setKeepTogether(true).add(new Paragraph(messages.getString("headerRightSummaryTable")))).setFontColor(HEADER_COLOR).setFontSize(15).setBorder(Border.NO_BORDER);
         this.document.add(table);
 
         for (int i = 0; i < fileNames.size(); i++) {
-            
+
             table.addCell(new Cell().setKeepTogether(true).add(new Paragraph(fileNames.get(i))));
             table.addCell(new Cell().setKeepTogether(true).add(new Paragraph(String.format(Locale.ROOT, "%.3f", fileScores.get(i)))));
-
         }
 
         table.complete();
-
-        this.document.add(table);
 
     }
 

@@ -403,7 +403,7 @@ public class TasksBar extends
                 pdf.addFinalSummary(this.fileScores, this.fileNames, this.messages);
                 pdf.addSummaryInformation(this.messages.getString("totalNumberOfFiles") + " " + countNumberOfFiles);
                 pdf.addSummaryInformation(this.messages.getString("totalNumberOfLines") + " " + this.totalNumLines);
-                pdf.addSubSection(this.messages.getString("finalTable"));
+                pdf.addSubSectionInBold(this.messages.getString("finalTable"));
                 pdf.addFinalTableScore(this.scores, this.messages);
                 auxNote = partialCalification / this.totalNumLines;
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
@@ -1162,6 +1162,7 @@ public class TasksBar extends
      */
     public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
         String chain = "";
+        String previousChain = "";
         File file = new File(filePath);
         int variablesCommented = 0;
         int totalVariables = 0;
@@ -1177,12 +1178,15 @@ public class TasksBar extends
 
                     totalVariables++;
 
-                    if (chain.contains("!")) {
+                    //check if the next line is a comment or the previous line
+                    //is a comment
+                    if (previousChain.contains("!")) {
                         variablesCommented++;
                         this.commentedElements++;
                     }
 
                 }
+                previousChain = chain;
             }
         }
         return totalVariables == variablesCommented;
