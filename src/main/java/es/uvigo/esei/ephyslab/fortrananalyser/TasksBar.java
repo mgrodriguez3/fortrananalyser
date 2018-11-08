@@ -200,6 +200,13 @@ public class TasksBar extends
      */
     ResourceBundle messages;
 
+    /**
+     * Constructor of the class with GUI
+     * 
+     * @param w
+     * @param path
+     * @param messages 
+     */
     TasksBar(Window w, String path, ResourceBundle messages) {
 
         this.scores = new ArrayList<>();
@@ -240,6 +247,11 @@ public class TasksBar extends
 
     }
 
+    /**
+     * Constructor of the class without GUI
+     * @param path
+     * @param messages 
+     */
     TasksBar(String path, ResourceBundle messages) {
         this.scores = new ArrayList<>();
         this.scoresImplicitNone = new ArrayList<>();
