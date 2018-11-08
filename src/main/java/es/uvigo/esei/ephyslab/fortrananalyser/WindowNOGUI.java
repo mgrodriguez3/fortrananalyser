@@ -10,7 +10,8 @@ import java.util.ResourceBundle;
 
 /**
  *
- * @author miki
+ * @author Michael García Rodríguez
+ * @version 1.9.2
  */
 public class WindowNOGUI {
     

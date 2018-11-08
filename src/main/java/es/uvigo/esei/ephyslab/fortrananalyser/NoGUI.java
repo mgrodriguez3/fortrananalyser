@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * graphical intercface, after that it generate the quallity report.
  *
  * @author Michael García Rodríguez
- * @version 1.9
+ * @version 1.9.2
  */
 public class NoGUI  {
 

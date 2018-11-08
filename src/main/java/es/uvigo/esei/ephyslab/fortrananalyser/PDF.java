@@ -50,7 +50,7 @@ import java.util.logging.Logger;
  * This class create the document PDF with the quality report
  *
  * @author Michael García Rodríguez
- * @version 1.9
+ * @version 1.9.2
  */
 public class PDF {
 

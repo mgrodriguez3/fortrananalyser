@@ -15,7 +15,7 @@ import javax.swing.SwingUtilities;
  * Main class that is called initially when the code is executed
  *
  * @author Michael García Rodríguez
- * @version 1.9
+ * @version 1.9.2
  */
 public class Principal {
 
