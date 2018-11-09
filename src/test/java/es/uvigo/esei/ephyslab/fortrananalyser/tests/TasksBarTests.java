@@ -247,7 +247,7 @@ public class TasksBarTests {
     @Test
     public void TestGetDurationAnalyse() {
 
-        String expectedDate = "17 D 10 h 41 min 23 s";
+        String expectedDate = "17 D 10 h 41 min 23 s 23700 ms";
 
         assertEquals(expectedDate, TasksBar.getDurationAnalyse(1507283723));
     }
