@@ -118,9 +118,10 @@ public class PDF {
     /**
      * Method that create the cover from the report document.
      *
-     * @param dest
-     * @param l
-     * @throws IOException
+     * @param dest path of the report
+     * @param l local data
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public void createPdf(String dest, Locale l) throws IOException {
         PdfWriter writer = new PdfWriter(dest, new WriterProperties().addXmpMetadata());
@@ -187,7 +188,8 @@ public class PDF {
      * add a paragraph in the report document
      *
      * @param text the text to add in a paragraph
-     * @throws java.io.IOException
+     * @throws java.io.IOException in case something wrong with intput/output
+     * file
      */
     public void addParagraph(String text) throws IOException {
 
@@ -206,7 +208,8 @@ public class PDF {
      * add a subsection in the report document
      *
      * @param text the name of the subsection
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public void addSubSection(String text) throws IOException {
         Paragraph p = new Paragraph();
@@ -223,7 +226,8 @@ public class PDF {
      * add a subsection in the report document
      *
      * @param text the name of the subsection
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public void addSubSectionInBold(String text) throws IOException {
         Paragraph p = new Paragraph();
@@ -239,8 +243,9 @@ public class PDF {
     /**
      * add a section in the report document
      *
-     * @param section
-     * @throws IOException
+     * @param section with the name of the section
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public void addSection(String section) throws IOException {
         Paragraph p = new Paragraph();
@@ -256,7 +261,8 @@ public class PDF {
      * add the result from a specific analysis
      *
      * @param result the text to insert as a result
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public void addResult(String result) throws IOException {
         Paragraph p = new Paragraph();
@@ -272,7 +278,8 @@ public class PDF {
      * add the result from a specific analysis
      *
      * @param result the text to insert as a result
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public void addScoreResult(String result) throws IOException {
         Paragraph p = new Paragraph();
@@ -288,8 +295,9 @@ public class PDF {
     /**
      * add the final note to the results from the PDF
      *
-     * @param result
-     * @throws IOException
+     * @param result the final note of the report
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public void addFinalNote(String result) throws IOException {
         
@@ -316,7 +324,8 @@ public class PDF {
     /**
      * Close the report document
      *
-     * @throws java.io.IOException
+     * @throws java.io.IOException in case something wrong with intput/output
+     * file
      */
     public void closePDF() throws IOException {
         this.document.close();
@@ -343,8 +352,8 @@ public class PDF {
     /**
      * this methos add the summary score table.
      *
-     * @param scores
-     * @param messages
+     * @param scores all scores obtains in tableScore
+     * @param messages with all strings needed to build the table
      */
     public void addTableScore(ArrayList<Double> scores, ResourceBundle messages) {
         
@@ -502,8 +511,8 @@ public class PDF {
      * this method add the final score table with a diferent style from the
      * addTableScore method (previously implemented).
      *
-     * @param scores
-     * @param messages
+     * @param scores all scores to calculate the final note
+     * @param messages all strings neccesaries to build the final table
      */
     public void addFinalTableScore(ArrayList<Double> scores, ResourceBundle messages) {
         
@@ -661,9 +670,9 @@ public class PDF {
      * This method add a summary information about the file names with the
      * scores obtains by each file of analysed software.
      *
-     * @param fileScores
-     * @param fileNames
-     * @param messages
+     * @param fileScores list with all scores for each file analysed
+     * @param fileNames list with all names for each file analysed
+     * @param messages with all strings necessaries to summary
      */
     public void addFinalSummary(ArrayList<Double> fileScores, ArrayList<String> fileNames, ResourceBundle messages) {
         

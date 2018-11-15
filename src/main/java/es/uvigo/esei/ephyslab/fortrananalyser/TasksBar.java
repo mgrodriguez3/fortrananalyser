@@ -203,9 +203,9 @@ public class TasksBar extends
     /**
      * Constructor of the class with GUI
      * 
-     * @param w
-     * @param path
-     * @param messages 
+     * @param w the iframe
+     * @param path the path of file
+     * @param messages all strings for build the report
      */
     TasksBar(Window w, String path, ResourceBundle messages) {
 
@@ -249,8 +249,8 @@ public class TasksBar extends
 
     /**
      * Constructor of the class without GUI
-     * @param path
-     * @param messages 
+     * @param path the path of the file
+     * @param messages all string to build the report
      */
     TasksBar(String path, ResourceBundle messages) {
         this.scores = new ArrayList<>();
@@ -289,7 +289,8 @@ public class TasksBar extends
      *
      *
      * @return the note of the analysed software
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception in case something wrong with intput/output
+     * file
      */
     @Override
     protected Void doInBackground() throws Exception {
@@ -439,7 +440,7 @@ public class TasksBar extends
      * This override method update the value of the progressBar when publish
      * method is called.
      *
-     * @param chunks
+     * @param chunks list with the percentage of the progress bar
      */
     @Override
     protected void process(List<Integer> chunks) {
@@ -518,7 +519,8 @@ public class TasksBar extends
      *
      * @param pathFile the path from the file to analyse
      * @return the result with all the output data
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public String analyseFile(String pathFile) throws IOException {
 
@@ -677,7 +679,8 @@ public class TasksBar extends
      *
      * @param filePath the path of the file
      * @return the number of lines from file
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public int analyseNumberOfLines(String filePath) throws IOException {
 
@@ -699,9 +702,10 @@ public class TasksBar extends
      * This method analyse if the sentence implicit none is used in each line
      * from a file
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed 
+     * @return boolean with the answer to the use of implicit none sentence
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseUseImplicitNone(String filePath) throws IOException {
 
@@ -726,7 +730,8 @@ public class TasksBar extends
      *
      * @param filePath The path from file to analyse
      * @return the number of functions in this file
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public int analyseNumFunctions(String filePath) throws IOException {
 
@@ -755,7 +760,8 @@ public class TasksBar extends
      *
      * @param filePath the absolute path from file
      * @return the number of subroutines calls
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public int analyseNumCalls(String filePath) throws IOException {
         int count = 0;
@@ -781,9 +787,10 @@ public class TasksBar extends
      * in loops to avoid making a certain sentence, so that it continues to
      * iterate to the next element. With they use, the code is more efficient.
      *
-     * @param filePath
-     * @return
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean about the answer to the use of CYCLE sentence
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseUseCycle(String filePath) throws IOException {
 
@@ -826,9 +833,10 @@ public class TasksBar extends
      * This method check if the EXIT sentence is used in the file. EXIT sentence
      * is used to go out of a loop, so the code is more efficient
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean of the answer to the use of EXIT sentence
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseUseExit(String filePath) throws IOException {
 
@@ -869,9 +877,10 @@ public class TasksBar extends
     /**
      * This method analyse the number of subroutines declared in a file
      *
-     * @param filePath
+     * @param filePath of the file analysed
      * @return the number of subroutines
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public int analyseNumberSubroutines(String filePath) throws IOException {
 
@@ -900,9 +909,10 @@ public class TasksBar extends
      * is greater than 3 or smaller than 0 AND this line don't have a comment ,
      * it is consider a bad programming practice.
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean with the use of nested loops
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseNestedLoops(String filePath) throws IOException {
 
@@ -951,9 +961,10 @@ public class TasksBar extends
     /**
      * This method count the number of declared variables in a file
      *
-     * @param filePath
+     * @param filePath of the file analysed
      * @return the number of declared variables
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
         String chain = "";
@@ -980,9 +991,10 @@ public class TasksBar extends
      * commented after or befor the declaration. 4.- the three first or more
      * lines of a file are commented.
      *
-     * @param filePath
+     * @param filePath of the file analysed
      * @return the paragraph to add to the pdf file
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     private String analyseGoodComment(String filePath) throws IOException {
 
@@ -1082,9 +1094,10 @@ public class TasksBar extends
      * This method analyse if the Control Structures are commented: ifs and
      * switch case
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean with the use of good comments in control structures
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
         String chain = "";
@@ -1126,9 +1139,10 @@ public class TasksBar extends
     /**
      * This method analyse if the declaration of subroutines are commented
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean to the use of good comments in subroutines
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
 
@@ -1168,9 +1182,10 @@ public class TasksBar extends
      * This method analyse if for each variable, there is a comment to describe
      * what it done.
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean to the use of good comments in variables 
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
         String chain = "";
@@ -1207,9 +1222,10 @@ public class TasksBar extends
     /**
      * This method analyse if there is a good comment at the beginning of a file
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean to the use of good comments at the beginning of the document
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
 
@@ -1239,9 +1255,10 @@ public class TasksBar extends
      * comment. The comment can be after or before the declaration of the
      * function. In addition, at the end of functions there are no comments.
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean of the use of good comments in functions
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseGoodCommentFunctions(String filePath) throws IOException {
 
@@ -1316,8 +1333,8 @@ public class TasksBar extends
     /**
      * this method calculate the average of the values in a list.
      *
-     * @param l
-     * @return
+     * @param l list with all values
+     * @return the average from list l
      */
     private Double calculateAverage(ArrayList<Double> l) {
 

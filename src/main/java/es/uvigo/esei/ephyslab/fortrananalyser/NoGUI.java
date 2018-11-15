@@ -21,15 +21,13 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
- * This class create a NoGUI and support the logic part of the application without
- * graphical intercface, after that it generate the quallity report.
+ * This class create a NoGUI and support the logic part of the application
+ * without graphical intercface, after that it generate the quallity report.
  *
  * @author Michael García Rodríguez
  * @version 1.9.2
  */
-public class NoGUI  {
-
-  
+public class NoGUI {
 
     /**
      * the extension file to search.
@@ -55,7 +53,6 @@ public class NoGUI  {
      * the path of the destination of the file
      */
     public static final String PATH = "/var/www/html/results/temp";
-
 
     /**
      * the path of the directory to analyse.
@@ -149,7 +146,11 @@ public class NoGUI  {
      */
     ResourceBundle messages;
 
-    
+    /**
+     *
+     * @param path of the file
+     * @param messages with all Strings variables
+     */
     NoGUI(String path, ResourceBundle messages) {
         try {
             this.scores = new ArrayList<>();
@@ -166,10 +167,10 @@ public class NoGUI  {
             this.commentableElements = 0.0;
             this.commentedElements = 0.0;
             this.partialCalification = 0.0;
-            
+
             this.messages = messages;
             this.path = path;
-            
+
             this.startAnalysis();
         } catch (Exception ex) {
             Logger.getLogger(NoGUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -190,9 +191,9 @@ public class NoGUI  {
      * ".f90" or ".h90" or ".f"
      *
      *
-     * @throws java.lang.Exception
+     * @throws java.lang.Exception in case something wrong with intput/output
+     * file
      */
-    
     private void startAnalysis() throws Exception {
 
         /**
@@ -223,7 +224,6 @@ public class NoGUI  {
             String auxDir = "";
             pdf = new PDF();
             String extensionFile = "";
-
 
             /**
              * In case the temp folder doesn't exits
@@ -317,7 +317,6 @@ public class NoGUI  {
 
     }
 
-
     /**
      * This method obtains the path from file without it name
      *
@@ -352,7 +351,7 @@ public class NoGUI  {
      *
      * @param pathFile the path from the file to analyse
      * @return the result with all the output data
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output file
      */
     public String analyseFile(String pathFile) throws IOException {
 
@@ -511,7 +510,7 @@ public class NoGUI  {
      *
      * @param filePath the path of the file
      * @return the number of lines from file
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumberOfLines(String filePath) throws IOException {
 
@@ -533,9 +532,9 @@ public class NoGUI  {
      * This method analyse if the sentence implicit none is used in each line
      * from a file
      *
-     * @param filePath
+     * @param filePath of the fiel to analyse
      * @return boolean
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseUseImplicitNone(String filePath) throws IOException {
 
@@ -560,7 +559,7 @@ public class NoGUI  {
      *
      * @param filePath The path from file to analyse
      * @return the number of functions in this file
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumFunctions(String filePath) throws IOException {
 
@@ -589,7 +588,7 @@ public class NoGUI  {
      *
      * @param filePath the absolute path from file
      * @return the number of subroutines calls
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumCalls(String filePath) throws IOException {
         int count = 0;
@@ -615,9 +614,10 @@ public class NoGUI  {
      * in loops to avoid making a certain sentence, so that it continues to
      * iterate to the next element. With they use, the code is more efficient.
      *
-     * @param filePath
-     * @return
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return true in case CYCLE sentence is used
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseUseCycle(String filePath) throws IOException {
 
@@ -660,9 +660,9 @@ public class NoGUI  {
      * This method check if the EXIT sentence is used in the file. EXIT sentence
      * is used to go out of a loop, so the code is more efficient
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file
+     * @return boolean with the use or not of EXIT sentence
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseUseExit(String filePath) throws IOException {
 
@@ -703,9 +703,9 @@ public class NoGUI  {
     /**
      * This method analyse the number of subroutines declared in a file
      *
-     * @param filePath
+     * @param filePath of the file analysed
      * @return the number of subroutines
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumberSubroutines(String filePath) throws IOException {
 
@@ -734,9 +734,9 @@ public class NoGUI  {
      * is greater than 3 or smaller than 0 AND this line don't have a comment ,
      * it is consider a bad programming practice.
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean with the use of nested loops
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseNestedLoops(String filePath) throws IOException {
 
@@ -785,9 +785,9 @@ public class NoGUI  {
     /**
      * This method count the number of declared variables in a file
      *
-     * @param filePath
+     * @param filePath of the file analysed
      * @return the number of declared variables
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
         String chain = "";
@@ -814,9 +814,9 @@ public class NoGUI  {
      * commented after or befor the declaration. 4.- the three first or more
      * lines of a file are commented.
      *
-     * @param filePath
+     * @param filePath of the file analysed
      * @return the paragraph to add to the pdf file
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output file
      */
     private String analyseGoodComment(String filePath) throws IOException {
 
@@ -916,9 +916,9 @@ public class NoGUI  {
      * This method analyse if the Control Structures are commented: ifs and
      * switch case
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean with the result of the use of good comments
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
         String chain = "";
@@ -960,9 +960,9 @@ public class NoGUI  {
     /**
      * This method analyse if the declaration of subroutines are commented
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean with the result of the good comments in subroutines
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
 
@@ -1002,9 +1002,9 @@ public class NoGUI  {
      * This method analyse if for each variable, there is a comment to describe
      * what it done.
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean with the result of the use of good comments in variables
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
         String chain = "";
@@ -1037,9 +1037,10 @@ public class NoGUI  {
     /**
      * This method analyse if there is a good comment at the beginning of a file
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the file analysed
+     * @return boolean with the result of the use of good comments at the
+     * beginning of the document
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
 
@@ -1069,9 +1070,10 @@ public class NoGUI  {
      * comment. The comment can be after or before the declaration of the
      * function. In addition, at the end of functions there are no comments.
      *
-     * @param filePath
-     * @return boolean
-     * @throws IOException
+     * @param filePath of the analysed file
+     * @return boolean with the result of the use of good comments in functions
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public boolean analyseGoodCommentFunctions(String filePath) throws IOException {
 
@@ -1146,8 +1148,8 @@ public class NoGUI  {
     /**
      * this method calculate the average of the values in a list.
      *
-     * @param l
-     * @return
+     * @param l the list of the numbers to calculate average
+     * @return the average of the list
      */
     private Double calculateAverage(ArrayList<Double> l) {
 

@@ -114,7 +114,8 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Constructor from Class
      *
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     public Window() throws IOException {
 
@@ -126,7 +127,8 @@ public class Window extends JFrame implements ActionListener {
     /**
      * This method set settings of the main windows
      *
-     * @throws IOException
+     * @throws IOException in case something wrong with intput/output
+     * file
      */
     private void configureWindow() throws IOException {
 
@@ -272,7 +274,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * call the execution of the analisis in a new Thread
      *
-     * @param pathFile
+     * @param pathFile the path of the file
      */
     private void executeAnalyse(String pathFile) {
 
@@ -286,7 +288,7 @@ public class Window extends JFrame implements ActionListener {
      * This method update the parameters in the lenguage selected by the user.
      * es: spanish, fr: french, gl: galician, en: english
      *
-     * @param lang
+     * @param lang the lenguage selected
      */
     private void changeLanguage(String lang) {
 

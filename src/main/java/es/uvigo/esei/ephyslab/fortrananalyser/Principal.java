@@ -21,9 +21,10 @@ public class Principal {
 
     /**
      * @param args the command line arguments
-     * @throws java.io.IOException
-     * @throws java.lang.InterruptedException
-     * @throws java.lang.reflect.InvocationTargetException
+     * @throws java.io.IOException in case something wrong with intput/output
+     * file
+     * @throws java.lang.InterruptedException in case something interrupt the execution process
+     * @throws java.lang.reflect.InvocationTargetException in case something is wrong with the GUI
      */
     public static void main(String[] args) throws IOException, InterruptedException, InvocationTargetException {
         org.apache.log4j.BasicConfigurator.configure();
