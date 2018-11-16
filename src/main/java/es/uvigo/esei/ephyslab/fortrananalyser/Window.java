@@ -60,7 +60,7 @@ public class Window extends JFrame implements ActionListener {
      * the file choser from the computer where the application is open.
      */
     private final JFileChooser fc = new JFileChooser();
-    
+
     private static final String NAME_MENU = "nameMenu";
 
     /**
@@ -102,17 +102,17 @@ public class Window extends JFrame implements ActionListener {
      * Spanish is one of possible languages to select
      */
     private JMenuItem spanish;
-    
+
     /**
      * Galician is one of possible languages to select
      */
     private JMenuItem galician;
-    
+
     /**
      * English is one of possible languages to select and the default language
      */
     private JMenuItem english;
-    
+
     /**
      * French is one of possible languages to select
      */
@@ -131,8 +131,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * Constructor from Class
      *
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public Window() throws IOException {
 
@@ -144,8 +143,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * This method set settings of the main windows
      *
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     private void configureWindow() {
 
@@ -221,7 +219,7 @@ public class Window extends JFrame implements ActionListener {
         this.french = new JMenuItem(this.messages.getString("nameButtonFrench"));
         this.french.addActionListener(this);
         this.menuLanguages.add(french);
-        
+
         this.setUndecorated(true);
 
         // add all components in the JFrame
@@ -232,7 +230,7 @@ public class Window extends JFrame implements ActionListener {
         this.add(buttonFileExplorer);
 
     }
-    
+
     /**
      * Override of the method actionPerformed. it define the action to do when
      * an event button happens
@@ -361,14 +359,15 @@ public class Window extends JFrame implements ActionListener {
                     this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
                 }
                 break;
-             
-            default: 
+
+            default:
                 if (!this.currentLocale.getLanguage().equals("en")) {
 
                     //translate the text and update the value of strings in the messages variable
                     this.currentLocale = new Locale("en", "GB");
                     this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
                 }
+
                 break;
         }
 
