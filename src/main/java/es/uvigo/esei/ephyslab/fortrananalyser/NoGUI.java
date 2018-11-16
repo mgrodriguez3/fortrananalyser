@@ -52,22 +52,27 @@ public class NoGUI {
     /**
      * the path of the destination of the file
      */
-    public static final String PATH = "/var/www/html/results/temp";
+    public static final String DEST_PATH = "/var/www/html/results/temp";
+
+    /**
+     * end loop statement in Fortran
+     */
+    public static final String END_DO = "END DO";
+
+    /**
+     * arrow to put in the report
+     */
+    public static final String ARROW = "\n\t--> ";
 
     /**
      * the path of the directory to analyse.
      */
-    private String path;
+    private String dir_path;
 
     /**
      * the assesment from file of the quality report.
      */
     private double assesment = 0.0;
-
-    /**
-     * auxiliar variable to calcule the final calification.
-     */
-    private double auxNote;
 
     /**
      * the list with the parcial score of each file.
@@ -169,7 +174,7 @@ public class NoGUI {
             this.partialCalification = 0.0;
 
             this.messages = messages;
-            this.path = path;
+            this.dir_path = path;
 
             this.startAnalysis();
         } catch (Exception ex) {
@@ -195,7 +200,6 @@ public class NoGUI {
      * file
      */
     private void startAnalysis() throws Exception {
-
         /**
          * initialice all arrayList and global variables
          */
@@ -216,7 +220,7 @@ public class NoGUI {
 
         PDF pdf;
         int countNumberOfFiles = 0;
-        auxNote = 0.0;
+        double auxNote = 0.0;
 
         try {
 
@@ -229,12 +233,12 @@ public class NoGUI {
              * In case the temp folder doesn't exits
              */
             if (!Files.exists(Paths.get(NoGUI.DEST))) {
-                new File(NoGUI.PATH).mkdirs();
+                new File(NoGUI.DEST_PATH).mkdirs();
             }
 
             pdf.createPdf(NoGUI.DEST, this.messages.getLocale());
 
-            filesInFolder = Files.walk(Paths.get(this.path))
+            filesInFolder = Files.walk(Paths.get(this.dir_path))
                     .filter(Files::isRegularFile)
                     .map(java.nio.file.Path::toFile)
                     .collect(Collectors.toList());
@@ -616,8 +620,7 @@ public class NoGUI {
      *
      * @param filePath of the file analysed
      * @return true in case CYCLE sentence is used
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseUseCycle(String filePath) throws IOException {
 
@@ -637,7 +640,7 @@ public class NoGUI {
                  * check if there are a loop.
                  */
                 if (!chain.contains("!")
-                        && !chain.contains("END DO")
+                        && !chain.contains(NoGUI.END_DO)
                         && chain.contains("DO")) {
                     numLoops++;
                 }
@@ -680,7 +683,7 @@ public class NoGUI {
                  * check if they are a loop.
                  */
                 if (!chain.contains("!")
-                        && !chain.contains("END DO")
+                        && !chain.contains(NoGUI.END_DO)
                         && chain.contains("DO")) {
                     numLoops++;
                 }
@@ -751,7 +754,7 @@ public class NoGUI {
                 chain = chain.toUpperCase();
 
                 if (!chain.contains("!")
-                        && !chain.contains("END DO")
+                        && !chain.contains(NoGUI.END_DO)
                         && chain.contains("DO")) {
 
                     nestedLoops++;
@@ -763,7 +766,7 @@ public class NoGUI {
                 }
 
                 if (!chain.contains("!")
-                        && chain.contains("END DO")) {
+                        && chain.contains(NoGUI.END_DO)) {
                     nestedLoops--;
                     if (nestedLoops < 0) {
                         return false;
@@ -830,27 +833,27 @@ public class NoGUI {
         /**
          * good comment in functions
          */
-        sb = "\n\t--> " + this.messages.getString("function") + goodCommentFunctions;
+        sb = NoGUI.ARROW + this.messages.getString("function") + goodCommentFunctions;
 
         /**
          * good comment at the begining of the document
          */
-        sb += "\n\t--> " + this.messages.getString("initDoc") + goodCommentInitDoc;
+        sb += NoGUI.ARROW + this.messages.getString("initDoc") + goodCommentInitDoc;
 
         /**
          * good comment at variables declaration
          */
-        sb += "\n\t--> " + this.messages.getString("variables") + goodCommentVariables;
+        sb += NoGUI.ARROW + this.messages.getString("variables") + goodCommentVariables;
 
         /**
          * good comment soubroutines declaration
          */
-        sb += "\n\t--> " + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
+        sb += NoGUI.ARROW + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
 
         /**
          * good comment in control structures
          */
-        sb += "\n\t--> " + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
+        sb += NoGUI.ARROW + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
 
         /**
          * 1. comments in functions
@@ -1072,8 +1075,7 @@ public class NoGUI {
      *
      * @param filePath of the analysed file
      * @return boolean with the result of the use of good comments in functions
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentFunctions(String filePath) throws IOException {
 

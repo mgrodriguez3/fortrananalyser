@@ -33,13 +33,13 @@ public class Window extends JFrame implements ActionListener {
     /**
      * application icon.
      */
-    private final static ImageIcon ICON_EPHYSLAB
+    private static final ImageIcon ICON_EPHYSLAB
             = new ImageIcon(Window.class.getResource("ephysLab.png"));
 
     /**
      * name of the application.
      */
-    private final static String APP_NAME = "Fortran Analyser tool";
+    private static final String APP_NAME = "Fortran Analyser tool";
 
     /**
      * default country to initialice the user interface.
@@ -60,6 +60,8 @@ public class Window extends JFrame implements ActionListener {
      * the file choser from the computer where the application is open.
      */
     private final JFileChooser fc = new JFileChooser();
+    
+    private static final String NAME_MENU = "nameMenu";
 
     /**
      * the text that is show to select a directory.
@@ -97,9 +99,24 @@ public class Window extends JFrame implements ActionListener {
     private JMenu menuLanguages;
 
     /**
-     * the posible language to select.
+     * Spanish is one of possible languages to select
      */
-    private JMenuItem spanish, galician, english, french;
+    private JMenuItem spanish;
+    
+    /**
+     * Galician is one of possible languages to select
+     */
+    private JMenuItem galician;
+    
+    /**
+     * English is one of possible languages to select and the default language
+     */
+    private JMenuItem english;
+    
+    /**
+     * French is one of possible languages to select
+     */
+    private JMenuItem french;
 
     /**
      * By default, the selected language is Enslish.
@@ -130,7 +147,7 @@ public class Window extends JFrame implements ActionListener {
      * @throws IOException in case something wrong with intput/output
      * file
      */
-    private void configureWindow() throws IOException {
+    private void configureWindow() {
 
         this.setTitle(APP_NAME);
         this.setSize(400, 250);
@@ -186,7 +203,7 @@ public class Window extends JFrame implements ActionListener {
         this.fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         //Configure MenuBar
-        this.menuLanguages = new JMenu(this.messages.getString("nameMenu"));
+        this.menuLanguages = new JMenu(this.messages.getString(Window.NAME_MENU));
         this.mb.add(menuLanguages);
 
         this.spanish = new JMenuItem(this.messages.getString("nameButtonSpanish"));
@@ -344,6 +361,15 @@ public class Window extends JFrame implements ActionListener {
                     this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
                 }
                 break;
+             
+            default: 
+                if (!this.currentLocale.getLanguage().equals("en")) {
+
+                    //translate the text and update the value of strings in the messages variable
+                    this.currentLocale = new Locale("en", "GB");
+                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                }
+                break;
         }
 
         //re-configure buttons
@@ -353,8 +379,8 @@ public class Window extends JFrame implements ActionListener {
 
         //re-configure MenuBar
         this.mb.remove(menuLanguages);
-        this.menuLanguages.setName(this.messages.getString("nameMenu"));
-        this.menuLanguages = new JMenu(this.messages.getString("nameMenu"));
+        this.menuLanguages.setName(this.messages.getString(Window.NAME_MENU));
+        this.menuLanguages = new JMenu(this.messages.getString(Window.NAME_MENU));
         this.mb.add(menuLanguages);
 
         this.spanish = new JMenuItem(this.messages.getString("nameButtonSpanish"));

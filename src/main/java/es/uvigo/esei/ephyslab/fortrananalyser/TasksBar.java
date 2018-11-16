@@ -68,7 +68,7 @@ public class TasksBar extends
     /**
      * the path of the destination of the file
      */
-    public static final String PATH = System.getProperty("user.home") + "/temp";
+    public static final String DEST_PATH = System.getProperty("user.home") + "/temp";
 
     /**
      * the frame that represent the taskbar.
@@ -338,7 +338,7 @@ public class TasksBar extends
              * In case the temp folder doesn't exits
              */
             if (!Files.exists(Paths.get(TasksBar.DEST))) {
-                new File(TasksBar.PATH).mkdirs();
+                new File(TasksBar.DEST_PATH).mkdirs();
             }
 
             pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
