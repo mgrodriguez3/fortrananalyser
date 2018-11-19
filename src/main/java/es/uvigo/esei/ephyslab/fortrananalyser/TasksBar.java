@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import java.awt.Color;
@@ -69,6 +64,16 @@ public class TasksBar extends
      * the path of the destination of the file
      */
     public static final String DEST_PATH = System.getProperty("user.home") + "/temp";
+    
+    /**
+     * Ends of the loops in Fortran
+     */
+    public static final String END_DO = "END DO";
+    
+    /**
+     * arrow to put in the report
+     */
+    public static final String ARROW = "\n\t--> ";
 
     /**
      * the frame that represent the taskbar.
@@ -508,7 +513,7 @@ public class TasksBar extends
 
         String name = file.getName();
         try {
-            return name.substring(name.lastIndexOf(".") + 1);
+            return name.substring(name.lastIndexOf('.') + 1);
         } catch (Exception e) {
             return "";
         }
@@ -810,7 +815,7 @@ public class TasksBar extends
                  * check if there are a loop.
                  */
                 if (!chain.contains("!")
-                        && !chain.contains("END DO")
+                        && !chain.contains(TasksBar.END_DO)
                         && chain.contains("DO")) {
                     numLoops++;
                 }
@@ -854,7 +859,7 @@ public class TasksBar extends
                  * check if they are a loop.
                  */
                 if (!chain.contains("!")
-                        && !chain.contains("END DO")
+                        && !chain.contains(TasksBar.END_DO)
                         && chain.contains("DO")) {
                     numLoops++;
                 }
@@ -927,7 +932,7 @@ public class TasksBar extends
                 chain = chain.toUpperCase();
 
                 if (!chain.contains("!")
-                        && !chain.contains("END DO")
+                        && !chain.contains(TasksBar.END_DO)
                         && chain.contains("DO")) {
 
                     nestedLoops++;
@@ -939,7 +944,7 @@ public class TasksBar extends
                 }
 
                 if (!chain.contains("!")
-                        && chain.contains("END DO")) {
+                        && chain.contains(TasksBar.END_DO)) {
                     nestedLoops--;
                     if (nestedLoops < 0) {
                         return false;
@@ -1008,27 +1013,27 @@ public class TasksBar extends
         /**
          * good comment in functions
          */
-        sb = "\n\t--> " + this.messages.getString("function") + goodCommentFunctions;
+        sb = TasksBar.ARROW + this.messages.getString("function") + goodCommentFunctions;
 
         /**
          * good comment at the begining of the document
          */
-        sb += "\n\t--> " + this.messages.getString("initDoc") + goodCommentInitDoc;
+        sb += TasksBar.ARROW + this.messages.getString("initDoc") + goodCommentInitDoc;
 
         /**
          * good comment at variables declaration
          */
-        sb += "\n\t--> " + this.messages.getString("variables") + goodCommentVariables;
+        sb += TasksBar.ARROW + this.messages.getString("variables") + goodCommentVariables;
 
         /**
          * good comment soubroutines declaration
          */
-        sb += "\n\t--> " + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
+        sb += TasksBar.ARROW + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
 
         /**
          * good comment in control structures
          */
-        sb += "\n\t--> " + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
+        sb += TasksBar.ARROW + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
 
         /**
          * 1. comments in functions

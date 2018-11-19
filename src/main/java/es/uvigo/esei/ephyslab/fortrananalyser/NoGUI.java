@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import java.io.BufferedReader;
@@ -67,7 +62,7 @@ public class NoGUI {
     /**
      * the path of the directory to analyse.
      */
-    private String dir_path;
+    private String dirPath;
 
     /**
      * the assesment from file of the quality report.
@@ -174,7 +169,7 @@ public class NoGUI {
             this.partialCalification = 0.0;
 
             this.messages = messages;
-            this.dir_path = path;
+            this.dirPath = path;
 
             this.startAnalysis();
         } catch (Exception ex) {
@@ -199,7 +194,7 @@ public class NoGUI {
      * @throws java.lang.Exception in case something wrong with intput/output
      * file
      */
-    private void startAnalysis() throws Exception {
+    private void startAnalysis() throws IOException {
         /**
          * initialice all arrayList and global variables
          */
@@ -219,7 +214,6 @@ public class NoGUI {
         this.partialCalification = 0.0;
 
         PDF pdf;
-        int countNumberOfFiles = 0;
         double auxNote = 0.0;
 
         try {
@@ -232,84 +226,87 @@ public class NoGUI {
             /**
              * In case the temp folder doesn't exits
              */
-            if (!Files.exists(Paths.get(NoGUI.DEST))) {
+            if (!Paths.get(NoGUI.DEST).toFile().exists()) {
                 new File(NoGUI.DEST_PATH).mkdirs();
             }
 
             pdf.createPdf(NoGUI.DEST, this.messages.getLocale());
 
-            filesInFolder = Files.walk(Paths.get(this.dir_path))
-                    .filter(Files::isRegularFile)
-                    .map(java.nio.file.Path::toFile)
-                    .collect(Collectors.toList());
-
-            /**
-             * for each file of the directory and subdirectory
-             */
-            for (File file : filesInFolder) {
-
-                this.scores.clear();
-                extensionFile = getFileExtension(file).toLowerCase();
+            if (Paths.get(this.dirPath).toFile().isFile()) {
+                filesInFolder = Files.walk(Paths.get(this.dirPath))
+                        .map(java.nio.file.Path::toFile)
+                        .collect(Collectors.toList());
 
                 /**
-                 * Check if the file is not empty
+                 * for each file of the directory and subdirectory
                  */
-                if (file.length() > 0) {
-                    /**
-                     * If it is a new directory, the path is added into the
-                     * report.
-                     */
-                    if (!auxDir.equals(getPathFromFile(file))
-                            && (extensionFile.equals(NoGUI.EXTENSION)
-                            || extensionFile.equals(NoGUI.EXTENSION2)
-                            || extensionFile.equals(NoGUI.EXTENSION3))) {
-                        auxDir = getPathFromFile(file);
-                        pdf.addSection(auxDir);
-                    }
+                for (File file : filesInFolder) {
+
+                    this.scores.clear();
+                    extensionFile = getFileExtension(file).toLowerCase();
 
                     /**
-                     * If it is a new file of fortran code, the path is added
-                     * into the report.
+                     * Check if the file is not empty
                      */
-                    if (extensionFile.equals(NoGUI.EXTENSION)
-                            || extensionFile.equals(NoGUI.EXTENSION2)
-                            || extensionFile.equals(NoGUI.EXTENSION3)) {
-                        pdf.addSubSection(file.getName());
-                        pdf.addResult(analyseFile(file.getAbsolutePath()));
-                        pdf.addTableScore(scores, this.messages);
-                        countNumberOfFiles++;
-                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
-                    }
+                    if (file.length() > 0) {
+                        /**
+                         * If it is a new directory, the path is added into the
+                         * report.
+                         */
+                        if (!auxDir.equals(getPathFromFile(file))
+                                && (extensionFile.equals(NoGUI.EXTENSION)
+                                || extensionFile.equals(NoGUI.EXTENSION2)
+                                || extensionFile.equals(NoGUI.EXTENSION3))) {
+                            auxDir = getPathFromFile(file);
+                            pdf.addSection(auxDir);
+                        }
 
+                        /**
+                         * If it is a new file of fortran code, the path is
+                         * added into the report.
+                         */
+                        if (extensionFile.equals(NoGUI.EXTENSION)
+                                || extensionFile.equals(NoGUI.EXTENSION2)
+                                || extensionFile.equals(NoGUI.EXTENSION3)) {
+                            pdf.addSubSection(file.getName());
+                            pdf.addResult(analyseFile(file.getAbsolutePath()));
+                            pdf.addTableScore(scores, this.messages);
+                            pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
+                        }
+
+                    }
                 }
+
+                /**
+                 * the list scores is reused to stock the average of all
+                 * metrics.
+                 */
+                this.scores.clear();
+                this.scores.add(this.calculateAverage(this.scoresImplicitNone));
+                this.scores.add(this.calculateAverage(this.scoresRatio));
+                this.scores.add(this.calculateAverage(this.scoresNestedLoops));
+                this.scores.add(this.calculateAverage(this.scoresCommentsBeginning));
+                this.scores.add(this.calculateAverage(this.scoresCommentsVariables));
+                this.scores.add(this.calculateAverage(this.scoresCommentsfunction));
+                this.scores.add(this.calculateAverage(this.scoresCommentsSubroutine));
+                this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
+                this.scores.add(this.calculateAverage(this.scoresExit));
+                this.scores.add(this.calculateAverage(this.scoresCycle));
+
+                /**
+                 * Check if the software analysed have not Fortran files
+                 */
+                if (!this.scores.get(0).isNaN()) {
+                    pdf.addSection(this.messages.getString("finalTable"));
+                    pdf.addFinalTableScore(this.scores, this.messages);
+                    auxNote = partialCalification / this.totalNumLines;
+                    pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
+                }
+
+                pdf.closePDF();
+                filesInFolder.clear();
             }
 
-            /**
-             * the list scores is reused to stock the average of all metrics.
-             */
-            this.scores.clear();
-            this.scores.add(this.calculateAverage(this.scoresImplicitNone));
-            this.scores.add(this.calculateAverage(this.scoresRatio));
-            this.scores.add(this.calculateAverage(this.scoresNestedLoops));
-            this.scores.add(this.calculateAverage(this.scoresCommentsBeginning));
-            this.scores.add(this.calculateAverage(this.scoresCommentsVariables));
-            this.scores.add(this.calculateAverage(this.scoresCommentsfunction));
-            this.scores.add(this.calculateAverage(this.scoresCommentsSubroutine));
-            this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
-            this.scores.add(this.calculateAverage(this.scoresExit));
-            this.scores.add(this.calculateAverage(this.scoresCycle));
-
-            /**
-             * Check if the software analysed have not Fortran files
-             */
-            if (!this.scores.get(0).isNaN()) {
-                pdf.addSection(this.messages.getString("finalTable"));
-                pdf.addFinalTableScore(this.scores, this.messages);
-                auxNote = partialCalification / this.totalNumLines;
-                pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
-            }
-
-            pdf.closePDF();
             this.partialCalification = 0.0;
             this.totalNumLines = 0;
 
@@ -344,7 +341,7 @@ public class NoGUI {
 
         String name = file.getName();
         try {
-            return name.substring(name.lastIndexOf(".") + 1);
+            return name.substring(name.lastIndexOf('.') + 1);
         } catch (Exception e) {
             return "";
         }
@@ -524,7 +521,8 @@ public class NoGUI {
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
-            while (b.readLine() != null) {
+            String line = null;
+            while ((line = b.readLine()) != null) {
                 count++;
             }
         }
