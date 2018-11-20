@@ -171,7 +171,7 @@ public class NoGUI {
             this.messages = messages;
             this.dirPath = path;
 
-            this.startAnalysis();
+            this.analyseFiles();
         } catch (Exception ex) {
             Logger.getLogger(NoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -194,7 +194,7 @@ public class NoGUI {
      * @throws java.lang.Exception in case something wrong with intput/output
      * file
      */
-    private void startAnalysis() throws IOException {
+    private void analyseFiles() throws IOException {
         /**
          * initialice all arrayList and global variables
          */
@@ -232,7 +232,6 @@ public class NoGUI {
 
             pdf.createPdf(NoGUI.DEST, this.messages.getLocale());
 
-            if (Paths.get(this.dirPath).toFile().isFile()) {
                 filesInFolder = Files.walk(Paths.get(this.dirPath))
                         .map(java.nio.file.Path::toFile)
                         .collect(Collectors.toList());
@@ -305,7 +304,6 @@ public class NoGUI {
 
                 pdf.closePDF();
                 filesInFolder.clear();
-            }
 
             this.partialCalification = 0.0;
             this.totalNumLines = 0;

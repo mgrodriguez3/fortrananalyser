@@ -64,12 +64,12 @@ public class TasksBar extends
      * the path of the destination of the file
      */
     public static final String DEST_PATH = System.getProperty("user.home") + "/temp";
-    
+
     /**
      * Ends of the loops in Fortran
      */
     public static final String END_DO = "END DO";
-    
+
     /**
      * arrow to put in the report
      */
@@ -189,12 +189,12 @@ public class TasksBar extends
      * Sum of all scores for each file analysed
      */
     private double partialCalification;
-    
+
     /**
      * Names of each file
      */
     private ArrayList<String> fileNames;
-    
+
     /**
      * Scores obtain by each file
      */
@@ -207,7 +207,7 @@ public class TasksBar extends
 
     /**
      * Constructor of the class with GUI
-     * 
+     *
      * @param w the iframe
      * @param path the path of file
      * @param messages all strings for build the report
@@ -254,6 +254,7 @@ public class TasksBar extends
 
     /**
      * Constructor of the class without GUI
+     *
      * @param path the path of the file
      * @param messages all string to build the report
      */
@@ -342,96 +343,98 @@ public class TasksBar extends
             /**
              * In case the temp folder doesn't exits
              */
-            if (!Files.exists(Paths.get(TasksBar.DEST))) {
+            if (!Paths.get(TasksBar.DEST).toFile().exists()) {
                 new File(TasksBar.DEST_PATH).mkdirs();
             }
 
-            pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
 
-            filesInFolder = Files.walk(Paths.get(this.path))
-                    .filter(Files::isRegularFile)
-                    .map(java.nio.file.Path::toFile)
-                    .collect(Collectors.toList());
+                pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
 
-            /**
-             * for each file of the directory and subdirectory
-             */
-            for (File file : filesInFolder) {
-
-                this.scores.clear();
-                extensionFile = getFileExtension(file).toLowerCase();
+                filesInFolder = Files.walk(Paths.get(this.path))
+                        .map(java.nio.file.Path::toFile)
+                        .collect(Collectors.toList());
 
                 /**
-                 * Check if the file is not empty
+                 * for each file of the directory and subdirectory
                  */
-                if (file.length() > 0) {
-                    /**
-                     * If it is a new directory, the path is added into the
-                     * report.
-                     */
-                    if (!auxDir.equals(getPathFromFile(file))
-                            && (extensionFile.equals(TasksBar.EXTENSION)
-                            || extensionFile.equals(TasksBar.EXTENSION2)
-                            || extensionFile.equals(TasksBar.EXTENSION3))) {
-                        auxDir = getPathFromFile(file);
-                        pdf.addSection(auxDir);
-                    }
+                for (File file : filesInFolder) {
+
+                    this.scores.clear();
+                    extensionFile = getFileExtension(file).toLowerCase();
 
                     /**
-                     * If it is a new file of fortran code, the path is added
-                     * into the report.
+                     * Check if the file is not empty
                      */
-                    if (extensionFile.equals(TasksBar.EXTENSION)
-                            || extensionFile.equals(TasksBar.EXTENSION2)
-                            || extensionFile.equals(TasksBar.EXTENSION3)) {
-                        pdf.addSubSection(file.getName());
-                        this.fileNames.add(file.getName());
-                        pdf.addResult(analyseFile(file.getAbsolutePath()));
-                        pdf.addTableScore(scores, this.messages);
-                        countNumberOfFiles++;
-                        this.fileScores.add(assesment);
-                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
-                    }
+                    if (file.length() > 0) {
+                        /**
+                         * If it is a new directory, the path is added into the
+                         * report.
+                         */
+                        if (!auxDir.equals(getPathFromFile(file))
+                                && (extensionFile.equals(TasksBar.EXTENSION)
+                                || extensionFile.equals(TasksBar.EXTENSION2)
+                                || extensionFile.equals(TasksBar.EXTENSION3))) {
+                            auxDir = getPathFromFile(file);
+                            pdf.addSection(auxDir);
+                        }
 
-                    percentage += 98.0 / filesInFolder.size();
-                    publish((int) percentage);
+                        /**
+                         * If it is a new file of fortran code, the path is
+                         * added into the report.
+                         */
+                        if (extensionFile.equals(TasksBar.EXTENSION)
+                                || extensionFile.equals(TasksBar.EXTENSION2)
+                                || extensionFile.equals(TasksBar.EXTENSION3)) {
+                            pdf.addSubSection(file.getName());
+                            this.fileNames.add(file.getName());
+                            pdf.addResult(analyseFile(file.getAbsolutePath()));
+                            pdf.addTableScore(scores, this.messages);
+                            countNumberOfFiles++;
+                            this.fileScores.add(assesment);
+                            pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
+                        }
+
+                        percentage += 98.0 / filesInFolder.size();
+                        publish((int) percentage);
+                    }
                 }
-            }
 
-            /**
-             * the list scores is reused to stock the average of all metrics.
-             */
-            this.scores.clear();
-            this.scores.add(this.calculateAverage(this.scoresImplicitNone));
-            this.scores.add(this.calculateAverage(this.scoresRatio));
-            this.scores.add(this.calculateAverage(this.scoresNestedLoops));
-            this.scores.add(this.calculateAverage(this.scoresCommentsBeginning));
-            this.scores.add(this.calculateAverage(this.scoresCommentsVariables));
-            this.scores.add(this.calculateAverage(this.scoresCommentsfunction));
-            this.scores.add(this.calculateAverage(this.scoresCommentsSubroutine));
-            this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
-            this.scores.add(this.calculateAverage(this.scoresExit));
-            this.scores.add(this.calculateAverage(this.scoresCycle));
+                /**
+                 * the list scores is reused to stock the average of all
+                 * metrics.
+                 */
+                this.scores.clear();
+                this.scores.add(this.calculateAverage(this.scoresImplicitNone));
+                this.scores.add(this.calculateAverage(this.scoresRatio));
+                this.scores.add(this.calculateAverage(this.scoresNestedLoops));
+                this.scores.add(this.calculateAverage(this.scoresCommentsBeginning));
+                this.scores.add(this.calculateAverage(this.scoresCommentsVariables));
+                this.scores.add(this.calculateAverage(this.scoresCommentsfunction));
+                this.scores.add(this.calculateAverage(this.scoresCommentsSubroutine));
+                this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
+                this.scores.add(this.calculateAverage(this.scoresExit));
+                this.scores.add(this.calculateAverage(this.scoresCycle));
 
-            /**
-             * Check if the software analysed have not Fortran files
-             */
-            if (!this.scores.get(0).isNaN()) {
-                pdf.addSection(this.messages.getString("summary"));
-                pdf.addFinalSummary(this.fileScores, this.fileNames, this.messages);
-                pdf.addSummaryInformation(this.messages.getString("totalNumberOfFiles") + " " + countNumberOfFiles);
-                pdf.addSummaryInformation(this.messages.getString("totalNumberOfLines") + " " + this.totalNumLines);
-                pdf.addSubSectionInBold(this.messages.getString("finalTable"));
-                pdf.addFinalTableScore(this.scores, this.messages);
-                auxNote = partialCalification / this.totalNumLines;
-                pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
-            }
+                /**
+                 * Check if the software analysed have not Fortran files
+                 */
+                if (!this.scores.get(0).isNaN()) {
+                    pdf.addSection(this.messages.getString("summary"));
+                    pdf.addFinalSummary(this.fileScores, this.fileNames, this.messages);
+                    pdf.addSummaryInformation(this.messages.getString("totalNumberOfFiles") + " " + countNumberOfFiles);
+                    pdf.addSummaryInformation(this.messages.getString("totalNumberOfLines") + " " + this.totalNumLines);
+                    pdf.addSubSectionInBold(this.messages.getString("finalTable"));
+                    pdf.addFinalTableScore(this.scores, this.messages);
+                    auxNote = partialCalification / this.totalNumLines;
+                    pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
+                }
 
-            pdf.closePDF();
-            partialCalification = 0.0;
-            percentage = 100;
-            this.totalNumLines = 0;
-            publish((int) percentage);
+                pdf.closePDF();
+                partialCalification = 0.0;
+                percentage = 100;
+                this.totalNumLines = 0;
+                publish((int) percentage);
+            
 
         } catch (IOException ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
@@ -524,8 +527,7 @@ public class TasksBar extends
      *
      * @param pathFile the path from the file to analyse
      * @return the result with all the output data
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public String analyseFile(String pathFile) throws IOException {
 
@@ -684,8 +686,7 @@ public class TasksBar extends
      *
      * @param filePath the path of the file
      * @return the number of lines from file
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumberOfLines(String filePath) throws IOException {
 
@@ -707,10 +708,9 @@ public class TasksBar extends
      * This method analyse if the sentence implicit none is used in each line
      * from a file
      *
-     * @param filePath of the file analysed 
+     * @param filePath of the file analysed
      * @return boolean with the answer to the use of implicit none sentence
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseUseImplicitNone(String filePath) throws IOException {
 
@@ -735,8 +735,7 @@ public class TasksBar extends
      *
      * @param filePath The path from file to analyse
      * @return the number of functions in this file
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumFunctions(String filePath) throws IOException {
 
@@ -765,8 +764,7 @@ public class TasksBar extends
      *
      * @param filePath the absolute path from file
      * @return the number of subroutines calls
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumCalls(String filePath) throws IOException {
         int count = 0;
@@ -794,8 +792,7 @@ public class TasksBar extends
      *
      * @param filePath of the file analysed
      * @return boolean about the answer to the use of CYCLE sentence
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseUseCycle(String filePath) throws IOException {
 
@@ -840,8 +837,7 @@ public class TasksBar extends
      *
      * @param filePath of the file analysed
      * @return boolean of the answer to the use of EXIT sentence
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseUseExit(String filePath) throws IOException {
 
@@ -884,8 +880,7 @@ public class TasksBar extends
      *
      * @param filePath of the file analysed
      * @return the number of subroutines
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumberSubroutines(String filePath) throws IOException {
 
@@ -916,8 +911,7 @@ public class TasksBar extends
      *
      * @param filePath of the file analysed
      * @return boolean with the use of nested loops
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseNestedLoops(String filePath) throws IOException {
 
@@ -968,8 +962,7 @@ public class TasksBar extends
      *
      * @param filePath of the file analysed
      * @return the number of declared variables
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
         String chain = "";
@@ -998,8 +991,7 @@ public class TasksBar extends
      *
      * @param filePath of the file analysed
      * @return the paragraph to add to the pdf file
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     private String analyseGoodComment(String filePath) throws IOException {
 
@@ -1101,8 +1093,7 @@ public class TasksBar extends
      *
      * @param filePath of the file analysed
      * @return boolean with the use of good comments in control structures
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
         String chain = "";
@@ -1146,8 +1137,7 @@ public class TasksBar extends
      *
      * @param filePath of the file analysed
      * @return boolean to the use of good comments in subroutines
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
 
@@ -1188,9 +1178,8 @@ public class TasksBar extends
      * what it done.
      *
      * @param filePath of the file analysed
-     * @return boolean to the use of good comments in variables 
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @return boolean to the use of good comments in variables
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
         String chain = "";
@@ -1228,9 +1217,9 @@ public class TasksBar extends
      * This method analyse if there is a good comment at the beginning of a file
      *
      * @param filePath of the file analysed
-     * @return boolean to the use of good comments at the beginning of the document
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @return boolean to the use of good comments at the beginning of the
+     * document
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
 
@@ -1262,8 +1251,7 @@ public class TasksBar extends
      *
      * @param filePath of the file analysed
      * @return boolean of the use of good comments in functions
-     * @throws IOException in case something wrong with intput/output
-     * file
+     * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentFunctions(String filePath) throws IOException {
 
