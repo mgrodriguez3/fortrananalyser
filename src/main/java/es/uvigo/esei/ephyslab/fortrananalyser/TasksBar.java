@@ -704,12 +704,14 @@ public class TasksBar extends
     public int analyseNumberOfLines(String filePath) throws IOException {
 
         int count = 0;
+        String line= "";
         File file = new File(filePath);
 
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
-            while (b.readLine() != null) {
+            
+            while ((line = b.readLine()) != null) {
                 count++;
             }
         }
