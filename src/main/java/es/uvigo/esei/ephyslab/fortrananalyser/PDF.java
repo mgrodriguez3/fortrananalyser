@@ -31,6 +31,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -47,32 +48,32 @@ public class PDF {
     /**
      * Define the color of headers of the main table.
      */
-    private final static com.itextpdf.kernel.color.Color HEADER_COLOR = new DeviceRgb(0, 130, 130);
+    private static final com.itextpdf.kernel.color.Color HEADER_COLOR = new DeviceRgb(0, 130, 130);
 
     /**
      * Define the color of header of the table.
      */
-    private final static com.itextpdf.kernel.color.Color HEADER_2_COLOR = new DeviceRgb(0, 69, 69);
+    private static final com.itextpdf.kernel.color.Color HEADER_2_COLOR = new DeviceRgb(0, 69, 69);
 
     /**
      * Define the color of sections.
      */
-    private final static com.itextpdf.kernel.color.Color SECTION_COLOR = new DeviceRgb(207, 106, 11);
+    private static final com.itextpdf.kernel.color.Color SECTION_COLOR = new DeviceRgb(207, 106, 11);
 
     /**
      * Define the color of the results.
      */
-    private final static com.itextpdf.kernel.color.Color RESULT_COLOR = new DeviceRgb(38, 50, 61);
+    private static final com.itextpdf.kernel.color.Color RESULT_COLOR = new DeviceRgb(38, 50, 61);
 
     /**
      * Define the color of the subsections.
      */
-    private final static com.itextpdf.kernel.color.Color SUB_SECTION_COLOR = new DeviceRgb(11, 136, 207);
+    private static final com.itextpdf.kernel.color.Color SUB_SECTION_COLOR = new DeviceRgb(11, 136, 207);
 
     /**
      * Define the color of the text of the final score.
      */
-    private final static com.itextpdf.kernel.color.Color FINAL_NOTE_COLOR = new DeviceRgb(77, 135, 133);
+    private static final com.itextpdf.kernel.color.Color FINAL_NOTE_COLOR = new DeviceRgb(77, 135, 133);
 
     /**
      * the file with the report information.
@@ -82,28 +83,28 @@ public class PDF {
     /**
      * the name of the author.
      */
-    private final static String AUTHOR = "Michael García Rodríguez";
+    private static final String AUTHOR = "Michael García Rodríguez";
 
     /**
      * the font type of the document.
      */
-    private final PdfFont PDF_FONT = loadPdfFont();
+    private PdfFont fontPDF;
 
     /**
      * The icon of the application.
      */
-    private final static String ICON_FORTRAN_ANALYSER
+    private static final String ICON_FORTRAN_ANALYSER
             = PDF.class.getResource("fortranAnalyser.png").toString();
 
     /**
      * the title of the document.
      */
-    private final static String TITLE_PDF = "FortranAnalyser: Quality report";
+    private static final String TITLE_PDF = "FortranAnalyser: Quality report";
 
     /**
      * the name of the application.
      */
-    private final static String APP_NAME = "FortranAnalyser";
+    private static final String APP_NAME = "FortranAnalyser";
 
     /**
      * Method that create the cover from the report document.
@@ -114,12 +115,13 @@ public class PDF {
      * file
      */
     public void createPdf(String dest, Locale l) throws IOException {
+        this.fontPDF = loadPdfFont();
         PdfWriter writer = new PdfWriter(dest, new WriterProperties().addXmpMetadata());
         PdfDocument pdf = new PdfDocument(writer);
         
         this.document = new Document(pdf, PageSize.A4);
         
-        this.document.setFont(PDF_FONT);
+        this.document.setFont(fontPDF);
         
         PageEvent evento = new PageEvent(this.document);
         
@@ -156,7 +158,7 @@ public class PDF {
         Image coverImage = new Image(ImageDataFactory.create(ICON_FORTRAN_ANALYSER));
         
         coverImage.getAccessibilityProperties()
-                .setAlternateDescription("FortranAnalyser");
+                .setAlternateDescription(APP_NAME);
         coverImage.setHeight(320);
         coverImage.setWidth(320);
         
@@ -301,7 +303,7 @@ public class PDF {
         this.document.add(p);
     }
     
-    public void addSummaryInformation(String result) throws IOException {
+    public void addSummaryInformation(String result) {
         Paragraph p = new Paragraph();
         Text t = new Text(result);
         
@@ -326,17 +328,15 @@ public class PDF {
      *
      * @return the font selected
      */
-    private static PdfFont loadPdfFont() {
+    private static PdfFont loadPdfFont() throws IOException {
         
-        try {
+        
             Path tmpFile = Files.createTempFile("fa-arial", ".ttf");
             Files.copy(PDF.class.getResourceAsStream("arial.ttf"), tmpFile, StandardCopyOption.REPLACE_EXISTING);
+
             
             return PdfFontFactory.createFont(tmpFile.toString());
-        } catch (IOException ex) {
-            Logger.getLogger(PDF.class.getName()).log(Level.SEVERE, null, ex);
-            throw new RuntimeException(ex);
-        }
+       
     }
 
     /**
@@ -345,7 +345,7 @@ public class PDF {
      * @param scores all scores obtains in tableScore
      * @param messages with all strings needed to build the table
      */
-    public void addTableScore(ArrayList<Double> scores, ResourceBundle messages) {
+    public void addTableScore(List<Double> scores, ResourceBundle messages) {
         
         Table table = new Table(2);
         Cell headerCellLeft = new Cell();
@@ -504,7 +504,7 @@ public class PDF {
      * @param scores all scores to calculate the final note
      * @param messages all strings neccesaries to build the final table
      */
-    public void addFinalTableScore(ArrayList<Double> scores, ResourceBundle messages) {
+    public void addFinalTableScore(List<Double> scores, ResourceBundle messages) {
         
         Table table = new Table(2);
         Cell headerCellLeft = new Cell();
@@ -664,7 +664,7 @@ public class PDF {
      * @param fileNames list with all names for each file analysed
      * @param messages with all strings necessaries to summary
      */
-    public void addFinalSummary(ArrayList<Double> fileScores, ArrayList<String> fileNames, ResourceBundle messages) {
+    public void addFinalSummary(List<Double> fileScores, List<String> fileNames, ResourceBundle messages) {
         
         Table table = new Table(2, true);
         Cell headerCellLeft = new Cell().setKeepTogether(true);
