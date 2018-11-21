@@ -14,14 +14,15 @@ import javax.swing.SwingUtilities;
  */
 public class Principal {
 
+
     /**
-     * @param args the command line arguments
-     * @throws java.io.IOException in case something wrong with intput/output
-     * file
-     * @throws java.lang.InterruptedException in case something interrupt the execution process
-     * @throws java.lang.reflect.InvocationTargetException in case something is wrong with the GUI
+     * 
+     * @param args arguments used when the programme is launched:
+     * 
+     * In case that there are no arguments, the user interface is launched;
+     * In case that there are arguments, the user interface is not launched.
      */
-    public static void main(String[] args) throws IOException, InterruptedException, InvocationTargetException {
+    public static void main(String[] args) {
         org.apache.log4j.BasicConfigurator.configure();
 
         if (args.length == 0) {
@@ -36,8 +37,7 @@ public class Principal {
             });
         } else {
            
-                WindowNOGUI w;
-                w = new WindowNOGUI(args[0], args[1]);
+            WindowNOGUI windowNOGUI = new WindowNOGUI(args[0], args[1]);
          
         }
 
