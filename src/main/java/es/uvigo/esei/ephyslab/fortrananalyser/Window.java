@@ -358,12 +358,10 @@ public class Window extends JFrame implements ActionListener {
                 break;
 
             default:
-                if (!this.currentLocale.getLanguage().equals("en")) {
 
                     //translate the text and update the value of strings in the messages variable
                     this.currentLocale = new Locale("en", "GB");
                     this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                }
 
                 break;
         }

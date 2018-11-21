@@ -90,6 +90,15 @@ public class WindowNOGUI {
                     this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
                 }
                 break;
+                
+            /**
+             * Enslish is de default language
+             */
+            default: 
+                //translate the text and update the value of strings in the messages variable
+                    this.currentLocale = new Locale("en", "GB");
+                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                
         }
 
     }
