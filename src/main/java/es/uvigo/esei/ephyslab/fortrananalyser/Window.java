@@ -54,7 +54,7 @@ public class Window extends JFrame implements ActionListener {
     /**
      * the file choser from the computer where the application is open.
      */
-    private final JFileChooser fc = new JFileChooser();
+    private final JFileChooser fc;
 
     private static final String NAME_MENU = "nameMenu";
 
@@ -131,8 +131,10 @@ public class Window extends JFrame implements ActionListener {
     public Window() throws IOException {
 
         super();
+        fc = new JFileChooser();
         configureWindow();
         initialiceComponents();
+        
     }
 
     /**
