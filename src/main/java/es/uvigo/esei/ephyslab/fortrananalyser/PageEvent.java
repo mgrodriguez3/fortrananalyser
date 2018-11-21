@@ -10,7 +10,6 @@ import com.itextpdf.kernel.pdf.canvas.PdfCanvas;
 import com.itextpdf.layout.Canvas;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
-import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.property.TextAlignment;
 
 /**
@@ -26,28 +25,7 @@ public class PageEvent implements IEventHandler {
     public PageEvent(Document doc) {
         documento = doc;
     }
-    
-    /**
-     * This method create a rectangle in header.
-     * 
-     * @param docEvent Document event
-     * @return Area where header is
-     */
-    private Rectangle createHeaderRectangle(PdfDocumentEvent docEvent) {
         
-        PdfDocument pdfDoc = docEvent.getDocument();
-        PdfPage page = docEvent.getPage();        
-        
-        float xHeader = pdfDoc.getDefaultPageSize().getX() + documento.getLeftMargin();
-        float yHeader = pdfDoc.getDefaultPageSize().getTop() - documento.getTopMargin();
-        float widthHeader = page.getPageSize().getWidth() - 72;
-        float heightHeader = 50F;
-
-        Rectangle rectanguloEncabezado = new Rectangle(xHeader, yHeader, widthHeader, heightHeader);
-        
-        return rectanguloEncabezado;        
-    }
-    
     /**
      * This method create a rectangle in footer.
      * 
@@ -63,36 +41,17 @@ public class PageEvent implements IEventHandler {
         float yFooter = pdfDoc.getDefaultPageSize().getBottom();
         float widthFooter = page.getPageSize().getWidth() - 72;
         float heightFooter = 50F;
-
-        Rectangle rectanguloPie = new Rectangle(xFooter, yFooter, widthFooter, heightFooter);
         
-        return rectanguloPie;
+        return new Rectangle(xFooter, yFooter, widthFooter, heightFooter);
     }
-    
-    /**
-     * This method create a table in header. 
-     * 
-     * @param mensaje 
-     * @return Table with header
-     */
-    private Table createHeaderTable(String mensaje) {
         
-        float[] anchos = {1F};
-        Table tableHeader = new Table(anchos);
-        tableHeader.setWidth(527F);
-
-        tableHeader.addCell(mensaje);
-        
-        return tableHeader;
-    }
-    
     /**
      * This method create a table in footer.
      * 
      * @param docEvent The document event
      * @return Footer with page number
      */
-    private Paragraph CreateFooterTable(PdfDocumentEvent docEvent) {
+    private Paragraph createFooterTable(PdfDocumentEvent docEvent) {
         
         PdfPage page = docEvent.getPage();
         Integer pageNum = docEvent.getDocument().getPageNumber(page) - 1;
@@ -125,17 +84,11 @@ public class PageEvent implements IEventHandler {
         float xPosition = pdfDoc.getDefaultPageSize().getX() + documento.getLeftMargin() + 260;
         PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);        
         
-        //Table headerTable = this.createHeaderTable("Departamento de Recursos Humanos");
-        //Rectangle headerRectangle = this.createHeaderRectangle(docEvent);        
-        //Canvas headerCanvas = new Canvas(canvas, pdfDoc, headerRectangle);        
-        //headerCanvas.add(headerTable);      
-
-        //Table numsTable = this.CreateFooterTable(docEvent);
         Rectangle footerRectangle = this.createFooterRectangle(docEvent);
         Canvas footerCanvas = new Canvas(canvas, pdfDoc, footerRectangle);
         
 
-        footerCanvas.showTextAligned(this.CreateFooterTable(docEvent), xPosition,
+        footerCanvas.showTextAligned(this.createFooterTable(docEvent), xPosition,
                 yPosition, TextAlignment.CENTER);
         
     }

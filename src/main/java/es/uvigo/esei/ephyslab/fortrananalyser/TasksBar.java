@@ -7,7 +7,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -103,7 +101,7 @@ public class TasksBar extends
     /**
      * the assesment from file of the quality report.
      */
-    private double assesment = 0.0;
+    private double assesment;
 
     /**
      * auxiliar variable to calcule the final calification.
@@ -201,6 +199,11 @@ public class TasksBar extends
     private ArrayList<Double> fileScores;
 
     /**
+     * The list of all files to analyse
+     */
+    private List<File> filesInFolder;
+
+    /**
      * the string resources i18n.
      */
     ResourceBundle messages;
@@ -214,22 +217,7 @@ public class TasksBar extends
      */
     TasksBar(Window w, String path, ResourceBundle messages) {
 
-        this.scores = new ArrayList<>();
-        this.scoresImplicitNone = new ArrayList<>();
-        this.scoresRatio = new ArrayList<>();
-        this.scoresNestedLoops = new ArrayList<>();
-        this.scoresCommentsBeginning = new ArrayList<>();
-        this.scoresCommentsVariables = new ArrayList<>();
-        this.scoresCommentsfunction = new ArrayList<>();
-        this.scoresCommentsSubroutine = new ArrayList<>();
-        this.scoresCommentsControlStructures = new ArrayList<>();
-        this.scoresExit = new ArrayList<>();
-        this.scoresCycle = new ArrayList<>();
-        this.fileNames = new ArrayList<>();
-        this.fileScores = new ArrayList<>();
-        this.commentableElements = 0.0;
-        this.commentedElements = 0.0;
-        this.partialCalification = 0.0;
+        initializeVariables();
 
         this.w = w;
         this.messages = messages;
@@ -259,6 +247,17 @@ public class TasksBar extends
      * @param messages all string to build the report
      */
     TasksBar(String path, ResourceBundle messages) {
+        initializeVariables();
+
+        this.messages = messages;
+        this.path = path;
+
+    }
+    
+    /**
+     * Initialization of all variables declared in this class
+     */
+    private void initializeVariables(){
         this.scores = new ArrayList<>();
         this.scoresImplicitNone = new ArrayList<>();
         this.scoresRatio = new ArrayList<>();
@@ -272,13 +271,11 @@ public class TasksBar extends
         this.scoresCycle = new ArrayList<>();
         this.fileNames = new ArrayList<>();
         this.fileScores = new ArrayList<>();
+        this.filesInFolder = new ArrayList<>();
         this.commentableElements = 0.0;
         this.commentedElements = 0.0;
         this.partialCalification = 0.0;
-
-        this.messages = messages;
-        this.path = path;
-
+        this.assesment = 0.0;
     }
 
     /**
@@ -316,6 +313,7 @@ public class TasksBar extends
         this.scoresCycle.clear();
         this.fileNames.clear();
         this.fileScores.clear();
+        this.filesInFolder.clear();
         this.commentableElements = 0.0;
         this.commentedElements = 0.0;
         this.totalNumLines = 0;
@@ -329,7 +327,6 @@ public class TasksBar extends
 
         try {
 
-            List<File> filesInFolder;
             String auxDir = "";
             pdf = new PDF();
             String extensionFile = "";
@@ -347,94 +344,89 @@ public class TasksBar extends
                 new File(TasksBar.DEST_PATH).mkdirs();
             }
 
+            pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
 
-                pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
+            scanFilesInDirectory(this.path, filesInFolder);
 
-                filesInFolder = Files.walk(Paths.get(this.path))
-                        .map(java.nio.file.Path::toFile)
-                        .collect(Collectors.toList());
+            /**
+             * for each file of the directory and subdirectory
+             */
+            for (File file : filesInFolder) {
+
+                this.scores.clear();
+                extensionFile = getFileExtension(file).toLowerCase();
 
                 /**
-                 * for each file of the directory and subdirectory
+                 * Check if the file is not empty
                  */
-                for (File file : filesInFolder) {
-
-                    this.scores.clear();
-                    extensionFile = getFileExtension(file).toLowerCase();
+                if (file.length() > 0) {
+                    /**
+                     * If it is a new directory, the path is added into the
+                     * report.
+                     */
+                    if (!auxDir.equals(getPathFromFile(file))
+                            && (extensionFile.equals(TasksBar.EXTENSION)
+                            || extensionFile.equals(TasksBar.EXTENSION2)
+                            || extensionFile.equals(TasksBar.EXTENSION3))) {
+                        auxDir = getPathFromFile(file);
+                        pdf.addSection(auxDir);
+                    }
 
                     /**
-                     * Check if the file is not empty
+                     * If it is a new file of fortran code, the path is added
+                     * into the report.
                      */
-                    if (file.length() > 0) {
-                        /**
-                         * If it is a new directory, the path is added into the
-                         * report.
-                         */
-                        if (!auxDir.equals(getPathFromFile(file))
-                                && (extensionFile.equals(TasksBar.EXTENSION)
-                                || extensionFile.equals(TasksBar.EXTENSION2)
-                                || extensionFile.equals(TasksBar.EXTENSION3))) {
-                            auxDir = getPathFromFile(file);
-                            pdf.addSection(auxDir);
-                        }
-
-                        /**
-                         * If it is a new file of fortran code, the path is
-                         * added into the report.
-                         */
-                        if (extensionFile.equals(TasksBar.EXTENSION)
-                                || extensionFile.equals(TasksBar.EXTENSION2)
-                                || extensionFile.equals(TasksBar.EXTENSION3)) {
-                            pdf.addSubSection(file.getName());
-                            this.fileNames.add(file.getName());
-                            pdf.addResult(analyseFile(file.getAbsolutePath()));
-                            pdf.addTableScore(scores, this.messages);
-                            countNumberOfFiles++;
-                            this.fileScores.add(assesment);
-                            pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
-                        }
-
-                        percentage += 98.0 / filesInFolder.size();
-                        publish((int) percentage);
+                    if (extensionFile.equals(TasksBar.EXTENSION)
+                            || extensionFile.equals(TasksBar.EXTENSION2)
+                            || extensionFile.equals(TasksBar.EXTENSION3)) {
+                        pdf.addSubSection(file.getName());
+                        this.fileNames.add(file.getName());
+                        pdf.addResult(analyseFile(file.getAbsolutePath()));
+                        pdf.addTableScore(scores, this.messages);
+                        countNumberOfFiles++;
+                        this.fileScores.add(assesment);
+                        pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
                     }
+
+                    percentage += 98.0 / filesInFolder.size();
+                    publish((int) percentage);
                 }
+            }
 
-                /**
-                 * the list scores is reused to stock the average of all
-                 * metrics.
-                 */
-                this.scores.clear();
-                this.scores.add(this.calculateAverage(this.scoresImplicitNone));
-                this.scores.add(this.calculateAverage(this.scoresRatio));
-                this.scores.add(this.calculateAverage(this.scoresNestedLoops));
-                this.scores.add(this.calculateAverage(this.scoresCommentsBeginning));
-                this.scores.add(this.calculateAverage(this.scoresCommentsVariables));
-                this.scores.add(this.calculateAverage(this.scoresCommentsfunction));
-                this.scores.add(this.calculateAverage(this.scoresCommentsSubroutine));
-                this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
-                this.scores.add(this.calculateAverage(this.scoresExit));
-                this.scores.add(this.calculateAverage(this.scoresCycle));
+            /**
+             * the list scores is reused to stock the average of all metrics.
+             */
+            this.scores.clear();
+            this.scores.add(this.calculateAverage(this.scoresImplicitNone));
+            this.scores.add(this.calculateAverage(this.scoresRatio));
+            this.scores.add(this.calculateAverage(this.scoresNestedLoops));
+            this.scores.add(this.calculateAverage(this.scoresCommentsBeginning));
+            this.scores.add(this.calculateAverage(this.scoresCommentsVariables));
+            this.scores.add(this.calculateAverage(this.scoresCommentsfunction));
+            this.scores.add(this.calculateAverage(this.scoresCommentsSubroutine));
+            this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
+            this.scores.add(this.calculateAverage(this.scoresExit));
+            this.scores.add(this.calculateAverage(this.scoresCycle));
 
-                /**
-                 * Check if the software analysed have not Fortran files
-                 */
-                if (!this.scores.get(0).isNaN()) {
-                    pdf.addSection(this.messages.getString("summary"));
-                    pdf.addFinalSummary(this.fileScores, this.fileNames, this.messages);
-                    pdf.addSummaryInformation(this.messages.getString("totalNumberOfFiles") + " " + countNumberOfFiles);
-                    pdf.addSummaryInformation(this.messages.getString("totalNumberOfLines") + " " + this.totalNumLines);
-                    pdf.addSubSectionInBold(this.messages.getString("finalTable"));
-                    pdf.addFinalTableScore(this.scores, this.messages);
-                    auxNote = partialCalification / this.totalNumLines;
-                    pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
-                }
+            /**
+             * Check if the software analysed have not Fortran files
+             */
+            if (!this.scores.get(0).isNaN()) {
+                pdf.addSection(this.messages.getString("summary"));
+                pdf.addFinalSummary(this.fileScores, this.fileNames, this.messages);
+                pdf.addSummaryInformation(this.messages.getString("totalNumberOfFiles") + " " + countNumberOfFiles);
+                pdf.addSummaryInformation(this.messages.getString("totalNumberOfLines") + " " + this.totalNumLines);
+                pdf.addSubSectionInBold(this.messages.getString("finalTable"));
+                pdf.addFinalTableScore(this.scores, this.messages);
+                auxNote = partialCalification / this.totalNumLines;
+                pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
+            }
 
-                pdf.closePDF();
-                partialCalification = 0.0;
-                percentage = 100;
-                this.totalNumLines = 0;
-                publish((int) percentage);
-            
+            pdf.closePDF();
+            partialCalification = 0.0;
+            percentage = 100;
+            this.totalNumLines = 0;
+            publish((int) percentage);
 
         } catch (IOException ex) {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
@@ -442,6 +434,27 @@ public class TasksBar extends
 
         this.w.setEnabled(true);
         return null;
+    }
+
+    /**
+     * List recursively files in a specific directory and each subdirectories.
+     *
+     * @param directoryName the root directory where the search start
+     * @param files list of each file finded
+     */
+    public static void scanFilesInDirectory(String directoryName, List<File> files) {
+
+        File directory = new File(directoryName);
+        File[] fList = directory.listFiles();
+        if (fList != null) {
+            for (File file : fList) {
+                if (file.isFile()) {
+                    files.add(file);
+                } else if (file.isDirectory()) {
+                    scanFilesInDirectory(file.getAbsolutePath(), files);
+                }
+            }
+        }
     }
 
     /**
