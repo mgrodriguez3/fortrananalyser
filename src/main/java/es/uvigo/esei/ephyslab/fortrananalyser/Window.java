@@ -134,7 +134,7 @@ public class Window extends JFrame implements ActionListener {
         fc = new JFileChooser();
         configureWindow();
         initialiceComponents();
-        
+
     }
 
     /**
@@ -198,24 +198,7 @@ public class Window extends JFrame implements ActionListener {
         this.fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         //Configure MenuBar
-        this.menuLanguages = new JMenu(this.messages.getString(Window.NAME_MENU));
-        this.mb.add(menuLanguages);
-
-        this.spanish = new JMenuItem(this.messages.getString("nameButtonSpanish"));
-        this.spanish.addActionListener(this);
-        this.menuLanguages.add(spanish);
-
-        this.galician = new JMenuItem(this.messages.getString("nameButtonGalician"));
-        this.galician.addActionListener(this);
-        this.menuLanguages.add(galician);
-
-        this.english = new JMenuItem(this.messages.getString("nameButtonEnglish"));
-        this.english.addActionListener(this);
-        this.menuLanguages.add(english);
-
-        this.french = new JMenuItem(this.messages.getString("nameButtonFrench"));
-        this.french.addActionListener(this);
-        this.menuLanguages.add(french);
+        this.configureMenuBar();
 
         this.setUndecorated(true);
 
@@ -359,9 +342,9 @@ public class Window extends JFrame implements ActionListener {
 
             default:
 
-                    //translate the text and update the value of strings in the messages variable
-                    this.currentLocale = new Locale("en", "GB");
-                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                //translate the text and update the value of strings in the messages variable
+                this.currentLocale = new Locale("en", "GB");
+                this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
 
                 break;
         }
@@ -373,8 +356,17 @@ public class Window extends JFrame implements ActionListener {
 
         //re-configure MenuBar
         this.mb.remove(menuLanguages);
-        this.menuLanguages.setName(this.messages.getString(Window.NAME_MENU));
+        this.configureMenuBar();
+
+    }
+
+    /**
+     * Configuration of the menu bar.
+     */
+    private void configureMenuBar() {
+        
         this.menuLanguages = new JMenu(this.messages.getString(Window.NAME_MENU));
+        this.menuLanguages.setName(this.messages.getString(Window.NAME_MENU));
         this.mb.add(menuLanguages);
 
         this.spanish = new JMenuItem(this.messages.getString("nameButtonSpanish"));
@@ -392,6 +384,6 @@ public class Window extends JFrame implements ActionListener {
         this.french = new JMenuItem(this.messages.getString("nameButtonFrench"));
         this.french.addActionListener(this);
         this.menuLanguages.add(french);
-
+        
     }
 }

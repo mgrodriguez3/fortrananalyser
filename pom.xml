@@ -74,8 +74,36 @@
                     </execution>
                 </executions>
             </plugin>
+            
+            <plugin>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.1</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
         </plugins>
     </build>
     
+    <distributionManagement>
+        <repository>
+            <id>deployment</id>
+            <name>Releases</name>
+            <url>http://193.146.46.151:8081/repository/FortranAnalyser-Releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>deployment</id>
+            <name>Internal Snapshot Releases</name>
+            <url>http://193.146.46.151:8081/repository/FortranAnalyser-Snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
   
 </project>
