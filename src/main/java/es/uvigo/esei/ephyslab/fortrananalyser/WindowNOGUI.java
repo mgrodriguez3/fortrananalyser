@@ -24,7 +24,7 @@ public class WindowNOGUI {
     public WindowNOGUI(String language, String path){
         initialiceComponentsNoGUI();
         this.changeLanguageNoGUI(language);
-        NoGUI noGUI = new NoGUI(path, WindowNOGUI.this.messages);
+        new NoGUI(path, WindowNOGUI.this.messages);
     }
     
     private void initialiceComponentsNoGUI() {

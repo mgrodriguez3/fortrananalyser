@@ -36,7 +36,7 @@ public class Principal {
             });
         } else {
            
-            WindowNOGUI windowNOGUI = new WindowNOGUI(args[0], args[1]);
+            new WindowNOGUI(args[0], args[1]);
          
         }
 

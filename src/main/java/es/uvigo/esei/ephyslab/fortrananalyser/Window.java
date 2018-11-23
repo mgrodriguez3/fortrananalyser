@@ -248,19 +248,19 @@ public class Window extends JFrame implements ActionListener {
         }
 
         //In the language menu, a language is selected
-        if (e.getSource().equals(spanish) && !this.currentLocale.getLanguage().equals("es")) {
+        if (e.getSource().equals(spanish)) {
             this.changeLanguage("es");
         }
 
-        if (e.getSource().equals(french) && !this.currentLocale.getLanguage().equals("fr")) {
+        if (e.getSource().equals(french)) {
             this.changeLanguage("fr");
         }
 
-        if (e.getSource().equals(english) && !this.currentLocale.getLanguage().equals("en")) {
+        if (e.getSource().equals(english)) {
             this.changeLanguage("en");
         }
 
-        if (e.getSource().equals(galician) && !this.currentLocale.getLanguage().equals("gl")) {
+        if (e.getSource().equals(galician)) {
             this.changeLanguage("gl");
         }
 
@@ -287,6 +287,8 @@ public class Window extends JFrame implements ActionListener {
      */
     private void changeLanguage(String lang) {
 
+        if(!this.currentLocale.getLanguage().equals(lang))
+        {
         /**
          * configuring the language
          */
@@ -357,6 +359,7 @@ public class Window extends JFrame implements ActionListener {
         //re-configure MenuBar
         this.mb.remove(menuLanguages);
         this.configureMenuBar();
+        }
 
     }
 
