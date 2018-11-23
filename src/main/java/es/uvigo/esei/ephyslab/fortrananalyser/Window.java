@@ -136,6 +136,14 @@ public class Window extends JFrame implements ActionListener {
         initialiceComponents();
 
     }
+    
+    public Window(String language, String path)
+    {
+        fc=null;
+        initialiceComponentsNoGUI();
+        this.changeLanguage(language);
+        new NoGUI(path, Window.this.messages);
+    }
 
     /**
      * This method set settings of the main windows
@@ -155,15 +163,24 @@ public class Window extends JFrame implements ActionListener {
         this.setIconImage(new ImageIcon(Window.class.getResource("fortranAnalyserIcon.png")).getImage());
 
     }
+    
+    /**
+     * Components to use in case the programme is lanched by console
+     */
+    private void initialiceComponentsNoGUI(){
+
+        this.currentLocale = new Locale(Window.DEFAULT_LANGUAGE, Window.DEFAULT_COUNTRY);
+        Locale.setDefault(currentLocale);
+        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+        
+    }
 
     /**
      * initialice all the components that form the main window
      */
     private void initialiceComponents() {
 
-        this.currentLocale = new Locale(Window.DEFAULT_LANGUAGE, Window.DEFAULT_COUNTRY);
-        Locale.setDefault(currentLocale);
-        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+        initialiceComponentsNoGUI();
 
         // create components
         this.text = new JLabel();
@@ -250,18 +267,26 @@ public class Window extends JFrame implements ActionListener {
         //In the language menu, a language is selected
         if (e.getSource().equals(spanish)) {
             this.changeLanguage("es");
+            this.reConfigureButtons();
+            this.reConfigureMenuBar();
         }
 
         if (e.getSource().equals(french)) {
             this.changeLanguage("fr");
+            this.reConfigureButtons();
+            this.reConfigureMenuBar();
         }
 
         if (e.getSource().equals(english)) {
             this.changeLanguage("en");
+            this.reConfigureButtons();
+            this.reConfigureMenuBar();
         }
 
         if (e.getSource().equals(galician)) {
             this.changeLanguage("gl");
+            this.reConfigureButtons();
+            this.reConfigureMenuBar();
         }
 
     }
@@ -350,18 +375,30 @@ public class Window extends JFrame implements ActionListener {
 
                 break;
         }
-
-        //re-configure buttons
-        this.buttonanalyse.setText(this.messages.getString("nameButtonAnalyse"));
-        this.buttonExit.setText(this.messages.getString("nameButtonExit"));
-        this.text.setText(this.messages.getString("selectDirectory"));
-
-        //re-configure MenuBar
-        this.mb.remove(menuLanguages);
-        this.configureMenuBar();
+        
         }
 
     }
+    
+    /**
+     * Reconfiguration of the buttons in case the language is switched.
+     */
+    private void reConfigureButtons()
+    {
+        this.buttonanalyse.setText(this.messages.getString("nameButtonAnalyse"));
+        this.buttonExit.setText(this.messages.getString("nameButtonExit"));
+        this.text.setText(this.messages.getString("selectDirectory"));
+    }
+    
+    /**
+     * reconfiguration of the menuBar buttons in case the language is switched.
+     */
+    private void reConfigureMenuBar(){
+        
+        this.mb.remove(menuLanguages);
+        this.configureMenuBar();
+    }
+    
 
     /**
      * Configuration of the menu bar.
