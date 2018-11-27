@@ -1,0 +1,25 @@
+-classpath
+'/home/miki/.m2/repository/com/itextpdf/layout/7.0.0/layout-7.0.0.jar:/home/miki/.m2/repository/org/slf4j/slf4j-log4j12/1.7.18/slf4j-log4j12-1.7.18.jar:/home/miki/.m2/repository/log4j/log4j/1.2.17/log4j-1.2.17.jar:/home/miki/.m2/repository/org/bouncycastle/bcmail-jdk14/1.38/bcmail-jdk14-1.38.jar:/home/miki/.m2/repository/com/itextpdf/kernel/7.0.0/kernel-7.0.0.jar:/home/miki/.m2/repository/com/itextpdf/itextpdf/5.0.6/itextpdf-5.0.6.jar:/home/miki/.m2/repository/org/bouncycastle/bctsp-jdk14/1.38/bctsp-jdk14-1.38.jar:/home/miki/.m2/repository/org/slf4j/slf4j-api/1.7.13/slf4j-api-1.7.13.jar:/home/miki/.m2/repository/org/bouncycastle/bcprov-jdk14/1.38/bcprov-jdk14-1.38.jar:/home/miki/.m2/repository/com/itextpdf/io/7.0.0/io-7.0.0.jar'
+-encoding
+'UTF-8'
+-private
+-sourcepath
+'/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2018. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/target/site/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'FortranAnalyser 1.9.2 API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/target/javadoc-bundle-options'
+-nohelp
+-use
+-version
+-windowtitle
+'FortranAnalyser 1.9.2 API'
