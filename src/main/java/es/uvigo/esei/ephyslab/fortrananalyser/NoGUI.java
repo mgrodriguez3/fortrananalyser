@@ -197,9 +197,7 @@ public class NoGUI {
      * and subdirectories and analyse them where the extension of the files are
      * ".f90" or ".h90" or ".f"
      *
-     *
-     * @throws java.lang.Exception in case something wrong with intput/output
-     * file
+     * @throws IOException in case the input or output file is wrong.
      */
     private void analyseFiles() throws IOException {
         /**

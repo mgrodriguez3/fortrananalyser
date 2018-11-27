@@ -136,19 +136,16 @@ public class Window extends JFrame implements ActionListener {
         initialiceComponents();
 
     }
-    
-    public Window(String language, String path)
-    {
-        fc=null;
+
+    public Window(String language, String path) {
+        fc = null;
         initialiceComponentsNoGUI();
         this.changeLanguage(language);
         new NoGUI(path, Window.this.messages);
     }
 
     /**
-     * This method set settings of the main windows
-     *
-     * @throws IOException in case something wrong with intput/output file
+     * This method set settings of the main windows.
      */
     private void configureWindow() {
 
@@ -163,16 +160,16 @@ public class Window extends JFrame implements ActionListener {
         this.setIconImage(new ImageIcon(Window.class.getResource("fortranAnalyserIcon.png")).getImage());
 
     }
-    
+
     /**
      * Components to use in case the programme is lanched by console
      */
-    private void initialiceComponentsNoGUI(){
+    private void initialiceComponentsNoGUI() {
 
         this.currentLocale = new Locale(Window.DEFAULT_LANGUAGE, Window.DEFAULT_COUNTRY);
         Locale.setDefault(currentLocale);
         this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-        
+
     }
 
     /**
@@ -312,99 +309,96 @@ public class Window extends JFrame implements ActionListener {
      */
     private void changeLanguage(String lang) {
 
-        if(!this.currentLocale.getLanguage().equals(lang))
-        {
-        /**
-         * configuring the language
-         */
-        switch (lang) {
-
+        if (!this.currentLocale.getLanguage().equals(lang)) {
             /**
-             * spanish from Spain
+             * configuring the language
              */
-            case "es":
-                if (!this.currentLocale.getLanguage().equals("es")) {
+            switch (lang) {
 
-                    //translate the text and update the value of strings in the messages variable
-                    currentLocale = new Locale("es", "ES");
-                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                }
+                /**
+                 * spanish from Spain
+                 */
+                case "es":
+                    if (!this.currentLocale.getLanguage().equals("es")) {
 
-                break;
-            /**
-             * french from France
-             */
-            case "fr":
-                if (!this.currentLocale.getLanguage().equals("fr")) {
+                        //translate the text and update the value of strings in the messages variable
+                        currentLocale = new Locale("es", "ES");
+                        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                    }
 
-                    //translate the text and update the value of strings in the messages variable
-                    this.currentLocale = new Locale("fr", "FR");
-                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                }
-                break;
+                    break;
+                /**
+                 * french from France
+                 */
+                case "fr":
+                    if (!this.currentLocale.getLanguage().equals("fr")) {
 
-            /**
-             * Galician from Spain
-             */
-            case "gl":
-                if (!this.currentLocale.getLanguage().equals("gl")) {
+                        //translate the text and update the value of strings in the messages variable
+                        this.currentLocale = new Locale("fr", "FR");
+                        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                    }
+                    break;
 
-                    //translate the text and update the value of strings in the messages variable
-                    this.currentLocale = new Locale("gl", "ES");
-                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                }
-                break;
+                /**
+                 * Galician from Spain
+                 */
+                case "gl":
+                    if (!this.currentLocale.getLanguage().equals("gl")) {
 
-            /**
-             * english from United Kingdom
-             */
-            case "en":
-                if (!this.currentLocale.getLanguage().equals("en")) {
+                        //translate the text and update the value of strings in the messages variable
+                        this.currentLocale = new Locale("gl", "ES");
+                        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                    }
+                    break;
+
+                /**
+                 * english from United Kingdom
+                 */
+                case "en":
+                    if (!this.currentLocale.getLanguage().equals("en")) {
+
+                        //translate the text and update the value of strings in the messages variable
+                        this.currentLocale = new Locale("en", "GB");
+                        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                    }
+                    break;
+
+                default:
 
                     //translate the text and update the value of strings in the messages variable
                     this.currentLocale = new Locale("en", "GB");
                     this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                }
-                break;
 
-            default:
+                    break;
+            }
 
-                //translate the text and update the value of strings in the messages variable
-                this.currentLocale = new Locale("en", "GB");
-                this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-
-                break;
-        }
-        
         }
 
     }
-    
+
     /**
      * Reconfiguration of the buttons in case the language is switched.
      */
-    private void reConfigureButtons()
-    {
+    private void reConfigureButtons() {
         this.buttonanalyse.setText(this.messages.getString("nameButtonAnalyse"));
         this.buttonExit.setText(this.messages.getString("nameButtonExit"));
         this.text.setText(this.messages.getString("selectDirectory"));
     }
-    
+
     /**
      * reconfiguration of the menuBar buttons in case the language is switched.
      */
-    private void reConfigureMenuBar(){
-        
+    private void reConfigureMenuBar() {
+
         this.mb.remove(menuLanguages);
         this.configureMenuBar();
     }
-    
 
     /**
      * Configuration of the menu bar.
      */
     private void configureMenuBar() {
-        
+
         this.menuLanguages = new JMenu(this.messages.getString(Window.NAME_MENU));
         this.menuLanguages.setName(this.messages.getString(Window.NAME_MENU));
         this.mb.add(menuLanguages);
@@ -424,6 +418,6 @@ public class Window extends JFrame implements ActionListener {
         this.french = new JMenuItem(this.messages.getString("nameButtonFrench"));
         this.french.addActionListener(this);
         this.menuLanguages.add(french);
-        
+
     }
 }

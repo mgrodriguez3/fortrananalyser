@@ -311,9 +311,11 @@ public class PDF {
     }
 
     /**
-     * this method created a new font to write in the pdf document
+     * This method created a new font to write in the pdf document.
      *
-     * @return the font selected
+     * @return the font loaded to use in pdf file
+     * @throws IOException in case there are something wrong with the input or
+     * output file
      */
     private static PdfFont loadPdfFont() throws IOException {
 
