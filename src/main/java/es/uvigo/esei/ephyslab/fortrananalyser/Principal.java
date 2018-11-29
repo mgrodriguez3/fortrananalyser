@@ -36,7 +36,7 @@ public class Principal {
             });
         } else {
            
-            new Window(args[0], args[1]);
+            new Window(args[0], args[1], args[2]);
          
         }
 

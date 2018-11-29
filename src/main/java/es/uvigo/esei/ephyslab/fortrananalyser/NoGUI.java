@@ -38,11 +38,6 @@ public class NoGUI {
     private static final String EXTENSION3 = "f";
 
     /**
-     * the path and the name of the file.
-     */
-    public static final String DEST = "/var/www/html/results/temp/QualityReport.pdf";
-
-    /**
      * the path of the destination of the file
      */
     public static final String DEST_PATH = "/var/www/html/results/temp";
@@ -154,10 +149,11 @@ public class NoGUI {
 
     /**
      *
-     * @param path of the file
+     * @param pathToAnalyse of the file
+     * @param fileName name of the output file
      * @param messages with all Strings variables
      */
-    NoGUI(String path, ResourceBundle messages) {
+    NoGUI(String pathToAnalyse, String fileName, ResourceBundle messages) {
         try {
             this.scores = new ArrayList<>();
             this.scoresImplicitNone = new ArrayList<>();
@@ -176,9 +172,9 @@ public class NoGUI {
             this.partialCalification = 0.0;
 
             this.messages = messages;
-            this.dirPath = path;
-
-            this.analyseFiles();
+            this.dirPath = pathToAnalyse;
+            this.analyseFiles("./results/temp/"+ fileName + ".pdf");
+            
         } catch (IOException ex) {
             Logger.getLogger(NoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -199,10 +195,11 @@ public class NoGUI {
      *
      * @throws IOException in case the input or output file is wrong.
      */
-    private void analyseFiles() throws IOException {
+    private void analyseFiles(String filePath) throws IOException {
         /**
          * initialice all arrayList and global variables
          */
+        
         this.scoresImplicitNone.clear();
         this.scoresRatio.clear();
         this.scoresNestedLoops.clear();
@@ -228,15 +225,17 @@ public class NoGUI {
             String auxDir = "";
             pdf = new PDF();
             String extensionFile = "";
+            
 
             /**
              * In case the temp folder doesn't exits
              */
-            if (!Paths.get(NoGUI.DEST).toFile().exists()) {
+            if (!Paths.get(filePath).toFile().exists()) {
                 new File(NoGUI.DEST_PATH).mkdirs();
             }
 
-            pdf.createPdf(NoGUI.DEST, this.messages.getLocale());
+            
+            pdf.createPdf(filePath, this.messages.getLocale());
 
             TasksBar.scanFilesInDirectory(this.dirPath, filesInFolder);
 

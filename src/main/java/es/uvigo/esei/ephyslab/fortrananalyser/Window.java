@@ -137,11 +137,11 @@ public class Window extends JFrame implements ActionListener {
 
     }
 
-    public Window(String language, String path) {
+    public Window(String language, String pathToAnalyse, String fileName) {
         fc = null;
         initialiceComponentsNoGUI();
         this.changeLanguage(language);
-        new NoGUI(path, Window.this.messages);
+        new NoGUI(pathToAnalyse, fileName, Window.this.messages);
     }
 
     /**
