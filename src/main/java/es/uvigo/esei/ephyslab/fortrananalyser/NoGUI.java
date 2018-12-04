@@ -24,8 +24,8 @@ public class NoGUI {
     /**
      * the path of the destination of the file
      */
-    //public static final String DEST_PATH = "/var/www/html/results/temp";
-    public static final String DEST_PATH = System.getProperty("user.home") + "/temp/";
+    public static final String DEST_PATH = "/var/www/html/results/temp";
+    
     /**
      * the path of the directory to analyse.
      */
@@ -358,9 +358,7 @@ public class NoGUI {
 
         /**
          * 7. calcule the ratio and show it in percentage in the report
-         */
-        System.out.println("Elementos comentados: "+commentedElementsNoGUI);
-        
+         */       
         if (commentableElementsNoGUI > 0.0) {
             ratio = (commentedElementsNoGUI / commentableElementsNoGUI);
         }

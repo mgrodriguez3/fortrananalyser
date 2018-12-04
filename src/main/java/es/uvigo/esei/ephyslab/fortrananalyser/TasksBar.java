@@ -603,8 +603,6 @@ public class TasksBar extends
         /**
          * 7. calcule the ratio and show it in percentage in the report
          */
-
-        System.out.println("Commented elements: "+commentedElements);
         if (commentableElements > 0.0) {
             ratio = (commentedElements / commentableElements);
         }
