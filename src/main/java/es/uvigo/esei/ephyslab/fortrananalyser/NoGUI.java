@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,35 +22,10 @@ import java.util.logging.Logger;
 public class NoGUI {
 
     /**
-     * the extension file to search.
-     */
-    private static final String EXTENSION = "f90";
-
-    /**
-     * the second extension file to search.
-     */
-    private static final String EXTENSION2 = "h90";
-
-    /**
-     * the third extension file to search.
-     */
-    private static final String EXTENSION3 = "f";
-
-    /**
      * the path of the destination of the file
      */
-    public static final String DEST_PATH = "/var/www/html/results/temp";
-
-    /**
-     * end loop statement in Fortran
-     */
-    public static final String END_DO = "END DO";
-
-    /**
-     * arrow to put in the report
-     */
-    public static final String ARROW = "\n\t--> ";
-
+    //public static final String DEST_PATH = "/var/www/html/results/temp";
+    public static final String DEST_PATH = System.getProperty("user.home") + "/temp/";
     /**
      * the path of the directory to analyse.
      */
@@ -65,77 +39,77 @@ public class NoGUI {
     /**
      * the list with the parcial score of each file.
      */
-    private ArrayList<Double> scores;
+    private ArrayList<Double> scoresNoGUI;
 
     /**
      * the list with all scores obtain by implicit none metric.
      */
-    private ArrayList<Double> scoresImplicitNone;
+    private ArrayList<Double> scoresImplicitNoneNoGUI;
 
     /**
      * the list with all scores obtain by percentage of comments metric.
      */
-    private ArrayList<Double> scoresRatio;
+    private ArrayList<Double> scoresRatioNoGUI;
 
     /**
      * the list with all scores obtain by nested loops metric.
      */
-    private ArrayList<Double> scoresNestedLoops;
+    private ArrayList<Double> scoresNestedLoopsNoGUI;
 
     /**
      * the list with all scores obtain by comments metric at the beginning.
      */
-    private ArrayList<Double> scoresCommentsBeginning;
+    private ArrayList<Double> scoresCommentsBeginningNoGUI;
 
     /**
      * the list with all scores obtain by comments metric in variables.
      */
-    private ArrayList<Double> scoresCommentsVariables;
+    private ArrayList<Double> scoresCommentsVariablesNoGUI;
 
     /**
      * the list with all scores obtain by comments metric in functions.
      */
-    private ArrayList<Double> scoresCommentsfunction;
+    private ArrayList<Double> scoresCommentsfunctionNoGUI;
 
     /**
      * the list with all scores obtain by comments metric in subroutine.
      */
-    private ArrayList<Double> scoresCommentsSubroutine;
+    private ArrayList<Double> scoresCommentsSubroutineNoGUI;
 
     /**
      * the list with all scores obtain by control structures metric.
      */
-    private ArrayList<Double> scoresCommentsControlStructures;
+    private ArrayList<Double> scoresCommentsControlStructuresNoGUI;
 
     /**
      * the list with scores obtain by exit metric.
      */
-    private ArrayList<Double> scoresExit;
+    private ArrayList<Double> scoresExitNoGUI;
 
     /**
      * the list with scores obtain by cycle metric.
      */
-    private ArrayList<Double> scoresCycle;
+    private ArrayList<Double> scoresCycleNoGUI;
 
     /**
      * number of comentable elements in file
      */
-    private double commentableElements;
+    private double commentableElementsNoGUI;
 
     /**
      * number of comented elements in file
      */
-    private double commentedElements;
+    private double commentedElementsNoGUI;
 
     /**
      * total number of lines of the analysed software
      */
-    private int totalNumLines;
+    private int totalNumLinesNoGUI;
 
     /**
      * the parcial calification of files
      */
-    private double partialCalification;
+    private double noGUIPartialCalification;
 
     /**
      * List of file to analyse
@@ -155,25 +129,25 @@ public class NoGUI {
      */
     NoGUI(String pathToAnalyse, String fileName, ResourceBundle messages) {
         try {
-            this.scores = new ArrayList<>();
-            this.scoresImplicitNone = new ArrayList<>();
-            this.scoresRatio = new ArrayList<>();
-            this.scoresNestedLoops = new ArrayList<>();
-            this.scoresCommentsBeginning = new ArrayList<>();
-            this.scoresCommentsVariables = new ArrayList<>();
-            this.scoresCommentsfunction = new ArrayList<>();
-            this.scoresCommentsSubroutine = new ArrayList<>();
-            this.scoresCommentsControlStructures = new ArrayList<>();
-            this.scoresExit = new ArrayList<>();
-            this.scoresCycle = new ArrayList<>();
+            this.scoresNoGUI = new ArrayList<>();
+            this.scoresImplicitNoneNoGUI = new ArrayList<>();
+            this.scoresRatioNoGUI = new ArrayList<>();
+            this.scoresNestedLoopsNoGUI = new ArrayList<>();
+            this.scoresCommentsBeginningNoGUI = new ArrayList<>();
+            this.scoresCommentsVariablesNoGUI = new ArrayList<>();
+            this.scoresCommentsfunctionNoGUI = new ArrayList<>();
+            this.scoresCommentsSubroutineNoGUI = new ArrayList<>();
+            this.scoresCommentsControlStructuresNoGUI = new ArrayList<>();
+            this.scoresExitNoGUI = new ArrayList<>();
+            this.scoresCycleNoGUI = new ArrayList<>();
             this.filesInFolder = new ArrayList<>();
-            this.commentableElements = 0.0;
-            this.commentedElements = 0.0;
-            this.partialCalification = 0.0;
+            this.commentableElementsNoGUI = 0.0;
+            this.commentedElementsNoGUI = 0.0;
+            this.noGUIPartialCalification = 0.0;
 
             this.messages = messages;
             this.dirPath = pathToAnalyse;
-            this.analyseFiles("./results/temp/"+ fileName + ".pdf");
+            this.analyseFiles(NoGUI.DEST_PATH + fileName + ".pdf");
             
         } catch (IOException ex) {
             Logger.getLogger(NoGUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -198,23 +172,22 @@ public class NoGUI {
     private void analyseFiles(String filePath) throws IOException {
         /**
          * initialice all arrayList and global variables
-         */
-        
-        this.scoresImplicitNone.clear();
-        this.scoresRatio.clear();
-        this.scoresNestedLoops.clear();
-        this.scoresCommentsBeginning.clear();
-        this.scoresCommentsVariables.clear();
-        this.scoresCommentsfunction.clear();
-        this.scoresCommentsSubroutine.clear();
-        this.scoresCommentsControlStructures.clear();
-        this.scoresExit.clear();
-        this.scoresCycle.clear();
+         */   
+        this.scoresImplicitNoneNoGUI.clear();
+        this.scoresRatioNoGUI.clear();
+        this.scoresNestedLoopsNoGUI.clear();
+        this.scoresCommentsBeginningNoGUI.clear();
+        this.scoresCommentsVariablesNoGUI.clear();
+        this.scoresCommentsfunctionNoGUI.clear();
+        this.scoresCommentsSubroutineNoGUI.clear();
+        this.scoresCommentsControlStructuresNoGUI.clear();
+        this.scoresExitNoGUI.clear();
+        this.scoresCycleNoGUI.clear();
         this.filesInFolder.clear();
-        this.commentableElements = 0.0;
-        this.commentedElements = 0.0;
-        this.totalNumLines = 0;
-        this.partialCalification = 0.0;
+        this.commentableElementsNoGUI = 0.0;
+        this.commentedElementsNoGUI = 0.0;
+        this.totalNumLinesNoGUI = 0;
+        this.noGUIPartialCalification = 0.0;
         this.assesment = 0.0;
 
         PDF pdf;
@@ -244,8 +217,8 @@ public class NoGUI {
              */
             for (File file : filesInFolder) {
 
-                this.scores.clear();
-                extensionFile = getFileExtension(file).toLowerCase();
+                this.scoresNoGUI.clear();
+                extensionFile = TasksBar.getFileExtension(file).toLowerCase();
 
                 /**
                  * Check if the file is not empty
@@ -255,11 +228,11 @@ public class NoGUI {
                      * If it is a new directory, the path is added into the
                      * report.
                      */
-                    if (!auxDir.equals(getPathFromFile(file))
-                            && (extensionFile.equals(NoGUI.EXTENSION)
-                            || extensionFile.equals(NoGUI.EXTENSION2)
-                            || extensionFile.equals(NoGUI.EXTENSION3))) {
-                        auxDir = getPathFromFile(file);
+                    if (!auxDir.equals(TasksBar.getPathFromFile(file))
+                            && (extensionFile.equals(TasksBar.EXTENSION)
+                            || extensionFile.equals(TasksBar.EXTENSION2)
+                            || extensionFile.equals(TasksBar.EXTENSION3))) {
+                        auxDir = TasksBar.getPathFromFile(file);
                         pdf.addSection(auxDir);
                     }
 
@@ -267,12 +240,12 @@ public class NoGUI {
                      * If it is a new file of fortran code, the path is added
                      * into the report.
                      */
-                    if (extensionFile.equals(NoGUI.EXTENSION)
-                            || extensionFile.equals(NoGUI.EXTENSION2)
-                            || extensionFile.equals(NoGUI.EXTENSION3)) {
+                    if (extensionFile.equals(TasksBar.EXTENSION)
+                            || extensionFile.equals(TasksBar.EXTENSION2)
+                            || extensionFile.equals(TasksBar.EXTENSION3)) {
                         pdf.addSubSection(file.getName());
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
-                        pdf.addTableScore(scores, this.messages);
+                        pdf.addTableScore(scoresNoGUI, this.messages);
                         pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
                     }
 
@@ -282,33 +255,33 @@ public class NoGUI {
             /**
              * the list scores is reused to stock the average of all metrics.
              */
-            this.scores.clear();
-            this.scores.add(this.calculateAverage(this.scoresImplicitNone));
-            this.scores.add(this.calculateAverage(this.scoresRatio));
-            this.scores.add(this.calculateAverage(this.scoresNestedLoops));
-            this.scores.add(this.calculateAverage(this.scoresCommentsBeginning));
-            this.scores.add(this.calculateAverage(this.scoresCommentsVariables));
-            this.scores.add(this.calculateAverage(this.scoresCommentsfunction));
-            this.scores.add(this.calculateAverage(this.scoresCommentsSubroutine));
-            this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
-            this.scores.add(this.calculateAverage(this.scoresExit));
-            this.scores.add(this.calculateAverage(this.scoresCycle));
+            this.scoresNoGUI.clear();
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresImplicitNoneNoGUI));
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresRatioNoGUI));
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresNestedLoopsNoGUI));
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsBeginningNoGUI));
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsVariablesNoGUI));
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsfunctionNoGUI));
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsSubroutineNoGUI));
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsControlStructuresNoGUI));
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresExitNoGUI));
+            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCycleNoGUI));
 
             /**
              * Check if the software analysed have not Fortran files
              */
-            if (!this.scores.get(0).isNaN()) {
+            if (!this.scoresNoGUI.get(0).isNaN()) {
                 pdf.addSection(this.messages.getString("finalTable"));
-                pdf.addFinalTableScore(this.scores, this.messages);
-                auxNote = partialCalification / this.totalNumLines;
+                pdf.addFinalTableScore(this.scoresNoGUI, this.messages);
+                auxNote = noGUIPartialCalification / this.totalNumLinesNoGUI;
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
             }
 
             pdf.closePDF();
             filesInFolder.clear();
 
-            this.partialCalification = 0.0;
-            this.totalNumLines = 0;
+            this.noGUIPartialCalification = 0.0;
+            this.totalNumLinesNoGUI = 0;
 
             System.exit(1);
 
@@ -316,35 +289,6 @@ public class NoGUI {
             Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-
-    /**
-     * This method obtains the path from file without it name
-     *
-     * @param file the file that you want to get the path without it name
-     * @return the path from a file
-     */
-    private static String getPathFromFile(File file) {
-
-        return file.getAbsolutePath().
-                substring(0, file.getAbsolutePath().lastIndexOf(File.separator));
-
-    }
-
-    /**
-     * This method obtains the extension of a file
-     *
-     * @param file the file that we want to check the extension
-     * @return the extension of the file
-     */
-    private static String getFileExtension(File file) {
-
-        String name = file.getName();
-        try {
-            return name.substring(name.lastIndexOf('.') + 1);
-        } catch (Exception e) {
-            return "";
-        }
     }
 
     /**
@@ -359,19 +303,19 @@ public class NoGUI {
         String result = "";
         assesment = 0.0;
         double ratio = 0.0;
-        int numLines = this.analyseNumberOfLines(pathFile);
-        boolean useImplicitNone = this.analyseUseImplicitNone(pathFile);
-        boolean checkNestedLoops = this.analyseNestedLoops(pathFile);
-        boolean useExit = this.analyseUseExit(pathFile);
-        boolean useCycle = this.analyseUseCycle(pathFile);
-        int numFunctions = this.analyseNumFunctions(pathFile);
-        int numSubroutines = this.analyseNumberSubroutines(pathFile);
-        int numVariables = this.analyseNumberOfDeclaredVariables(pathFile);
+        int numLines = TasksBar.analyseNumberOfLines(pathFile);
+        boolean useImplicitNone = TasksBar.analyseUseImplicitNone(pathFile);
+        boolean checkNestedLoops = TasksBar.analyseNestedLoops(pathFile);
+        boolean useExit = TasksBar.analyseUseExit(pathFile);
+        boolean useCycle = TasksBar.analyseUseCycle(pathFile);
+        int numFunctions = TasksBar.analyseNumFunctions(pathFile);
+        int numSubroutines = TasksBar.analyseNumberSubroutines(pathFile);
+        int numVariables = TasksBar.analyseNumberOfDeclaredVariables(pathFile);
         String goodComments = this.analyseGoodComment(pathFile);
-
-        this.commentableElements += numFunctions;
-        this.commentableElements += numSubroutines;
-        this.commentableElements += numVariables;
+        
+        this.commentableElementsNoGUI += numFunctions;
+        this.commentableElementsNoGUI += numSubroutines;
+        this.commentableElementsNoGUI += numVariables;
 
         /**
          * count the number of lines in the file
@@ -379,7 +323,7 @@ public class NoGUI {
         result += this.messages.getString("numberOfLines") + numLines;
         result += "\n";
 
-        this.totalNumLines += numLines;
+        this.totalNumLinesNoGUI += numLines;
 
         /**
          * 6. Use or not use the sentence IMPLICIT NONE
@@ -392,12 +336,12 @@ public class NoGUI {
          */
         if (useImplicitNone) {
             assesment += 2.0;
-            this.scores.add(2.0);
-            this.scoresImplicitNone.add(2.0);
+            this.scoresNoGUI.add(2.0);
+            this.scoresImplicitNoneNoGUI.add(2.0);
 
         } else {
-            this.scores.add(0.0);
-            this.scoresImplicitNone.add(0.0);
+            this.scoresNoGUI.add(0.0);
+            this.scoresImplicitNoneNoGUI.add(0.0);
         }
 
         /**
@@ -409,14 +353,16 @@ public class NoGUI {
         /**
          * count the number of subroutines calls
          */
-        result += this.messages.getString("subroutinesCall") + this.analyseNumCalls(pathFile);
+        result += this.messages.getString("subroutinesCall") + TasksBar.analyseNumCalls(pathFile);
         result += "\n";
 
         /**
          * 7. calcule the ratio and show it in percentage in the report
          */
-        if (commentableElements > 0.0) {
-            ratio = (commentedElements / commentableElements);
+        System.out.println("Elementos comentados: "+commentedElementsNoGUI);
+        
+        if (commentableElementsNoGUI > 0.0) {
+            ratio = (commentedElementsNoGUI / commentableElementsNoGUI);
         }
 
         result += this.messages.getString("ratio") + String.format(Locale.ROOT, "%.2f", (ratio * 100)) + "%";
@@ -425,8 +371,8 @@ public class NoGUI {
         ratio = ratio * 2.0;
 
         assesment += ratio;
-        this.scores.add(ratio);
-        this.scoresRatio.add(ratio);
+        this.scoresNoGUI.add(ratio);
+        this.scoresRatioNoGUI.add(ratio);
 
         /**
          * count the number of variables declared
@@ -445,11 +391,11 @@ public class NoGUI {
          */
         if (checkNestedLoops) {
             assesment += 2.0;
-            this.scores.add(2.0);
-            this.scoresNestedLoops.add(2.0);
+            this.scoresNoGUI.add(2.0);
+            this.scoresNestedLoopsNoGUI.add(2.0);
         } else {
-            this.scores.add(0.0);
-            this.scoresNestedLoops.add(0.0);
+            this.scoresNoGUI.add(0.0);
+            this.scoresNestedLoopsNoGUI.add(0.0);
         }
 
         /**
@@ -475,11 +421,11 @@ public class NoGUI {
          */
         if (useExit) {
             assesment += 1.0;
-            this.scores.add(1.0);
-            this.scoresExit.add(1.0);
+            this.scoresNoGUI.add(1.0);
+            this.scoresExitNoGUI.add(1.0);
         } else {
-            this.scores.add(0.0);
-            this.scoresExit.add(0.0);
+            this.scoresNoGUI.add(0.0);
+            this.scoresExitNoGUI.add(0.0);
         }
 
         /**
@@ -493,319 +439,17 @@ public class NoGUI {
          */
         if (useCycle) {
             assesment += 1.0;
-            this.scores.add(1.0);
-            this.scoresCycle.add(1.0);
+            this.scoresNoGUI.add(1.0);
+            this.scoresCycleNoGUI.add(1.0);
         } else {
-            this.scores.add(0.0);
-            this.scoresCycle.add(0.0);
+            this.scoresNoGUI.add(0.0);
+            this.scoresCycleNoGUI.add(0.0);
         }
 
-        this.partialCalification += this.assesment * numLines;
+        this.noGUIPartialCalification += this.assesment * numLines;
 
         return result;
 
-    }
-
-    /**
-     * This method obtains the number of lines of a file
-     *
-     * @param filePath the path of the file
-     * @return the number of lines from file
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public int analyseNumberOfLines(String filePath) throws IOException {
-
-        int count = 0;
-        File file = new File(filePath);
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            String line = null;
-            while ((line = b.readLine()) != null) {
-                count++;
-            }
-        }
-
-        return count;
-    }
-
-    /**
-     * This method analyse if the sentence implicit none is used in each line
-     * from a file
-     *
-     * @param filePath of the fiel to analyse
-     * @return boolean
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public boolean analyseUseImplicitNone(String filePath) throws IOException {
-
-        String chain = "";
-        File file = new File(filePath);
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-                chain = chain.toUpperCase();
-                if (!chain.contains("!") && chain.contains("IMPLICIT NONE")) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
-     * This method analyse the number of functions in file filePath
-     *
-     * @param filePath The path from file to analyse
-     * @return the number of functions in this file
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public int analyseNumFunctions(String filePath) throws IOException {
-
-        int count = 0;
-        String chain = "";
-        File file = new File(filePath);
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-                chain = chain.toUpperCase();
-                if (!chain.contains("!")
-                        && !chain.contains("END FUNCTION")
-                        && chain.contains("FUNCTION")) {
-                    count++;
-                }
-            }
-        }
-
-        return (count / 2);
-    }
-
-    /**
-     * This method analyse the number of subroutines are called in this file
-     *
-     * @param filePath the absolute path from file
-     * @return the number of subroutines calls
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public int analyseNumCalls(String filePath) throws IOException {
-        int count = 0;
-        String chain = "";
-        File file = new File(filePath);
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-                chain = chain.toUpperCase();
-                if (!chain.contains("!") && chain.contains("CALL")) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
-    }
-
-    /**
-     * This method analyse the use of the CYCLE sentence in the file. It is used
-     * in loops to avoid making a certain sentence, so that it continues to
-     * iterate to the next element. With they use, the code is more efficient.
-     *
-     * @param filePath of the file analysed
-     * @return true in case CYCLE sentence is used
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public boolean analyseUseCycle(String filePath) throws IOException {
-
-        String chain = "";
-        File file = new File(filePath);
-        int numCycles = 0;
-        int numLoops = 0;
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-
-                chain = chain.toUpperCase();
-
-                /**
-                 * check if there are a loop.
-                 */
-                if (!chain.contains("!")
-                        && !chain.contains(NoGUI.END_DO)
-                        && chain.contains("DO")) {
-                    numLoops++;
-                }
-                /**
-                 * check if the chain is a declaration of a variable and it is
-                 * not a comment.
-                 */
-                if (chain.contains("CYCLE")
-                        && !chain.contains("!")) {
-
-                    numCycles++;
-                }
-            }
-        }
-
-        return numLoops == numCycles;
-    }
-
-    /**
-     * This method check if the EXIT sentence is used in the file. EXIT sentence
-     * is used to go out of a loop, so the code is more efficient
-     *
-     * @param filePath of the file
-     * @return boolean with the use or not of EXIT sentence
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public boolean analyseUseExit(String filePath) throws IOException {
-
-        String chain = "";
-        File file = new File(filePath);
-        int numLoops = 0;
-        int numExit = 0;
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-
-                chain = chain.toUpperCase();
-                /**
-                 * check if they are a loop.
-                 */
-                if (!chain.contains("!")
-                        && !chain.contains(NoGUI.END_DO)
-                        && chain.contains("DO")) {
-                    numLoops++;
-                }
-
-                /**
-                 * check if the chain is a declaration of a variable and it is
-                 * not a comment.
-                 */
-                if ((chain.contains("EXIT"))
-                        && !chain.contains("!")) {
-
-                    numExit++;
-                }
-
-            }
-        }
-        return numLoops == numExit;
-    }
-
-    /**
-     * This method analyse the number of subroutines declared in a file
-     *
-     * @param filePath of the file analysed
-     * @return the number of subroutines
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public int analyseNumberSubroutines(String filePath) throws IOException {
-
-        String chain = "";
-        int count = 0;
-        File file = new File(filePath);
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-                chain = chain.toUpperCase();
-                if (chain.contains("SUBROUTINE")
-                        && !chain.contains("!")
-                        && chain.contains("END SUBROUTINE")) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
-    }
-
-    /**
-     * This method analyse the number of Nested loops there are. If this number
-     * is greater than 3 or smaller than 0 AND this line don't have a comment ,
-     * it is consider a bad programming practice.
-     *
-     * @param filePath of the file analysed
-     * @return boolean with the use of nested loops
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public boolean analyseNestedLoops(String filePath) throws IOException {
-
-        String chain = "";
-        int nestedLoops = 0;
-        File file = new File(filePath);
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-
-                chain = chain.toUpperCase();
-
-                if (!chain.contains("!")
-                        && !chain.contains(NoGUI.END_DO)
-                        && chain.contains("DO")) {
-
-                    nestedLoops++;
-
-                    if (nestedLoops > 3) {
-                        return false;
-                    }
-
-                }
-
-                if (!chain.contains("!")
-                        && chain.contains(NoGUI.END_DO)) {
-                    nestedLoops--;
-                    if (nestedLoops < 0) {
-                        return false;
-                    }
-                }
-
-            }
-
-        }
-
-        /**
-         * In case there are not nested loops in file, Else there are nested
-         * loops within close sentence.
-         */
-        return nestedLoops == 0;
-
-    }
-
-    /**
-     * This method count the number of declared variables in a file
-     *
-     * @param filePath of the file analysed
-     * @return the number of declared variables
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
-        String chain = "";
-        int count = 0;
-        File file = new File(filePath);
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-                if (chain.contains("::")) {
-                    count++;
-                }
-            }
-        }
-
-        return count;
     }
 
     /**
@@ -823,139 +467,94 @@ public class NoGUI {
 
         String sb = "";
         boolean goodCommentFunctions = this.analyseGoodCommentFunctions(filePath);
-        boolean goodCommentInitDoc = this.analyseGoodCommentInitDoc(filePath);
+        boolean goodCommentInitDoc = TasksBar.analyseGoodCommentInitDoc(filePath);
         boolean goodCommentVariables = this.analyseGoodCommentedVariables(filePath);
         boolean goodCommentSubroutines = this.analyseGoodCommentSubroutines(filePath);
-        boolean goodCommentControlStructures = this.analyseGoodCommentControlStructures(filePath);
+        boolean goodCommentControlStructures = TasksBar.analyseGoodCommentControlStructures(filePath);
 
         /**
          * good comment in functions
          */
-        sb = NoGUI.ARROW + this.messages.getString("function") + goodCommentFunctions;
+        sb = TasksBar.ARROW + this.messages.getString("function") + goodCommentFunctions;
 
         /**
          * good comment at the begining of the document
          */
-        sb += NoGUI.ARROW + this.messages.getString("initDoc") + goodCommentInitDoc;
+        sb += TasksBar.ARROW + this.messages.getString("initDoc") + goodCommentInitDoc;
 
         /**
          * good comment at variables declaration
          */
-        sb += NoGUI.ARROW + this.messages.getString("variables") + goodCommentVariables;
+        sb += TasksBar.ARROW + this.messages.getString("variables") + goodCommentVariables;
 
         /**
          * good comment soubroutines declaration
          */
-        sb += NoGUI.ARROW + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
+        sb += TasksBar.ARROW + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
 
         /**
          * good comment in control structures
          */
-        sb += NoGUI.ARROW + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
+        sb += TasksBar.ARROW + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
 
         /**
          * 1. comments in functions
          */
         if (goodCommentFunctions) {
             assesment += 0.4;
-            this.scores.add(0.4);
-            this.scoresCommentsfunction.add(0.4);
+            this.scoresNoGUI.add(0.4);
+            this.scoresCommentsfunctionNoGUI.add(0.4);
         } else {
-            this.scores.add(0.0);
-            this.scoresCommentsfunction.add(0.0);
+            this.scoresNoGUI.add(0.0);
+            this.scoresCommentsfunctionNoGUI.add(0.0);
         }
         /**
          * 2. comments at the begining of the document
          */
         if (goodCommentInitDoc) {
             assesment += 0.4;
-            this.scores.add(0.4);
-            this.scoresCommentsBeginning.add(0.4);
+            this.scoresNoGUI.add(0.4);
+            this.scoresCommentsBeginningNoGUI.add(0.4);
         } else {
-            this.scores.add(0.0);
-            this.scoresCommentsBeginning.add(0.0);
+            this.scoresNoGUI.add(0.0);
+            this.scoresCommentsBeginningNoGUI.add(0.0);
         }
         /**
          * 3. comments in variables
          */
         if (goodCommentVariables) {
             assesment += 0.4;
-            this.scores.add(0.4);
-            this.scoresCommentsVariables.add(0.4);
+            this.scoresNoGUI.add(0.4);
+            this.scoresCommentsVariablesNoGUI.add(0.4);
         } else {
-            this.scores.add(0.0);
-            this.scoresCommentsVariables.add(0.0);
+            this.scoresNoGUI.add(0.0);
+            this.scoresCommentsVariablesNoGUI.add(0.0);
         }
         /**
          * 4. comments in subroutines
          */
         if (goodCommentSubroutines) {
             assesment += 0.4;
-            this.scores.add(0.4);
-            this.scoresCommentsSubroutine.add(0.4);
+            this.scoresNoGUI.add(0.4);
+            this.scoresCommentsSubroutineNoGUI.add(0.4);
         } else {
-            this.scores.add(0.0);
-            this.scoresCommentsSubroutine.add(0.0);
+            this.scoresNoGUI.add(0.0);
+            this.scoresCommentsSubroutineNoGUI.add(0.0);
         }
         /**
          * 5. comments in control structures
          */
         if (goodCommentControlStructures) {
             assesment += 0.4;
-            this.scores.add(0.4);
-            this.scoresCommentsControlStructures.add(0.4);
+            this.scoresNoGUI.add(0.4);
+            this.scoresCommentsControlStructuresNoGUI.add(0.4);
         } else {
-            this.scores.add(0.0);
-            this.scoresCommentsControlStructures.add(0.0);
+            this.scoresNoGUI.add(0.0);
+            this.scoresCommentsControlStructuresNoGUI.add(0.0);
         }
 
         return sb;
 
-    }
-
-    /**
-     * This method analyse if the Control Structures are commented: ifs and
-     * switch case
-     *
-     * @param filePath of the file analysed
-     * @return boolean with the result of the use of good comments
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
-        String chain = "";
-        String previousChain = "";
-        File file = new File(filePath);
-        int numControlStructures = 0;
-        int totalControlStructures = 0;
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
-
-                chain = chain.toUpperCase();
-
-                //check if it is a if structure declaration
-                //or a select case structutre declaration
-                if ((!chain.contains("!")
-                        && !chain.contains("ENDIF")
-                        && chain.contains("IF ("))
-                        || (!chain.contains("!")
-                        && !chain.contains("END SELECT")
-                        && chain.contains("SELECT CASE"))) {
-                    totalControlStructures++;
-
-                    //check if the next line is a comment or the previous line
-                    //is a comment
-                    if (previousChain.contains("!")) {
-                        numControlStructures++;
-                    }
-                }
-                previousChain = chain;
-            }
-        }
-
-        return totalControlStructures == numControlStructures;
     }
 
     /**
@@ -965,7 +564,7 @@ public class NoGUI {
      * @return boolean with the result of the good comments in subroutines
      * @throws IOException in case something wrong with intput/output file
      */
-    public boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
+    private boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
 
         String chain = "";
         String previousChain = "";
@@ -990,7 +589,7 @@ public class NoGUI {
                     //is a comment
                     if (previousChain.contains("!")) {
                         numSubroutines++;
-                        this.commentedElements++;
+                        this.commentedElementsNoGUI++;
                     }
                 }
                 previousChain = chain;
@@ -1007,8 +606,9 @@ public class NoGUI {
      * @return boolean with the result of the use of good comments in variables
      * @throws IOException in case something wrong with intput/output file
      */
-    public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
+    private boolean analyseGoodCommentedVariables(String filePath) throws IOException {
         String chain = "";
+        String previousChain = "";
         File file = new File(filePath);
         int variablesCommented = 0;
         int totalVariables = 0;
@@ -1024,46 +624,18 @@ public class NoGUI {
 
                     totalVariables++;
 
-                    if (chain.contains("!")) {
+                    //check if the next line is a comment or the previous line
+                    //is a comment
+                    if (previousChain.contains("!")) {
                         variablesCommented++;
-                        this.commentedElements++;
+                        this.commentedElementsNoGUI++;
                     }
 
                 }
+                previousChain = chain;
             }
         }
         return totalVariables == variablesCommented;
-    }
-
-    /**
-     * This method analyse if there is a good comment at the beginning of a file
-     *
-     * @param filePath of the file analysed
-     * @return boolean with the result of the use of good comments at the
-     * beginning of the document
-     * @throws IOException in case something wrong with intput/output file
-     */
-    public boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
-
-        String chain = "";
-        int count = 0;
-        int ite = 0;
-        File file = new File(filePath);
-
-        FileReader fr = new FileReader(file);
-
-        try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null && count < 2 && ite < 3) {
-
-                if (chain.contains("!")) {
-                    count++;
-                }
-
-                ite++;
-            }
-        }
-
-        return count > 1;
     }
 
     /**
@@ -1075,7 +647,7 @@ public class NoGUI {
      * @return boolean with the result of the use of good comments in functions
      * @throws IOException in case something wrong with intput/output file
      */
-    public boolean analyseGoodCommentFunctions(String filePath) throws IOException {
+    private boolean analyseGoodCommentFunctions(String filePath) throws IOException {
 
         String chain = "";
         String previousChain = "";
@@ -1099,7 +671,7 @@ public class NoGUI {
                     //is a comment
                     if (previousChain.contains("!")) {
                         numFunction++;
-                        this.commentedElements++;
+                        this.commentedElementsNoGUI++;
                     }
                 }
                 previousChain = chain;
@@ -1107,59 +679,5 @@ public class NoGUI {
         }
         return totalFunctions == numFunction;
     }
-
-    /**
-     * This method transform a time in miliseconds in days, hours, minutes and
-     * seconds
-     *
-     * @param millis the time to transform
-     * @return the time in days, hours, minutes and seconds
-     */
-    public static String getDurationAnalyse(long millis) {
-
-        if (millis < 0) {
-            throw new IllegalArgumentException("Duration must be greater than zero!");
-        }
-
-        long days = TimeUnit.MILLISECONDS.toDays(millis);
-        millis -= TimeUnit.DAYS.toMillis(days);
-        long hours = TimeUnit.MILLISECONDS.toHours(millis);
-        millis -= TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-        millis -= TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
-        millis -= TimeUnit.MILLISECONDS.toMillis(seconds);
-
-        StringBuilder sb = new StringBuilder(64);
-        sb.append(days);
-        sb.append(" D ");
-        sb.append(hours);
-        sb.append(" h ");
-        sb.append(minutes);
-        sb.append(" min ");
-        sb.append(seconds);
-        sb.append(" s ");
-        sb.append(millis);
-        sb.append(" ms");
-
-        return sb.toString();
-    }
-
-    /**
-     * this method calculate the average of the values in a list.
-     *
-     * @param l the list of the numbers to calculate average
-     * @return the average of the list
-     */
-    private Double calculateAverage(ArrayList<Double> l) {
-
-        Double aux = 0.0;
-
-        for (int i = 0; i < l.size(); i++) {
-            aux += l.get(i);
-        }
-
-        return aux / l.size();
-    }
-
+    
 }

@@ -90,6 +90,25 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.5.1</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <serverId>nexus</serverId>
+                    <nexusUrl>http://193.146.46.151:8081/</nexusUrl>
+                    <skipStaging>true</skipStaging>
+                </configuration>
+            </plugin>
             
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -121,12 +140,12 @@
     <distributionManagement>
         <repository>
             <id>deployment</id>
-            <name>Releases</name>
+            <name>nexus-releases</name>
             <url>http://193.146.46.151:8081/repository/FortranAnalyser-Releases/</url>
         </repository>
         <snapshotRepository>
             <id>deployment</id>
-            <name>Internal Snapshot Releases</name>
+            <name>nexus-snapshots</name>
             <url>http://193.146.46.151:8081/repository/FortranAnalyser-Snapshots/</url>
         </snapshotRepository>
     </distributionManagement>

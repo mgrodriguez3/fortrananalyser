@@ -325,6 +325,45 @@ public class PDF {
         return PdfFontFactory.createFont(tmpFile.toString());
 
     }
+    
+    private Cell configureHeaderCells(String headerText, int fontSize,com.itextpdf.kernel.color.Color colorText){
+        Cell headerCell = new Cell();
+        headerCell.add(headerText);
+        headerCell.setFontSize(fontSize);
+        headerCell.setFontColor(colorText);
+        headerCell.setBorder(Border.NO_BORDER);
+        headerCell.setTextAlignment(TextAlignment.CENTER);
+        
+        return headerCell;
+    }
+    
+    /**
+     * This method configure a cell for the left position.
+     * 
+     * @param textCell is the text to put into the cell
+     * @return the cell with this configuration
+     */
+    private Cell addLeftCell(String textCell){
+        Cell leftCell = new Cell();
+        leftCell.add(textCell);
+        
+        return leftCell;
+    }
+    
+    /**
+     * This method configure a cell for the right position.
+     * 
+     * @param textCell is the score to put into the cell
+     * @return the cell with this configuration
+     */
+    private Cell addRightCell(Double textCell){
+        Cell rightCell = new Cell();
+        rightCell.add(String.format(Locale.ROOT, "%.3f", textCell));
+        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        return rightCell;
+    }
+    
 
     /**
      * this methos add the summary score table.
@@ -335,150 +374,113 @@ public class PDF {
     public void addTableScore(List<Double> scores, ResourceBundle messages) {
 
         Table table = new Table(2);
-        Cell headerCellLeft = new Cell();
-        Cell headerCellRight = new Cell();
-        Cell leftCell = new Cell();
-        Cell rightCell = new Cell();
+        Cell headerCellLeft;
+        Cell headerCellRight;
+        Cell leftCell;
+        Cell rightCell;
 
         /**
          * configuration of the left header of the table
          */
-        headerCellLeft.add(messages.getString("headerLeft_table"));
-        headerCellLeft.setFontSize(13);
-        headerCellLeft.setFontColor(HEADER_2_COLOR);
-        headerCellLeft.setBorder(Border.NO_BORDER);
-
-        headerCellLeft.setTextAlignment(TextAlignment.CENTER);
+        headerCellLeft = this.configureHeaderCells(messages.getString("headerLeft_table"), 13, HEADER_2_COLOR);
         table.addHeaderCell(headerCellLeft);
 
         /**
          * configuration of the right header of the table
          */
-        headerCellRight.add(messages.getString("headerRight_table"));
-        headerCellRight.setFontSize(13);
-        headerCellRight.setFontColor(HEADER_2_COLOR);
-        headerCellRight.setBorder(Border.NO_BORDER);
-
-        headerCellRight.setTextAlignment(TextAlignment.CENTER);
+        headerCellRight = this.configureHeaderCells(messages.getString("headerRight_table"), 13, HEADER_2_COLOR);
         table.addHeaderCell(headerCellRight);
 
         /**
          * 1. Implicit None
          */
-        leftCell.add(messages.getString("implicitNone_table"));
+        leftCell = this.addLeftCell(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
-
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(5)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(5));
         table.addCell(rightCell);
 
         /**
          * 2. Ratio
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("ratio_table"));
+        leftCell = this.addLeftCell(messages.getString("ratio_table"));
         table.addCell(leftCell);
 
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(6)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        rightCell = this.addRightCell(scores.get(6));
         table.addCell(rightCell);
 
         /**
          * 3. Nested Loops
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("useNestedLoops_table"));
+        leftCell = this.addLeftCell(messages.getString("useNestedLoops_table"));
         table.addCell(leftCell);
 
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(7)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        rightCell = this.addRightCell(scores.get(7));
         table.addCell(rightCell);
 
         /**
          * 4. Comments beginning
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsBeginning_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsBeginning_table"));
         table.addCell(leftCell);
 
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(1)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        rightCell = this.addRightCell(scores.get(1));
         table.addCell(rightCell);
 
         /**
          * 5. Comments variables
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsVariables_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsVariables_table"));
         table.addCell(leftCell);
 
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(2)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        rightCell = this.addRightCell(scores.get(2));
         table.addCell(rightCell);
 
         /**
          * 6. Comments in functions
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsFunctions_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsFunctions_table"));
         table.addCell(leftCell);
 
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(0)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        rightCell = this.addRightCell(scores.get(0));
         table.addCell(rightCell);
 
         /**
          * 7. Comments subroutines
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsSubroutines_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsSubroutines_table"));
         table.addCell(leftCell);
 
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(3)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        rightCell = this.addRightCell(scores.get(3));
         table.addCell(rightCell);
 
         /**
          * 8. Comments control structures
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsControlStructures_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsControlStructures_table"));
         table.addCell(leftCell);
 
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(4)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        rightCell = this.addRightCell(scores.get(4));
         table.addCell(rightCell);
 
         /**
          * 9. Use sentence EXIT
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("UseExit_table"));
+        leftCell = this.addLeftCell(messages.getString("UseExit_table"));
         table.addCell(leftCell);
 
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(8)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        rightCell = this.addRightCell(scores.get(8));
         table.addCell(rightCell);
-
+ 
         /**
          * 10. Use sentence CYCLE
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("UseCycle_table"));
+        leftCell = this.addLeftCell(messages.getString("UseCycle_table"));
         table.addCell(leftCell);
 
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(9)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        rightCell = this.addRightCell(scores.get(9));
         table.addCell(rightCell);
+        
 
         this.document.add(table);
 
@@ -494,150 +496,114 @@ public class PDF {
     public void addFinalTableScore(List<Double> scores, ResourceBundle messages) {
 
         Table table = new Table(2);
-        Cell headerCellLeft = new Cell();
-        Cell headerCellRight = new Cell();
-        Cell leftCell = new Cell();
-        Cell rightCell = new Cell();
+        Cell headerCellLeft;
+        Cell headerCellRight;
+        Cell leftCell;
+        Cell rightCell;
 
         /**
          * configuration of the left header of the table
          */
-        headerCellLeft.add(messages.getString("headerLeft_table"));
-        headerCellLeft.setFontSize(15);
-        headerCellLeft.setFontColor(HEADER_COLOR);
-        headerCellLeft.setBorder(Border.NO_BORDER);
-
-        headerCellLeft.setTextAlignment(TextAlignment.CENTER);
+        headerCellLeft = this.configureHeaderCells(messages.getString("headerLeft_table"), 15, HEADER_COLOR);
         table.addHeaderCell(headerCellLeft);
 
         /**
          * configuration of the right header of the table
          */
-        headerCellRight.add(messages.getString("headerRight_table"));
-        headerCellRight.setFontSize(15);
-        headerCellRight.setFontColor(HEADER_COLOR);
-        headerCellRight.setBorder(Border.NO_BORDER);
-
-        headerCellRight.setTextAlignment(TextAlignment.CENTER);
+        headerCellRight = this.configureHeaderCells(messages.getString("headerRight_table"), 15, HEADER_COLOR);
         table.addHeaderCell(headerCellRight);
 
+        
         /**
          * 1. Implicit None
          */
-        leftCell.add(messages.getString("implicitNone_table"));
+        leftCell = this.addLeftCell(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
-
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(0)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(0));
         table.addCell(rightCell);
 
         /**
          * 2. Ratio
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("ratio_table"));
+        leftCell = this.addLeftCell(messages.getString("ratio_table"));
         table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(1)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(1));
         table.addCell(rightCell);
-
+        
         /**
          * 3. Nested Loops
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("useNestedLoops_table"));
+        leftCell = this.addLeftCell(messages.getString("useNestedLoops_table"));
         table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(2)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(2));
         table.addCell(rightCell);
-
+        
         /**
          * 4. Comments beginning
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsBeginning_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsBeginning_table"));
         table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(3)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(3));
         table.addCell(rightCell);
 
         /**
          * 5. Comments variables
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsVariables_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsVariables_table"));
         table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(4)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(4));
         table.addCell(rightCell);
-
+ 
         /**
          * 6. Comments in functions
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsFunctions_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsFunctions_table"));
         table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(5)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(5));
         table.addCell(rightCell);
-
+        
         /**
          * 7. Comments subroutines
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsSubroutines_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsSubroutines_table"));
         table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(6)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(6));
         table.addCell(rightCell);
 
         /**
          * 8. Comments control structures
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("CommentsControlStructures_table"));
+        leftCell = this.addLeftCell(messages.getString("CommentsControlStructures_table"));
         table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(7)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(7));
         table.addCell(rightCell);
-
+        
         /**
          * 9. Use sentence EXIT
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("UseExit_table"));
+        leftCell = this.addLeftCell(messages.getString("UseExit_table"));
         table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(8)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(8));
         table.addCell(rightCell);
-
+        
         /**
          * 10. Use sentence CYCLE
          */
-        leftCell = new Cell();
-        leftCell.add(messages.getString("UseCycle_table"));
+        leftCell = this.addLeftCell(messages.getString("UseCycle_table"));
         table.addCell(leftCell);
-
-        rightCell = new Cell();
-        rightCell.add(String.format(Locale.ROOT, "%.3f", scores.get(9)));
-        rightCell.setTextAlignment(TextAlignment.CENTER);
+        
+        rightCell = this.addRightCell(scores.get(9));
         table.addCell(rightCell);
+        
 
         this.document.add(table);
 
@@ -654,29 +620,21 @@ public class PDF {
     public void addFinalSummary(List<Double> fileScores, List<String> fileNames, ResourceBundle messages) {
 
         Table table = new Table(2, true);
-        Cell headerCellLeft = new Cell().setKeepTogether(true);
-        Cell headerCellRight = new Cell().setKeepTogether(true);
+        Cell headerCellLeft;
+        Cell headerCellRight;
 
         /**
          * configuration of the left header of the table
          */
-        headerCellLeft.add(messages.getString("headerLeftSummaryTable"));
-        headerCellLeft.setFontSize(15);
-        headerCellLeft.setFontColor(HEADER_COLOR);
-        headerCellLeft.setBorder(Border.NO_BORDER);
-
-        headerCellLeft.setTextAlignment(TextAlignment.CENTER);
+        headerCellLeft = this.configureHeaderCells(messages.getString("headerLeftSummaryTable"), 15, HEADER_COLOR);
+        headerCellLeft.setKeepTogether(true);
         table.addHeaderCell(headerCellLeft);
 
         /**
          * configuration of the right header of the table
          */
-        headerCellRight.add(messages.getString("headerRightSummaryTable"));
-        headerCellRight.setFontSize(15);
-        headerCellRight.setFontColor(HEADER_COLOR);
-        headerCellRight.setBorder(Border.NO_BORDER);
-
-        headerCellRight.setTextAlignment(TextAlignment.CENTER);
+        headerCellRight = this.configureHeaderCells(messages.getString("headerRightSummaryTable"), 15, HEADER_COLOR);
+        headerCellRight.setKeepTogether(true);
         table.addHeaderCell(headerCellRight);
 
         this.document.add(table);

@@ -41,17 +41,17 @@ public class TasksBar extends
     /**
      * the extension file to search.
      */
-    private static final String EXTENSION = "f90";
+    public static final String EXTENSION = "f90";
 
     /**
      * the second extension file to search.
      */
-    private static final String EXTENSION2 = "h90";
+    public static final String EXTENSION2 = "h90";
 
     /**
      * the third extension file to search.
      */
-    private static final String EXTENSION3 = "f";
+    public static final String EXTENSION3 = "f";
 
     /**
      * the path and the name of the file.
@@ -253,11 +253,11 @@ public class TasksBar extends
         this.path = path;
 
     }
-    
+
     /**
      * Initialization of all variables declared in this class
      */
-    private void initializeVariables(){
+    private void initializeVariables() {
         this.scores = new ArrayList<>();
         this.scoresImplicitNone = new ArrayList<>();
         this.scoresRatio = new ArrayList<>();
@@ -512,7 +512,7 @@ public class TasksBar extends
      * @param file the file that you want to get the path without it name
      * @return the path from a file
      */
-    private static String getPathFromFile(File file) {
+    public static String getPathFromFile(File file) {
 
         return file.getAbsolutePath().
                 substring(0, file.getAbsolutePath().lastIndexOf(File.separator));
@@ -525,7 +525,7 @@ public class TasksBar extends
      * @param file the file that we want to check the extension
      * @return the extension of the file
      */
-    private static String getFileExtension(File file) {
+    public static String getFileExtension(File file) {
 
         String name = file.getName();
         try {
@@ -547,16 +547,16 @@ public class TasksBar extends
         String result = "";
         assesment = 0.0;
         double ratio = 0.0;
-        int numLines = this.analyseNumberOfLines(pathFile);
-        boolean useImplicitNone = this.analyseUseImplicitNone(pathFile);
-        boolean checkNestedLoops = this.analyseNestedLoops(pathFile);
-        boolean useExit = this.analyseUseExit(pathFile);
-        boolean useCycle = this.analyseUseCycle(pathFile);
-        int numFunctions = this.analyseNumFunctions(pathFile);
-        int numSubroutines = this.analyseNumberSubroutines(pathFile);
-        int numVariables = this.analyseNumberOfDeclaredVariables(pathFile);
-        String goodComments = this.analyseGoodComment(pathFile);
-
+        int numLines = analyseNumberOfLines(pathFile);
+        boolean useImplicitNone = analyseUseImplicitNone(pathFile);
+        boolean checkNestedLoops = analyseNestedLoops(pathFile);
+        boolean useExit = analyseUseExit(pathFile);
+        boolean useCycle = analyseUseCycle(pathFile);
+        int numFunctions = analyseNumFunctions(pathFile);
+        int numSubroutines = analyseNumberSubroutines(pathFile);
+        int numVariables = analyseNumberOfDeclaredVariables(pathFile);
+        String goodComments = analyseGoodComment(pathFile);
+        
         this.commentableElements += numFunctions;
         this.commentableElements += numSubroutines;
         this.commentableElements += numVariables;
@@ -603,6 +603,8 @@ public class TasksBar extends
         /**
          * 7. calcule the ratio and show it in percentage in the report
          */
+
+        System.out.println("Commented elements: "+commentedElements);
         if (commentableElements > 0.0) {
             ratio = (commentedElements / commentableElements);
         }
@@ -701,16 +703,16 @@ public class TasksBar extends
      * @return the number of lines from file
      * @throws IOException in case something wrong with intput/output file
      */
-    public int analyseNumberOfLines(String filePath) throws IOException {
+    public static int analyseNumberOfLines(String filePath) throws IOException {
 
         int count = 0;
-        String line= "";
+        String line = "";
         File file = new File(filePath);
 
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
-            
+
             while ((line = b.readLine()) != null) {
                 count++;
             }
@@ -727,7 +729,7 @@ public class TasksBar extends
      * @return boolean with the answer to the use of implicit none sentence
      * @throws IOException in case something wrong with intput/output file
      */
-    public boolean analyseUseImplicitNone(String filePath) throws IOException {
+    public static boolean analyseUseImplicitNone(String filePath) throws IOException {
 
         String chain = "";
         File file = new File(filePath);
@@ -752,7 +754,7 @@ public class TasksBar extends
      * @return the number of functions in this file
      * @throws IOException in case something wrong with intput/output file
      */
-    public int analyseNumFunctions(String filePath) throws IOException {
+    public static int analyseNumFunctions(String filePath) throws IOException {
 
         int count = 0;
         String chain = "";
@@ -781,7 +783,7 @@ public class TasksBar extends
      * @return the number of subroutines calls
      * @throws IOException in case something wrong with intput/output file
      */
-    public int analyseNumCalls(String filePath) throws IOException {
+    public static int analyseNumCalls(String filePath) throws IOException {
         int count = 0;
         String chain = "";
         File file = new File(filePath);
@@ -809,7 +811,7 @@ public class TasksBar extends
      * @return boolean about the answer to the use of CYCLE sentence
      * @throws IOException in case something wrong with intput/output file
      */
-    public boolean analyseUseCycle(String filePath) throws IOException {
+    public static boolean analyseUseCycle(String filePath) throws IOException {
 
         String chain = "";
         File file = new File(filePath);
@@ -854,7 +856,7 @@ public class TasksBar extends
      * @return boolean of the answer to the use of EXIT sentence
      * @throws IOException in case something wrong with intput/output file
      */
-    public boolean analyseUseExit(String filePath) throws IOException {
+    public static boolean analyseUseExit(String filePath) throws IOException {
 
         String chain = "";
         File file = new File(filePath);
@@ -897,7 +899,7 @@ public class TasksBar extends
      * @return the number of subroutines
      * @throws IOException in case something wrong with intput/output file
      */
-    public int analyseNumberSubroutines(String filePath) throws IOException {
+    public static int analyseNumberSubroutines(String filePath) throws IOException {
 
         String chain = "";
         int count = 0;
@@ -928,7 +930,7 @@ public class TasksBar extends
      * @return boolean with the use of nested loops
      * @throws IOException in case something wrong with intput/output file
      */
-    public boolean analyseNestedLoops(String filePath) throws IOException {
+    public static boolean analyseNestedLoops(String filePath) throws IOException {
 
         String chain = "";
         int nestedLoops = 0;
@@ -979,7 +981,7 @@ public class TasksBar extends
      * @return the number of declared variables
      * @throws IOException in case something wrong with intput/output file
      */
-    public int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
+    public static int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
         String chain = "";
         int count = 0;
         File file = new File(filePath);
@@ -1008,7 +1010,7 @@ public class TasksBar extends
      * @return the paragraph to add to the pdf file
      * @throws IOException in case something wrong with intput/output file
      */
-    private String analyseGoodComment(String filePath) throws IOException {
+    public String analyseGoodComment(String filePath) throws IOException {
 
         String sb = "";
         boolean goodCommentFunctions = this.analyseGoodCommentFunctions(filePath);
@@ -1110,7 +1112,7 @@ public class TasksBar extends
      * @return boolean with the use of good comments in control structures
      * @throws IOException in case something wrong with intput/output file
      */
-    public boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
+    public static boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
         String chain = "";
         String previousChain = "";
         File file = new File(filePath);
@@ -1218,7 +1220,7 @@ public class TasksBar extends
                     //is a comment
                     if (previousChain.contains("!")) {
                         variablesCommented++;
-                        this.commentedElements++;
+                        commentedElements++;
                     }
 
                 }
@@ -1236,7 +1238,7 @@ public class TasksBar extends
      * document
      * @throws IOException in case something wrong with intput/output file
      */
-    public boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
+    public static boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
 
         String chain = "";
         int count = 0;
@@ -1344,7 +1346,7 @@ public class TasksBar extends
      * @param l list with all values
      * @return the average from list l
      */
-    private Double calculateAverage(ArrayList<Double> l) {
+    public static Double calculateAverage(ArrayList<Double> l) {
 
         Double aux = 0.0;
 
