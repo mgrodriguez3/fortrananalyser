@@ -325,70 +325,83 @@ public class PDF {
         return PdfFontFactory.createFont(tmpFile.toString());
 
     }
-    
-    private Cell configureHeaderCells(String headerText, int fontSize,com.itextpdf.kernel.color.Color colorText){
+
+    private Cell configureHeaderCells(String headerText, int fontSize, com.itextpdf.kernel.color.Color colorText) {
         Cell headerCell = new Cell();
         headerCell.add(headerText);
         headerCell.setFontSize(fontSize);
         headerCell.setFontColor(colorText);
         headerCell.setBorder(Border.NO_BORDER);
         headerCell.setTextAlignment(TextAlignment.CENTER);
-        
+
         return headerCell;
     }
-    
+
     /**
      * This method configure a cell for the left position.
-     * 
+     *
      * @param textCell is the text to put into the cell
      * @return the cell with this configuration
      */
-    private Cell addLeftCell(String textCell){
+    private Cell addLeftCell(String textCell) {
         Cell leftCell = new Cell();
         leftCell.add(textCell);
-        
+
         return leftCell;
     }
-    
+
     /**
      * This method configure a cell for the right position.
-     * 
+     *
      * @param textCell is the score to put into the cell
      * @return the cell with this configuration
      */
-    private Cell addRightCell(Double textCell){
+    private Cell addRightCell(Double textCell) {
         Cell rightCell = new Cell();
         rightCell.add(String.format(Locale.ROOT, "%.3f", textCell));
         rightCell.setTextAlignment(TextAlignment.CENTER);
-        
+
         return rightCell;
     }
-    
 
     /**
      * this methos add the summary score table.
      *
      * @param scores all scores obtains in tableScore
      * @param messages with all strings needed to build the table
+     * @param size Text size in headers
+     * @param color Color of the text headers
+     * @param position position in the array of the corresponding score obtain
+     * in this metric
      */
-    public void addTableScore(List<Double> scores, ResourceBundle messages) {
+    public void addTableScores(List<Double> scores, ResourceBundle messages, int size, int color, int[] position) {
 
         Table table = new Table(2);
         Cell headerCellLeft;
         Cell headerCellRight;
         Cell leftCell;
         Cell rightCell;
+        com.itextpdf.kernel.color.Color headerColor;
+
+        /**
+         * select header color
+         */
+        if (color == 0) {
+            headerColor = PDF.HEADER_COLOR;
+        } else {
+            headerColor = PDF.HEADER_2_COLOR;
+        }
 
         /**
          * configuration of the left header of the table
          */
-        headerCellLeft = this.configureHeaderCells(messages.getString("headerLeft_table"), 13, HEADER_2_COLOR);
+        headerCellLeft = this.configureHeaderCells(messages.getString("headerLeft_table"), size, headerColor);
         table.addHeaderCell(headerCellLeft);
 
         /**
          * configuration of the right header of the table
          */
-        headerCellRight = this.configureHeaderCells(messages.getString("headerRight_table"), 13, HEADER_2_COLOR);
+        headerCellRight = this.configureHeaderCells(messages.getString("headerRight_table"), size, headerColor);
         table.addHeaderCell(headerCellRight);
 
         /**
@@ -396,8 +409,8 @@ public class PDF {
          */
         leftCell = this.addLeftCell(messages.getString("implicitNone_table"));
         table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(5));
+
+        rightCell = this.addRightCell(scores.get(position[0]));
         table.addCell(rightCell);
 
         /**
@@ -406,7 +419,7 @@ public class PDF {
         leftCell = this.addLeftCell(messages.getString("ratio_table"));
         table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(6));
+        rightCell = this.addRightCell(scores.get(position[1]));
         table.addCell(rightCell);
 
         /**
@@ -415,7 +428,7 @@ public class PDF {
         leftCell = this.addLeftCell(messages.getString("useNestedLoops_table"));
         table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(7));
+        rightCell = this.addRightCell(scores.get(position[2]));
         table.addCell(rightCell);
 
         /**
@@ -424,7 +437,7 @@ public class PDF {
         leftCell = this.addLeftCell(messages.getString("CommentsBeginning_table"));
         table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(1));
+        rightCell = this.addRightCell(scores.get(position[3]));
         table.addCell(rightCell);
 
         /**
@@ -433,7 +446,7 @@ public class PDF {
         leftCell = this.addLeftCell(messages.getString("CommentsVariables_table"));
         table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(2));
+        rightCell = this.addRightCell(scores.get(position[4]));
         table.addCell(rightCell);
 
         /**
@@ -442,7 +455,7 @@ public class PDF {
         leftCell = this.addLeftCell(messages.getString("CommentsFunctions_table"));
         table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(0));
+        rightCell = this.addRightCell(scores.get(position[5]));
         table.addCell(rightCell);
 
         /**
@@ -451,7 +464,7 @@ public class PDF {
         leftCell = this.addLeftCell(messages.getString("CommentsSubroutines_table"));
         table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(3));
+        rightCell = this.addRightCell(scores.get(position[6]));
         table.addCell(rightCell);
 
         /**
@@ -460,7 +473,7 @@ public class PDF {
         leftCell = this.addLeftCell(messages.getString("CommentsControlStructures_table"));
         table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(4));
+        rightCell = this.addRightCell(scores.get(position[7]));
         table.addCell(rightCell);
 
         /**
@@ -469,141 +482,17 @@ public class PDF {
         leftCell = this.addLeftCell(messages.getString("UseExit_table"));
         table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(8));
+        rightCell = this.addRightCell(scores.get(position[8]));
         table.addCell(rightCell);
- 
+
         /**
          * 10. Use sentence CYCLE
          */
         leftCell = this.addLeftCell(messages.getString("UseCycle_table"));
         table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(9));
+        rightCell = this.addRightCell(scores.get(position[9]));
         table.addCell(rightCell);
-        
-
-        this.document.add(table);
-
-    }
-
-    /**
-     * this method add the final score table with a diferent style from the
-     * addTableScore method (previously implemented).
-     *
-     * @param scores all scores to calculate the final note
-     * @param messages all strings neccesaries to build the final table
-     */
-    public void addFinalTableScore(List<Double> scores, ResourceBundle messages) {
-
-        Table table = new Table(2);
-        Cell headerCellLeft;
-        Cell headerCellRight;
-        Cell leftCell;
-        Cell rightCell;
-
-        /**
-         * configuration of the left header of the table
-         */
-        headerCellLeft = this.configureHeaderCells(messages.getString("headerLeft_table"), 15, HEADER_COLOR);
-        table.addHeaderCell(headerCellLeft);
-
-        /**
-         * configuration of the right header of the table
-         */
-        headerCellRight = this.configureHeaderCells(messages.getString("headerRight_table"), 15, HEADER_COLOR);
-        table.addHeaderCell(headerCellRight);
-
-        
-        /**
-         * 1. Implicit None
-         */
-        leftCell = this.addLeftCell(messages.getString("implicitNone_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(0));
-        table.addCell(rightCell);
-
-        /**
-         * 2. Ratio
-         */
-        leftCell = this.addLeftCell(messages.getString("ratio_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(1));
-        table.addCell(rightCell);
-        
-        /**
-         * 3. Nested Loops
-         */
-        leftCell = this.addLeftCell(messages.getString("useNestedLoops_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(2));
-        table.addCell(rightCell);
-        
-        /**
-         * 4. Comments beginning
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsBeginning_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(3));
-        table.addCell(rightCell);
-
-        /**
-         * 5. Comments variables
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsVariables_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(4));
-        table.addCell(rightCell);
- 
-        /**
-         * 6. Comments in functions
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsFunctions_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(5));
-        table.addCell(rightCell);
-        
-        /**
-         * 7. Comments subroutines
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsSubroutines_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(6));
-        table.addCell(rightCell);
-
-        /**
-         * 8. Comments control structures
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsControlStructures_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(7));
-        table.addCell(rightCell);
-        
-        /**
-         * 9. Use sentence EXIT
-         */
-        leftCell = this.addLeftCell(messages.getString("UseExit_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(8));
-        table.addCell(rightCell);
-        
-        /**
-         * 10. Use sentence CYCLE
-         */
-        leftCell = this.addLeftCell(messages.getString("UseCycle_table"));
-        table.addCell(leftCell);
-        
-        rightCell = this.addRightCell(scores.get(9));
-        table.addCell(rightCell);
-        
 
         this.document.add(table);
 

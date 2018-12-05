@@ -189,6 +189,7 @@ public class NoGUI {
         this.totalNumLinesNoGUI = 0;
         this.noGUIPartialCalification = 0.0;
         this.assesment = 0.0;
+       
 
         PDF pdf;
         double auxNote = 0.0;
@@ -245,7 +246,7 @@ public class NoGUI {
                             || extensionFile.equals(TasksBar.EXTENSION3)) {
                         pdf.addSubSection(file.getName());
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
-                        pdf.addTableScore(scoresNoGUI, this.messages);
+                        pdf.addTableScores(scoresNoGUI, this.messages,13,1, TasksBar.POSITIONTABLESCORES);
                         pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
                     }
 
@@ -272,7 +273,7 @@ public class NoGUI {
              */
             if (!this.scoresNoGUI.get(0).isNaN()) {
                 pdf.addSection(this.messages.getString("finalTable"));
-                pdf.addFinalTableScore(this.scoresNoGUI, this.messages);
+                pdf.addTableScores(this.scoresNoGUI, this.messages,15,0,TasksBar.POSITIONSFINALTABLESCORES);
                 auxNote = noGUIPartialCalification / this.totalNumLinesNoGUI;
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
             }

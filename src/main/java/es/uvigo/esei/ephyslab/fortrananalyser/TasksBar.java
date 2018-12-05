@@ -64,6 +64,18 @@ public class TasksBar extends
     public static final String DEST_PATH = System.getProperty("user.home") + "/temp";
 
     /**
+     * corresponding position in the scores array of the score obtain on each
+     * metric
+     */
+    public static final int[] POSITIONTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
+
+    /**
+     * corresponding position in the finalScores array of the scores obtain on
+     * each metric
+     */
+    public static final int[] POSITIONSFINALTABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+
+    /**
      * Ends of the loops in Fortran
      */
     public static final String END_DO = "END DO";
@@ -382,7 +394,7 @@ public class TasksBar extends
                         pdf.addSubSection(file.getName());
                         this.fileNames.add(file.getName());
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
-                        pdf.addTableScore(scores, this.messages);
+                        pdf.addTableScores(scores, this.messages, 13, 1, TasksBar.POSITIONTABLESCORES);
                         countNumberOfFiles++;
                         this.fileScores.add(assesment);
                         pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
@@ -397,16 +409,16 @@ public class TasksBar extends
              * the list scores is reused to stock the average of all metrics.
              */
             this.scores.clear();
-            this.scores.add(this.calculateAverage(this.scoresImplicitNone));
-            this.scores.add(this.calculateAverage(this.scoresRatio));
-            this.scores.add(this.calculateAverage(this.scoresNestedLoops));
-            this.scores.add(this.calculateAverage(this.scoresCommentsBeginning));
-            this.scores.add(this.calculateAverage(this.scoresCommentsVariables));
-            this.scores.add(this.calculateAverage(this.scoresCommentsfunction));
-            this.scores.add(this.calculateAverage(this.scoresCommentsSubroutine));
-            this.scores.add(this.calculateAverage(this.scoresCommentsControlStructures));
-            this.scores.add(this.calculateAverage(this.scoresExit));
-            this.scores.add(this.calculateAverage(this.scoresCycle));
+            this.scores.add(calculateAverage(this.scoresImplicitNone));
+            this.scores.add(calculateAverage(this.scoresRatio));
+            this.scores.add(calculateAverage(this.scoresNestedLoops));
+            this.scores.add(calculateAverage(this.scoresCommentsBeginning));
+            this.scores.add(calculateAverage(this.scoresCommentsVariables));
+            this.scores.add(calculateAverage(this.scoresCommentsfunction));
+            this.scores.add(calculateAverage(this.scoresCommentsSubroutine));
+            this.scores.add(calculateAverage(this.scoresCommentsControlStructures));
+            this.scores.add(calculateAverage(this.scoresExit));
+            this.scores.add(calculateAverage(this.scoresCycle));
 
             /**
              * Check if the software analysed have not Fortran files
@@ -417,7 +429,7 @@ public class TasksBar extends
                 pdf.addSummaryInformation(this.messages.getString("totalNumberOfFiles") + " " + countNumberOfFiles);
                 pdf.addSummaryInformation(this.messages.getString("totalNumberOfLines") + " " + this.totalNumLines);
                 pdf.addSubSectionInBold(this.messages.getString("finalTable"));
-                pdf.addFinalTableScore(this.scores, this.messages);
+                pdf.addTableScores(this.scores, this.messages, 15, 0, TasksBar.POSITIONSFINALTABLESCORES);
                 auxNote = partialCalification / this.totalNumLines;
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
             }
@@ -556,7 +568,7 @@ public class TasksBar extends
         int numSubroutines = analyseNumberSubroutines(pathFile);
         int numVariables = analyseNumberOfDeclaredVariables(pathFile);
         String goodComments = analyseGoodComment(pathFile);
-        
+
         this.commentableElements += numFunctions;
         this.commentableElements += numSubroutines;
         this.commentableElements += numVariables;
