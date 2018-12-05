@@ -166,8 +166,9 @@ public class NoGUI {
      * In background, this method obtains all the files in an specific directory
      * and subdirectories and analyse them where the extension of the files are
      * ".f90" or ".h90" or ".f"
-     *
-     * @throws IOException in case the input or output file is wrong.
+     * 
+     * @param filePath the path of the file to analyse
+     * @throws IOException in case that the reading file are wrong
      */
     private void analyseFiles(String filePath) throws IOException {
         /**
