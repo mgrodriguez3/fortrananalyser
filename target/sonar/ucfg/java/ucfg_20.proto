@@ -1,0 +1,36 @@
+
+les.uvigo.esei.ephyslab.fortrananalyser.PDF#addLeftCell(Ljava/lang/String;)Lcom/itextpdf/layout/element/Cell;
+__unknown_file (textCell"1*Ö
+1…
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaÛ Û("³°
+…
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaÛ Û( 
+%0" com.itextpdf.layout.element.CellÅ
+Â
+…
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaÛ Û("
+%1"*com.itextpdf.layout.element.Cell#<init>()V*
+
+%0¥
+¢
+…
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaÛ Û(#
+
+leftCell"__id*
+
+%0‰
+†
+…
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaÜ Ü(
+%2"Zcom.itextpdf.layout.element.Cell#add(Ljava/lang/String;)Lcom/itextpdf/layout/element/Cell;*
+
+
+leftCell*
+
+
+textCell"–
+…
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaÞ Þ(
+
+
+leftCell

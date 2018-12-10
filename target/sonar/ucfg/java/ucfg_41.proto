@@ -1,0 +1,79 @@
+
+Yes.uvigo.esei.ephyslab.fortrananalyser.TasksBar#analyseNumberOfLines(Ljava/lang/String;)I
+__unknown_file (filePath"7*¨
+1Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÛ Û("•
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÛ Û(
+""*í
+4Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÖ Ö(Ò
+Ï
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÖ Ö('
+%6"3java.io.BufferedReader#readLine()Ljava/lang/String;*
+
+b*
+4
+1*»
+5Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÔ Ô(6£
+ 
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÔ Ô(6
+b"__id*
+
+%4*
+4*¡
+6Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÔ3 Ô(5®«
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÔ$ Ô(2
+%4"java.io.BufferedReaderØ
+Õ
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÔ  Ô(6
+%5"0java.io.BufferedReader#<init>(Ljava/io/Reader;)V*
+
+%4*
+
+fr*
+5*é	
+7Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÎ Î(¤¡
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÐ Ð(
+%0"java.io.FileÖ
+Ó
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÐ Ð(&
+%1"(java.io.File#<init>(Ljava/lang/String;)V*
+
+%0*
+
+
+filePath¦
+£
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÐ Ð('
+file"__id*
+
+%0ª§
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÒ Ò(&
+%2"java.io.FileReaderÔ
+Ñ
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÒ Ò(,
+%3"*java.io.FileReader#<init>(Ljava/io/File;)V*
+
+%2*
+
+file¤
+¡
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.javaÒ Ò(-
+fr"__id*
+
+%2*
+6

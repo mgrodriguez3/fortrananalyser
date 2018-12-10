@@ -67,13 +67,13 @@ public class TasksBar extends
      * corresponding position in the scores array of the score obtain on each
      * metric
      */
-    public static final int[] POSITIONTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
+    private static final int[] POSITIONTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
 
     /**
      * corresponding position in the finalScores array of the scores obtain on
      * each metric
      */
-    public static final int[] POSITIONSFINALTABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    private static final int[] POSITIONSFINALTABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     /**
      * Ends of the loops in Fortran

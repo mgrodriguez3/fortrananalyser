@@ -1,0 +1,59 @@
+
+Zes.uvigo.esei.ephyslab.fortrananalyser.PDF#loadPdfFont()Lcom/itextpdf/kernel/font/PdfFont;
+__unknown_file ("1*ê
+1Ö
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java¬ ¬(…
+∆
+Ö
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java¬ ¬(?
+%0"Ñjava.nio.file.Files#createTempFile(Ljava/lang/String;Ljava/lang/String;[Ljava/nio/file/attribute/FileAttribute;)Ljava/nio/file/Path;*"
+java.nio.file.Files*
+
+fa-arial*
+.ttf§
+°
+Ö
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java¬ ¬(@	
+tmpFile"__id*
+
+%0ˆ
+Û
+Ö
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java√ √(=
+%1"Ljava.lang.Class#getResourceAsStream(Ljava/lang/String;)Ljava/io/InputStream;*
+""*
+	arial.ttf”
+–
+Ö
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java√H √(k
+%2"__id*:*8"
+ java.nio.file.StandardCopyOption"
+REPLACE_EXISTING®
+•
+Ö
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java√ √(l
+%3"_java.nio.file.Files#copy(Ljava/io/InputStream;Ljava/nio/file/Path;[Ljava/nio/file/CopyOption;)J*"
+java.nio.file.Files*
+
+%1*
+	
+tmpFile*
+
+%2œ
+Ã
+Ö
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java≈) ≈(;
+%4"/java.nio.file.Path#toString()Ljava/lang/String;*
+	
+tmpFile∞
+≠
+Ö
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java≈ ≈(<
+%5"hcom.itextpdf.kernel.font.PdfFontFactory#createFont(Ljava/lang/String;)Lcom/itextpdf/kernel/font/PdfFont;*+")
+'com.itextpdf.kernel.font.PdfFontFactory*
+
+%4"ê
+Ö
+y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java≈ ≈(=
+
+%5

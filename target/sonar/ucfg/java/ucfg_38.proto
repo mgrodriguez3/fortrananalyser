@@ -1,0 +1,45 @@
+
+aes.uvigo.esei.ephyslab.fortrananalyser.TasksBar#getPathFromFile(Ljava/io/File;)Ljava/lang/String;
+__unknown_file (file"1*Ñ
+
+1Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.java‘ ‘(Ò
+Ï
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.java‘ ‘(%
+%0"0java.io.File#getAbsolutePath()Ljava/lang/String;*
+
+fileÒ
+Ï
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.java’ ’(3
+%1"0java.io.File#getAbsolutePath()Ljava/lang/String;*
+
+file½
+º
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.java’@ ’(N
+%2"__id**
+java.io.File"
+	separatorÙ
+Ö
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.java’ ’(O
+%3"1java.lang.String#lastIndexOf(Ljava/lang/String;)I*
+
+%1*
+
+%2à
+Ý
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.java‘ ’(P
+%4"0java.lang.String#substring(II)Ljava/lang/String;*
+
+%0*
+""*
+
+%3"•
+Š
+~/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/TasksBar.java‘ ’(Q
+
+%4

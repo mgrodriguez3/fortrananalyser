@@ -115,6 +115,18 @@ public class NoGUI {
      * List of file to analyse
      */
     List<File> filesInFolder;
+    
+    /**
+     * corresponding position in the scores array of the score obtain on each
+     * metric
+     */
+    private static final int[] TABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    
+    /**
+     * corresponding position in the finalScores array of the scores obtain on
+     * each metric
+     */
+    private static final int[] FINALTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
 
     /**
      * the string resources i18n.
@@ -247,7 +259,7 @@ public class NoGUI {
                             || extensionFile.equals(TasksBar.EXTENSION3)) {
                         pdf.addSubSection(file.getName());
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
-                        pdf.addTableScores(scoresNoGUI, this.messages,13,1, TasksBar.POSITIONTABLESCORES);
+                        pdf.addTableScores(scoresNoGUI, this.messages,13,1, NoGUI.TABLESCORES);
                         pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
                     }
 
@@ -274,7 +286,7 @@ public class NoGUI {
              */
             if (!this.scoresNoGUI.get(0).isNaN()) {
                 pdf.addSection(this.messages.getString("finalTable"));
-                pdf.addTableScores(this.scoresNoGUI, this.messages,15,0,TasksBar.POSITIONSFINALTABLESCORES);
+                pdf.addTableScores(this.scoresNoGUI, this.messages,15,0,NoGUI.FINALTABLESCORES);
                 auxNote = noGUIPartialCalification / this.totalNumLinesNoGUI;
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
             }
