@@ -1002,6 +1002,9 @@ public class TasksBar extends
             while ((chain = b.readLine()) != null) {
                 if (chain.contains("::")) {
                     count++;
+                    if (chain.contains(",")) {
+                        count++;
+                    }
                 }
             }
         }
