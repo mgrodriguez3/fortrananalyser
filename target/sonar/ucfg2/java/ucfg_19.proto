@@ -1,84 +1,0 @@
-
-óes.uvigo.esei.ephyslab.fortrananalyser.PDF#configureHeaderCells(Ljava/lang/String;ILcom/itextpdf/kernel/color/Color;)Lcom/itextpdf/layout/element/Cell;
-__unknown_file (
-headerText""	colorText"1*√
-1Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java   ($≥∞
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java   ("
-%0" com.itextpdf.layout.element.Cell≈
-¬
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java   ($
-%1"*com.itextpdf.layout.element.Cell#<init>()V*
-
-%0ß
-§
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java   (%
-
-headerCell"__id*
-
-%0ç
-ä
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaÀ À("
-%2"Zcom.itextpdf.layout.element.Cell#add(Ljava/lang/String;)Lcom/itextpdf/layout/element/Cell;*
-
-
-headerCell*
-
-
-headerTexté
-ã
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaÃ Ã((
-%3"ccom.itextpdf.layout.ElementPropertyContainer#setFontSize(F)Lcom/itextpdf/layout/IPropertyContainer;*
-
-
-headerCell*
-""∑
-¥
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaÕ Õ(*
-%4"Ñcom.itextpdf.layout.ElementPropertyContainer#setFontColor(Lcom/itextpdf/kernel/color/Color;)Lcom/itextpdf/layout/IPropertyContainer;*
-
-
-headerCell*
-
-	colorTextÕ
- 
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaŒ Œ(-
-%5"__id*4*2#
-!com.itextpdf.layout.border.Border"
-	NO_BORDERØ
-¨
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaŒ Œ(.
-%6"Écom.itextpdf.layout.ElementPropertyContainer#setBorder(Lcom/itextpdf/layout/border/Border;)Lcom/itextpdf/layout/IPropertyContainer;*
-
-
-headerCell*
-
-%5”
-–
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaœ$ œ(8
-%7"__id*:*8,
-*com.itextpdf.layout.property.TextAlignment"
-CENTERø
-º
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.javaœ œ(9
-%8"ìcom.itextpdf.layout.ElementPropertyContainer#setTextAlignment(Lcom/itextpdf/layout/property/TextAlignment;)Lcom/itextpdf/layout/IPropertyContainer;*
-
-
-headerCell*
-
-%7"ò
-Ö
-y/home/miki/NetBeansProjects/FortranAnalyser/FortranAnalyser/src/main/java/es/uvigo/esei/ephyslab/fortrananalyser/PDF.java— —(
-
-
-headerCell

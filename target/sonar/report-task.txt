@@ -1,7 +1,0 @@
-organization=mgrodriguez3-github
-projectKey=fortrananalyser
-serverUrl=https://sonarcloud.io
-serverVersion=7.5.0.19741
-dashboardUrl=https://sonarcloud.io/dashboard?id=fortrananalyser
-ceTaskId=AWeXy9wJcOypVFdpq6wh
-ceTaskUrl=https://sonarcloud.io/api/ce/task?id=AWeXy9wJcOypVFdpq6wh
