@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>es.uvigo.esei.epyslab</groupId>
     <artifactId>FortranAnalyser</artifactId>
-    <version>1.9.2</version>
+    <version>1.9.5</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -50,7 +50,8 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    <build>
+        
+    <build>       
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -89,8 +90,28 @@
                         </goals>
                     </execution>
                 </executions>
-                
             </plugin>
+            
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.5.1</version>
+                <executions>
+                    <execution>
+                        <id>default-deploy</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>deploy</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <serverId>nexus</serverId>
+                    <nexusUrl>http://193.146.46.151:8081/nexus/</nexusUrl>
+                    <skipStaging>true</skipStaging>
+                </configuration>
+            </plugin>
+            
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -141,13 +162,13 @@
     <distributionManagement>
         <repository>
             <id>deployment</id>
-            <name>nexus-releases</name>
-            <url>http://193.146.46.151:8081/repository/FortranAnalyser-Releases/</url>
+            <name>FortranAnalyser</name>
+            <url>http://193.146.46.151:8081/repository/FortranAnalyser/</url>
         </repository>
         <snapshotRepository>
             <id>deployment</id>
-            <name>nexus-snapshots</name>
-            <url>http://193.146.46.151:8081/repository/FortranAnalyser-Snapshots/</url>
+            <name>FortranAnalyser-Snapshot</name>
+            <url>http://193.146.46.151:8081/repository/FortranAnalyser-snapshot/</url>
         </snapshotRepository>
     </distributionManagement>
 
