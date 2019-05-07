@@ -18,7 +18,7 @@ import org.junit.Test;
 
 /**
  *
- * @author michael
+ * @author Michael García Rodríguez
  */
 public class TasksBarTests {
 

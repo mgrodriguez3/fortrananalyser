@@ -692,4 +692,21 @@ public class NoGUI {
         return totalFunctions == numFunction;
     }
     
+    
+    /**
+     * Getter from tablesScores
+     * @return array from tablesScores
+     */
+    public static int[] getTablesScores(){
+        return TABLESCORES;
+    }
+    
+    /**
+     * Getter from finalTablesScores
+     * @return array from finalTablesScores
+     */
+    public static int[] getFinalTablesScores(){
+        return FINALTABLESCORES;
+    }
+    
 }

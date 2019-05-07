@@ -1363,11 +1363,15 @@ public class TasksBar extends
 
         Double aux = 0.0;
 
-        for (int i = 0; i < l.size(); i++) {
-            aux += l.get(i);
-        }
+        if (l.size() > 0) {
+            for (int i = 0; i < l.size(); i++) {
+                aux += l.get(i);
+            }
 
-        return aux / l.size();
+            return aux / l.size();
+        } else {
+            return 0.0;
+        }
     }
 
 }
