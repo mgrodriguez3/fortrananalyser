@@ -538,4 +538,67 @@ public class PDF {
 
     }
 
+    /**
+     * Getter from header_color
+     *
+     * @return header_color
+     */
+    public static Color getHEADER_COLOR() {
+        return HEADER_COLOR;
+    }
+
+    /**
+     * Getter from header_2_color
+     *
+     * @return header_2_color
+     */
+    public static Color getHEADER_2_COLOR() {
+        return HEADER_2_COLOR;
+    }
+
+    /**
+     * Getter from section_color
+     *
+     * @return section_color
+     */
+    public static Color getSECTION_COLOR() {
+        return SECTION_COLOR;
+    }
+
+    /**
+     * Getter from result_color
+     *
+     * @return result_color
+     */
+    public static Color getRESULT_COLOR() {
+        return RESULT_COLOR;
+    }
+
+    /**
+     * Getter from sub_section_color
+     *
+     * @return sub_section_color
+     */
+    public static Color getSUB_SECTION_COLOR() {
+        return SUB_SECTION_COLOR;
+    }
+
+    /**
+     * Getter from final_note_color
+     *
+     * @return final_note_color
+     */
+    public static Color getFINAL_NOTE_COLOR() {
+        return FINAL_NOTE_COLOR;
+    }
+
+    /**
+     * Getter from icon_fortran_analyser
+     *
+     * @return icon
+     */
+    public static String getICON_FORTRAN_ANALYSER() {
+        return ICON_FORTRAN_ANALYSER;
+    }
+
 }

@@ -137,6 +137,12 @@ public class Window extends JFrame implements ActionListener {
 
     }
 
+    /**
+     * Constructor for NoGUI usage
+     * @param language selected
+     * @param pathToAnalyse path to analyse
+     * @param fileName name of the output file
+     */
     public Window(String language, String pathToAnalyse, String fileName) {
         fc = null;
         initialiceComponentsNoGUI();

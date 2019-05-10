@@ -167,12 +167,6 @@ public class NoGUI {
 
     }
 
-    /**
-     * Empty constructor
-     */
-    public NoGUI() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     /**
      * In background, this method obtains all the files in an specific directory

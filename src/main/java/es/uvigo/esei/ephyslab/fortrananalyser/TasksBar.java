@@ -67,13 +67,13 @@ public class TasksBar extends
      * corresponding position in the scores array of the score obtain on each
      * metric
      */
-    private static final int[] POSITIONTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
+    public static final int[] POSITIONTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
 
     /**
      * corresponding position in the finalScores array of the scores obtain on
      * each metric
      */
-    private static final int[] POSITIONSFINALTABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    public static final int[] POSITIONSFINALTABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     /**
      * Ends of the loops in Fortran
@@ -269,7 +269,7 @@ public class TasksBar extends
     /**
      * Initialization of all variables declared in this class
      */
-    private void initializeVariables() {
+    public void initializeVariables() {
         this.scores = new ArrayList<>();
         this.scoresImplicitNone = new ArrayList<>();
         this.scoresRatio = new ArrayList<>();
@@ -452,7 +452,7 @@ public class TasksBar extends
      * List recursively files in a specific directory and each subdirectories.
      *
      * @param directoryName the root directory where the search start
-     * @param files list of each file finded
+     * @param files list of each file found
      */
     public static void scanFilesInDirectory(String directoryName, List<File> files) {
 
@@ -1027,10 +1027,10 @@ public class TasksBar extends
 
         String sb = "";
         boolean goodCommentFunctions = this.analyseGoodCommentFunctions(filePath);
-        boolean goodCommentInitDoc = this.analyseGoodCommentInitDoc(filePath);
+        boolean goodCommentInitDoc = TasksBar.analyseGoodCommentInitDoc(filePath);
         boolean goodCommentVariables = this.analyseGoodCommentedVariables(filePath);
         boolean goodCommentSubroutines = this.analyseGoodCommentSubroutines(filePath);
-        boolean goodCommentControlStructures = this.analyseGoodCommentControlStructures(filePath);
+        boolean goodCommentControlStructures = TasksBar.analyseGoodCommentControlStructures(filePath);
 
         /**
          * good comment in functions
