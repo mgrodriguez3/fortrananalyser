@@ -430,7 +430,16 @@ public class TasksBar extends
                 pdf.addSummaryInformation(this.messages.getString("totalNumberOfLines") + " " + this.totalNumLines);
                 pdf.addSubSectionInBold(this.messages.getString("finalTable"));
                 pdf.addTableScores(this.scores, this.messages, 15, 0, TasksBar.POSITIONSFINALTABLESCORES);
-                auxNote = partialCalification / this.totalNumLines;
+
+                /**
+                 * Checking if there are not files analysed
+                 */
+                if (this.totalNumLines == 0) {
+                    auxNote = 0.0;
+                } else {
+                    auxNote = partialCalification / this.totalNumLines;
+                }
+                
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
             }
 
@@ -1002,7 +1011,8 @@ public class TasksBar extends
             while ((chain = b.readLine()) != null) {
                 if (chain.contains("::")) {
                     count++;
-                    if (chain.contains(",")) {
+
+                    if (chain.contains(",") && chain.indexOf("::") <= chain.indexOf(",")) {
                         count++;
                     }
                 }
