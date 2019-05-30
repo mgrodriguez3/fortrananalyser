@@ -257,7 +257,7 @@ public class TasksBarJUnitTests {
     @Test
     public void testDEST() {
         String expected = System.getProperty("user.home") + "/temp/QualityReport.pdf";
-        String obtain = TasksBar.DEST;
+        String obtain = TasksBar.getDEST();
 
         assertEquals(expected, obtain);
     }
@@ -265,7 +265,7 @@ public class TasksBarJUnitTests {
     @Test
     public void testDEST_PATH() {
         String expected = System.getProperty("user.home") + "/temp";
-        String obtain = TasksBar.DEST_PATH;
+        String obtain = TasksBar.getDEST_PATH();
 
         assertEquals(expected, obtain);
     }
@@ -273,7 +273,7 @@ public class TasksBarJUnitTests {
     @Test
     public void testPOSITIONTABLESCORES() {
         int[] expected = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
-        int[] obtain = TasksBar.POSITIONTABLESCORES;
+        int[] obtain = TasksBar.getPOSITIONTABLESCORES();
 
         assertArrayEquals(expected, obtain);
     }
@@ -281,7 +281,7 @@ public class TasksBarJUnitTests {
     @Test
     public void testPOSITIONSFINALTABLESCORES() {
         int[] expected = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-        int[] obtain = TasksBar.POSITIONSFINALTABLESCORES;
+        int[] obtain = TasksBar.getPOSITIONSFINALTABLESCORES();
 
         assertArrayEquals(expected, obtain);
     }

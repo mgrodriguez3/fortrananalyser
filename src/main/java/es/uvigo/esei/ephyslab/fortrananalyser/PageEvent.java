@@ -20,10 +20,10 @@ import com.itextpdf.layout.property.TextAlignment;
  */
 public class PageEvent implements IEventHandler {
 
-    private final Document documento;
+    private final Document document;
 
     public PageEvent(Document doc) {
-        documento = doc;
+        document = doc;
     }
 
     /**
@@ -37,7 +37,7 @@ public class PageEvent implements IEventHandler {
         PdfDocument pdfDoc = docEvent.getDocument();
         PdfPage page = docEvent.getPage();
 
-        float xFooter = pdfDoc.getDefaultPageSize().getX() + documento.getLeftMargin();
+        float xFooter = pdfDoc.getDefaultPageSize().getX() + document.getLeftMargin();
         float yFooter = pdfDoc.getDefaultPageSize().getBottom();
         float widthFooter = page.getPageSize().getWidth() - 72;
         float heightFooter = 50F;
@@ -79,7 +79,7 @@ public class PageEvent implements IEventHandler {
         PdfDocument pdfDoc = docEvent.getDocument();
         PdfPage page = docEvent.getPage();
         float yPosition = pdfDoc.getDefaultPageSize().getBottom() + 10;
-        float xPosition = pdfDoc.getDefaultPageSize().getX() + documento.getLeftMargin() + 260;
+        float xPosition = pdfDoc.getDefaultPageSize().getX() + document.getLeftMargin() + 260;
         PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
 
         Rectangle footerRectangle = this.createFooterRectangle(docEvent);
@@ -96,6 +96,6 @@ public class PageEvent implements IEventHandler {
      * @return the value of documento variable
      */
     public Document getDocument() {
-        return this.documento;
+        return this.document;
     }
 }

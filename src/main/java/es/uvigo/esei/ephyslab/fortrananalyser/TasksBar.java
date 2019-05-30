@@ -31,7 +31,7 @@ import javax.swing.UIManager;
  * @author Michael García Rodríguez
  * @version 1.9.2
  */
-public class TasksBar extends
+public final class TasksBar extends
         SwingWorker<Void, Integer> {
 
     TasksBar(JTextArea textArea, int numbersToFind) {
@@ -41,49 +41,49 @@ public class TasksBar extends
     /**
      * the extension file to search.
      */
-    public static final String EXTENSION = "f90";
+    private static final String EXTENSION = "f90";
 
     /**
      * the second extension file to search.
      */
-    public static final String EXTENSION2 = "h90";
+    private static final String EXTENSION2 = "h90";
 
     /**
      * the third extension file to search.
      */
-    public static final String EXTENSION3 = "f";
+    private static final String EXTENSION3 = "f";
 
     /**
      * the path and the name of the file.
      */
-    public static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
+    private static final String DEST = System.getProperty("user.home") + "/temp/QualityReport.pdf";
 
     /**
      * the path of the destination of the file
      */
-    public static final String DEST_PATH = System.getProperty("user.home") + "/temp";
+    private static final String DEST_PATH = System.getProperty("user.home") + "/temp";
 
     /**
      * corresponding position in the scores array of the score obtain on each
      * metric
      */
-    public static final int[] POSITIONTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
+    private static final int[] POSITIONTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
 
     /**
      * corresponding position in the finalScores array of the scores obtain on
      * each metric
      */
-    public static final int[] POSITIONSFINALTABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    private static final int[] POSITIONSFINALTABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 
     /**
      * Ends of the loops in Fortran
      */
-    public static final String END_DO = "END DO";
+    private static final String END_DO = "END DO";
 
     /**
      * arrow to put in the report
      */
-    public static final String ARROW = "\n\t--> ";
+    private static final String ARROW = "\n\t--> ";
 
     /**
      * the frame that represent the taskbar.
@@ -1383,5 +1383,41 @@ public class TasksBar extends
             return 0.0;
         }
     }
+
+    
+    public static String getDEST() {
+        return DEST;
+    }
+
+    public static String getDEST_PATH() {
+        return DEST_PATH;
+    }
+
+    public static int[] getPOSITIONTABLESCORES() {
+        return POSITIONTABLESCORES;
+    }
+
+    public static int[] getPOSITIONSFINALTABLESCORES() {
+        return POSITIONSFINALTABLESCORES;
+    }
+
+    public static String getARROW() {
+        return ARROW;
+    }
+
+    public static String getEXTENSION() {
+        return EXTENSION;
+    }
+
+    public static String getEXTENSION2() {
+        return EXTENSION2;
+    }
+
+    public static String getEXTENSION3() {
+        return EXTENSION3;
+    }
+    
+    
+    
 
 }

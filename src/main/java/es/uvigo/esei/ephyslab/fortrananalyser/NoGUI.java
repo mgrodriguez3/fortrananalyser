@@ -237,9 +237,9 @@ public class NoGUI {
                      * report.
                      */
                     if (!auxDir.equals(TasksBar.getPathFromFile(file))
-                            && (extensionFile.equals(TasksBar.EXTENSION)
-                            || extensionFile.equals(TasksBar.EXTENSION2)
-                            || extensionFile.equals(TasksBar.EXTENSION3))) {
+                            && (extensionFile.equals(TasksBar.getEXTENSION())
+                            || extensionFile.equals(TasksBar.getEXTENSION2())
+                            || extensionFile.equals(TasksBar.getEXTENSION3()))) {
                         auxDir = TasksBar.getPathFromFile(file);
                         pdf.addSection(auxDir);
                     }
@@ -248,9 +248,9 @@ public class NoGUI {
                      * If it is a new file of fortran code, the path is added
                      * into the report.
                      */
-                    if (extensionFile.equals(TasksBar.EXTENSION)
-                            || extensionFile.equals(TasksBar.EXTENSION2)
-                            || extensionFile.equals(TasksBar.EXTENSION3)) {
+                    if (extensionFile.equals(TasksBar.getEXTENSION())
+                            || extensionFile.equals(TasksBar.getEXTENSION2())
+                            || extensionFile.equals(TasksBar.getEXTENSION3())) {
                         pdf.addSubSection(file.getName());
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
                         pdf.addTableScores(scoresNoGUI, this.messages,13,1, NoGUI.TABLESCORES);
@@ -481,27 +481,27 @@ public class NoGUI {
         /**
          * good comment in functions
          */
-        sb = TasksBar.ARROW + this.messages.getString("function") + goodCommentFunctions;
+        sb = TasksBar.getARROW() + this.messages.getString("function") + goodCommentFunctions;
 
         /**
          * good comment at the begining of the document
          */
-        sb += TasksBar.ARROW + this.messages.getString("initDoc") + goodCommentInitDoc;
+        sb += TasksBar.getARROW() + this.messages.getString("initDoc") + goodCommentInitDoc;
 
         /**
          * good comment at variables declaration
          */
-        sb += TasksBar.ARROW + this.messages.getString("variables") + goodCommentVariables;
+        sb += TasksBar.getARROW() + this.messages.getString("variables") + goodCommentVariables;
 
         /**
          * good comment soubroutines declaration
          */
-        sb += TasksBar.ARROW + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
+        sb += TasksBar.getARROW() + this.messages.getString("commentSubroutines") + goodCommentSubroutines;
 
         /**
          * good comment in control structures
          */
-        sb += TasksBar.ARROW + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
+        sb += TasksBar.getARROW() + this.messages.getString("commentControlStructures") + goodCommentControlStructures;
 
         /**
          * 1. comments in functions
