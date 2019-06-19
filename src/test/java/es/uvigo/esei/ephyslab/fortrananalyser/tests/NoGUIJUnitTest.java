@@ -19,7 +19,9 @@ import static org.junit.Assert.*;
  *
  * @author Michael García Rodríguez
  */
+
 public class NoGUIJUnitTest {
+    
     
     public NoGUIJUnitTest() {
     }
@@ -47,7 +49,8 @@ public class NoGUIJUnitTest {
   
     @Test
     public void testDEST_PATH(){
-        assertEquals("/var/www/html/results/temp", NoGUI.DEST_PATH);
+        String path =System.getProperty("user.home") + "/temp";
+        assertEquals(path, NoGUI.DEST_PATH);
     }
     
     @Test

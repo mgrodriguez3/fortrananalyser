@@ -20,7 +20,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
-import javax.swing.JTextArea;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
@@ -34,10 +33,7 @@ import javax.swing.UIManager;
 public final class TasksBar extends
         SwingWorker<Void, Integer> {
 
-    TasksBar(JTextArea textArea, int numbersToFind) {
-
-    }
-
+    
     /**
      * the extension file to search.
      */
@@ -61,7 +57,7 @@ public final class TasksBar extends
     /**
      * the path of the destination of the file
      */
-    private static final String DEST_PATH = System.getProperty("user.home") + "/temp";
+    private static final String DESTPATH = System.getProperty("user.home") + "/temp";
 
     /**
      * corresponding position in the scores array of the score obtain on each
@@ -78,7 +74,7 @@ public final class TasksBar extends
     /**
      * Ends of the loops in Fortran
      */
-    private static final String END_DO = "END DO";
+    private static final String ENDDO = "END DO";
 
     /**
      * arrow to put in the report
@@ -353,7 +349,7 @@ public final class TasksBar extends
              * In case the temp folder doesn't exits
              */
             if (!Paths.get(TasksBar.DEST).toFile().exists()) {
-                new File(TasksBar.DEST_PATH).mkdirs();
+                new File(TasksBar.DESTPATH).mkdirs();
             }
 
             pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
@@ -618,7 +614,7 @@ public final class TasksBar extends
         /**
          * count the number of subroutines calls
          */
-        result += this.messages.getString("subroutinesCall") + this.analyseNumCalls(pathFile);
+        result += this.messages.getString("subroutinesCall") + analyseNumCalls(pathFile);
         result += "\n";
 
         /**
@@ -848,7 +844,7 @@ public final class TasksBar extends
                  * check if there are a loop.
                  */
                 if (!chain.contains("!")
-                        && !chain.contains(TasksBar.END_DO)
+                        && !chain.contains(TasksBar.ENDDO)
                         && chain.contains("DO")) {
                     numLoops++;
                 }
@@ -891,7 +887,7 @@ public final class TasksBar extends
                  * check if they are a loop.
                  */
                 if (!chain.contains("!")
-                        && !chain.contains(TasksBar.END_DO)
+                        && !chain.contains(TasksBar.ENDDO)
                         && chain.contains("DO")) {
                     numLoops++;
                 }
@@ -962,7 +958,7 @@ public final class TasksBar extends
                 chain = chain.toUpperCase();
 
                 if (!chain.contains("!")
-                        && !chain.contains(TasksBar.END_DO)
+                        && !chain.contains(TasksBar.ENDDO)
                         && chain.contains("DO")) {
 
                     nestedLoops++;
@@ -974,7 +970,7 @@ public final class TasksBar extends
                 }
 
                 if (!chain.contains("!")
-                        && chain.contains(TasksBar.END_DO)) {
+                        && chain.contains(TasksBar.ENDDO)) {
                     nestedLoops--;
                     if (nestedLoops < 0) {
                         return false;
@@ -1012,7 +1008,7 @@ public final class TasksBar extends
                 if (chain.contains("::")) {
                     count++;
 
-                    if (chain.contains(",") && chain.indexOf("::") <= chain.indexOf(",")) {
+                    if (chain.contains(",") && chain.indexOf("::") <= chain.indexOf(',')) {
                         count++;
                     }
                 }
@@ -1369,11 +1365,11 @@ public final class TasksBar extends
      * @param l list with all values
      * @return the average from list l
      */
-    public static Double calculateAverage(ArrayList<Double> l) {
+    public static Double calculateAverage(List<Double> l) {
 
         Double aux = 0.0;
 
-        if (l.size() > 0) {
+        if (!l.isEmpty()) {
             for (int i = 0; i < l.size(); i++) {
                 aux += l.get(i);
             }
@@ -1389,8 +1385,8 @@ public final class TasksBar extends
         return DEST;
     }
 
-    public static String getDEST_PATH() {
-        return DEST_PATH;
+    public static String getDESTPATH() {
+        return DESTPATH;
     }
 
     public static int[] getPOSITIONTABLESCORES() {

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="6" failures="0" name="es.uvigo.esei.ephyslab.fortrananalyser.tests.NoGUIJUnitTest" time="0.008" errors="0" skipped="0">
+<testsuite tests="6" failures="0" name="es.uvigo.esei.ephyslab.fortrananalyser.tests.NoGUIJUnitTest" time="0" errors="0" skipped="0">
   <properties>
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment"/>
     <property name="sun.boot.library.path" value="/home/miki/jdk1.8.0_151/jre/lib/amd64"/>
@@ -31,7 +31,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.class.version" value="52.0"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
-    <property name="os.version" value="4.15.0-50-generic"/>
+    <property name="os.version" value="4.15.0-51-generic"/>
     <property name="user.home" value="/home/miki"/>
     <property name="user.timezone" value="Europe/Madrid"/>
     <property name="java.awt.printerjob" value="sun.print.PSPrinterJob"/>
@@ -62,7 +62,7 @@
   </properties>
   <testcase classname="es.uvigo.esei.ephyslab.fortrananalyser.tests.NoGUIJUnitTest" name="testFINALTABLESCORES" time="0"/>
   <testcase classname="es.uvigo.esei.ephyslab.fortrananalyser.tests.NoGUIJUnitTest" name="testDEST_PATH" time="0"/>
-  <testcase classname="es.uvigo.esei.ephyslab.fortrananalyser.tests.NoGUIJUnitTest" name="testCalculateAverage" time="0.006"/>
+  <testcase classname="es.uvigo.esei.ephyslab.fortrananalyser.tests.NoGUIJUnitTest" name="testCalculateAverage" time="0"/>
   <testcase classname="es.uvigo.esei.ephyslab.fortrananalyser.tests.NoGUIJUnitTest" name="testCalculateAverageZero" time="0"/>
   <testcase classname="es.uvigo.esei.ephyslab.fortrananalyser.tests.NoGUIJUnitTest" name="testTABLESCORES" time="0"/>
   <testcase classname="es.uvigo.esei.ephyslab.fortrananalyser.tests.NoGUIJUnitTest" name="testCalculateAverageEmpty" time="0"/>

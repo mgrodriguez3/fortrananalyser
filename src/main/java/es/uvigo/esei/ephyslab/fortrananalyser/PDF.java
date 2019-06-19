@@ -45,32 +45,32 @@ public class PDF {
     /**
      * Define the color of headers of the main table.
      */
-    private static final com.itextpdf.kernel.color.Color HEADER_COLOR = new DeviceRgb(0, 130, 130);
+    private static final com.itextpdf.kernel.color.Color HEADERCOLOR = new DeviceRgb(0, 130, 130);
 
     /**
      * Define the color of header of the table.
      */
-    private static final com.itextpdf.kernel.color.Color HEADER_2_COLOR = new DeviceRgb(0, 69, 69);
+    private static final com.itextpdf.kernel.color.Color HEADER2COLOR = new DeviceRgb(0, 69, 69);
 
     /**
      * Define the color of sections.
      */
-    private static final com.itextpdf.kernel.color.Color SECTION_COLOR = new DeviceRgb(207, 106, 11);
+    private static final com.itextpdf.kernel.color.Color SECTIONCOLOR = new DeviceRgb(207, 106, 11);
 
     /**
      * Define the color of the results.
      */
-    private static final com.itextpdf.kernel.color.Color RESULT_COLOR = new DeviceRgb(38, 50, 61);
+    private static final com.itextpdf.kernel.color.Color RESULTCOLOR = new DeviceRgb(38, 50, 61);
 
     /**
      * Define the color of the subsections.
      */
-    private static final com.itextpdf.kernel.color.Color SUB_SECTION_COLOR = new DeviceRgb(11, 136, 207);
+    private static final com.itextpdf.kernel.color.Color SUBSECTIONCOLOR = new DeviceRgb(11, 136, 207);
 
     /**
      * Define the color of the text of the final score.
      */
-    private static final com.itextpdf.kernel.color.Color FINAL_NOTE_COLOR = new DeviceRgb(77, 135, 133);
+    private static final com.itextpdf.kernel.color.Color FINALNOTECOLOR = new DeviceRgb(77, 135, 133);
 
     /**
      * the file with the report information.
@@ -85,18 +85,18 @@ public class PDF {
     /**
      * The icon of the application.
      */
-    private static final String ICON_FORTRAN_ANALYSER
+    private static final String ICONFORTRANANALYSER
             = PDF.class.getResource("fortranAnalyser.png").toString();
 
     /**
      * the title of the document.
      */
-    private static final String TITLE_PDF = "FortranAnalyser: Quality report";
+    private static final String TITLEPDF = "FortranAnalyser: Quality report";
 
     /**
      * the name of the application.
      */
-    private static final String APP_NAME = "FortranAnalyser";
+    private static final String APPNAME = "FortranAnalyser";
 
     /**
      * Method that create the cover from the report document.
@@ -130,11 +130,11 @@ public class PDF {
                         new PdfViewerPreferences().setDisplayDocTitle(true));
         PdfDocumentInfo info = pdf.getDocumentInfo();
 
-        info.setTitle(TITLE_PDF);
+        info.setTitle(TITLEPDF);
 
         info.addCreationDate();
         info.setAuthor(AUTHOR);
-        info.setTitle(TITLE_PDF);
+        info.setTitle(TITLEPDF);
 
         Paragraph par = new Paragraph();
         Date date = new Date();
@@ -146,12 +146,12 @@ public class PDF {
         this.document.add(par);
 
         Paragraph p = new Paragraph();
-        Text title = new Text(APP_NAME);
+        Text title = new Text(APPNAME);
 
-        Image coverImage = new Image(ImageDataFactory.create(ICON_FORTRAN_ANALYSER));
+        Image coverImage = new Image(ImageDataFactory.create(ICONFORTRANANALYSER));
 
         coverImage.getAccessibilityProperties()
-                .setAlternateDescription(APP_NAME);
+                .setAlternateDescription(APPNAME);
         coverImage.setHeight(320);
         coverImage.setWidth(320);
 
@@ -199,7 +199,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(text);
 
-        p.add(t.setFontSize(16).setFontColor(FINAL_NOTE_COLOR));
+        p.add(t.setFontSize(16).setFontColor(FINALNOTECOLOR));
         p.add("\n");
 
         this.document.add(p);
@@ -216,7 +216,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(text);
 
-        p.add(t.setFontSize(16).setFontColor(FINAL_NOTE_COLOR)).setBold();
+        p.add(t.setFontSize(16).setFontColor(FINALNOTECOLOR)).setBold();
         p.add("\n");
 
         this.document.add(p);
@@ -233,7 +233,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text sect = new Text(section);
 
-        p.add(sect.setFontSize(18).setFontColor(SECTION_COLOR));
+        p.add(sect.setFontSize(18).setFontColor(SECTIONCOLOR));
         p.add("\n");
 
         this.document.add(p);
@@ -249,7 +249,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(result);
 
-        p.add(t.setFontSize(12).setFontColor(RESULT_COLOR));
+        p.add(t.setFontSize(12).setFontColor(RESULTCOLOR));
         p.add("\n");
 
         this.document.add(p);
@@ -265,7 +265,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(result);
 
-        p.add(t.setFontSize(12).setFontColor(RESULT_COLOR)).setBold();
+        p.add(t.setFontSize(12).setFontColor(RESULTCOLOR)).setBold();
         p.add("\n");
 
         this.document.add(p);
@@ -284,7 +284,7 @@ public class PDF {
         p.setTextAlignment(TextAlignment.RIGHT);
         Text t = new Text(result);
 
-        p.add(t.setFontSize(18).setFontColor(SUB_SECTION_COLOR));
+        p.add(t.setFontSize(18).setFontColor(SUBSECTIONCOLOR));
         p.add("\n");
 
         this.document.add(p);
@@ -294,7 +294,7 @@ public class PDF {
         Paragraph p = new Paragraph();
         Text t = new Text(result);
 
-        p.add(t.setFontSize(12).setFontColor(RESULT_COLOR)).setBold();
+        p.add(t.setFontSize(12).setFontColor(RESULTCOLOR)).setBold();
         p.add("\n");
 
         this.document.add(p);
@@ -387,9 +387,9 @@ public class PDF {
          * select header color
          */
         if (color == 0) {
-            headerColor = PDF.HEADER_COLOR;
+            headerColor = PDF.HEADERCOLOR;
         } else {
-            headerColor = PDF.HEADER_2_COLOR;
+            headerColor = PDF.HEADER2COLOR;
         }
 
         /**
@@ -515,14 +515,14 @@ public class PDF {
         /**
          * configuration of the left header of the table
          */
-        headerCellLeft = this.configureHeaderCells(messages.getString("headerLeftSummaryTable"), 15, HEADER_COLOR);
+        headerCellLeft = this.configureHeaderCells(messages.getString("headerLeftSummaryTable"), 15, HEADERCOLOR);
         headerCellLeft.setKeepTogether(true);
         table.addHeaderCell(headerCellLeft);
 
         /**
          * configuration of the right header of the table
          */
-        headerCellRight = this.configureHeaderCells(messages.getString("headerRightSummaryTable"), 15, HEADER_COLOR);
+        headerCellRight = this.configureHeaderCells(messages.getString("headerRightSummaryTable"), 15, HEADERCOLOR);
         headerCellRight.setKeepTogether(true);
         table.addHeaderCell(headerCellRight);
 
@@ -539,66 +539,66 @@ public class PDF {
     }
 
     /**
-     * Getter from header_color
+     * Getter from headercolor
      *
-     * @return header_color
+     * @return headercolor
      */
-    public static Color getHEADER_COLOR() {
-        return HEADER_COLOR;
+    public static Color getHEADERCOLOR() {
+        return HEADERCOLOR;
     }
 
     /**
-     * Getter from header_2_color
+     * Getter from header2color
      *
-     * @return header_2_color
+     * @return header2color
      */
-    public static Color getHEADER_2_COLOR() {
-        return HEADER_2_COLOR;
+    public static Color getHEADER2COLOR() {
+        return HEADER2COLOR;
     }
 
     /**
-     * Getter from section_color
+     * Getter from sectioncolor
      *
-     * @return section_color
+     * @return sectioncolor
      */
-    public static Color getSECTION_COLOR() {
-        return SECTION_COLOR;
+    public static Color getSECTIONCOLOR() {
+        return SECTIONCOLOR;
     }
 
     /**
-     * Getter from result_color
+     * Getter from resultcolor
      *
-     * @return result_color
+     * @return resultcolor
      */
-    public static Color getRESULT_COLOR() {
-        return RESULT_COLOR;
+    public static Color getRESULTCOLOR() {
+        return RESULTCOLOR;
     }
 
     /**
-     * Getter from sub_section_color
+     * Getter from subsectioncolor
      *
-     * @return sub_section_color
+     * @return subsectioncolor
      */
-    public static Color getSUB_SECTION_COLOR() {
-        return SUB_SECTION_COLOR;
+    public static Color getSUBSECTIONCOLOR() {
+        return SUBSECTIONCOLOR;
     }
 
     /**
-     * Getter from final_note_color
+     * Getter from finalnotecolor
      *
-     * @return final_note_color
+     * @return finalnotecolor
      */
-    public static Color getFINAL_NOTE_COLOR() {
-        return FINAL_NOTE_COLOR;
+    public static Color getFINALNOTECOLOR() {
+        return FINALNOTECOLOR;
     }
 
     /**
-     * Getter from icon_fortran_analyser
+     * Getter from iconfortrananalyser
      *
      * @return icon
      */
-    public static String getICON_FORTRAN_ANALYSER() {
-        return ICON_FORTRAN_ANALYSER;
+    public static String getICONFORTRANANALYSER() {
+        return ICONFORTRANANALYSER;
     }
 
 }

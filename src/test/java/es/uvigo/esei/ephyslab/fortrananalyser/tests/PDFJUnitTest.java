@@ -46,37 +46,37 @@ public class PDFJUnitTest {
     // public void hello() {}
     
     @Test
-    public void testHEADER_COLOR(){
-        assertEquals(new DeviceRgb(0, 130, 130), PDF.getHEADER_COLOR());
+    public void testHEADERCOLOR(){
+        assertEquals(new DeviceRgb(0, 130, 130), PDF.getHEADERCOLOR());
     }
     
     @Test
-    public void testHEADER_2_COLOR(){
-        assertEquals(new DeviceRgb(0, 69, 69), PDF.getHEADER_2_COLOR());
+    public void testHEADER2COLOR(){
+        assertEquals(new DeviceRgb(0, 69, 69), PDF.getHEADER2COLOR());
     }
     
     @Test
-    public void testFinal_note_color(){
-        assertEquals(new DeviceRgb(77, 135, 133), PDF.getFINAL_NOTE_COLOR());
+    public void testFinalnotecolor(){
+        assertEquals(new DeviceRgb(77, 135, 133), PDF.getFINALNOTECOLOR());
     }
     
     @Test
     public void testIcon(){
-        assertEquals(PDF.class.getResource("fortranAnalyser.png").toString(), PDF.getICON_FORTRAN_ANALYSER());
+        assertEquals(PDF.class.getResource("fortranAnalyser.png").toString(), PDF.getICONFORTRANANALYSER());
     }
     
     @Test
-    public void testResult_COLOR(){
-        assertEquals(new DeviceRgb(38, 50, 61), PDF.getRESULT_COLOR());
+    public void testResultCOLOR(){
+        assertEquals(new DeviceRgb(38, 50, 61), PDF.getRESULTCOLOR());
     }
     
     @Test
-    public void testSection_COLOR(){
-        assertEquals(new DeviceRgb(207, 106, 11), PDF.getSECTION_COLOR());
+    public void testSectionCOLOR(){
+        assertEquals(new DeviceRgb(207, 106, 11), PDF.getSECTIONCOLOR());
     }
     
     @Test
-    public void testSub_section_COLOR(){
-        assertEquals(new DeviceRgb(11, 136, 207), PDF.getSUB_SECTION_COLOR());
+    public void testSubsectionCOLOR(){
+        assertEquals(new DeviceRgb(11, 136, 207), PDF.getSUBSECTIONCOLOR());
     }
 }

@@ -265,7 +265,7 @@ public class TasksBarJUnitTests {
     @Test
     public void testDEST_PATH() {
         String expected = System.getProperty("user.home") + "/temp";
-        String obtain = TasksBar.getDEST_PATH();
+        String obtain = TasksBar.getDESTPATH();
 
         assertEquals(expected, obtain);
     }

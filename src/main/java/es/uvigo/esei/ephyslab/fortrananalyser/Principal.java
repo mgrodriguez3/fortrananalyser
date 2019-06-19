@@ -37,10 +37,16 @@ public class Principal {
         } else {
 
             if (args.length == 3) {
-                Window window = new Window(args[0], args[1], args[2]);
+
+                String language = args[0];
+                String path = args[1];
+                String fileName = args[2];
+                Window w;
+                w = new Window(language, path, fileName);
+
             } else {
-                throw new Exception("bad number of argument. Check README.md file \n");
-                
+                throw new EditableException(111);
+
             }
 
         }

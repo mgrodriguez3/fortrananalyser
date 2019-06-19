@@ -11,6 +11,7 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.Resource;
 
 /**
  * This class create a NoGUI and support the logic part of the application
@@ -20,11 +21,11 @@ import java.util.logging.Logger;
  * @version 1.9.2
  */
 public class NoGUI {
-
+    
     /**
      * the path of the destination of the file
      */
-    public static final String DEST_PATH = "/var/www/html/results/temp";
+    public static final String DEST_PATH = System.getProperty("user.home") + "/temp";
     
     /**
      * the path of the directory to analyse.
@@ -120,12 +121,14 @@ public class NoGUI {
      * corresponding position in the scores array of the score obtain on each
      * metric
      */
+    @Resource
     private static final int[] TABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     
     /**
      * corresponding position in the finalScores array of the scores obtain on
      * each metric
      */
+    @Resource
     private static final int[] FINALTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
 
     /**
@@ -572,8 +575,8 @@ public class NoGUI {
      */
     private boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
 
-        String chain = "";
-        String previousChain = "";
+        String line = "";
+        String previousLine = "";
         File file = new File(filePath);
         int numSubroutines = 0;
         int totalSubroutines = 0;
@@ -581,24 +584,24 @@ public class NoGUI {
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
+            while ((line = b.readLine()) != null) {
 
-                chain = chain.toUpperCase();
+                line = line.toUpperCase();
 
                 //check if it is a declaration of a function
-                if (!chain.contains("!")
-                        && !chain.contains("END SUBROUTINE")
-                        && chain.contains("SUBROUTINE")) {
+                if (!line.contains("!")
+                        && !line.contains("END SUBROUTINE")
+                        && line.contains("SUBROUTINE")) {
                     totalSubroutines++;
 
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (previousChain.contains("!")) {
+                    if (previousLine.contains("!")) {
                         numSubroutines++;
                         this.commentedElementsNoGUI++;
                     }
                 }
-                previousChain = chain;
+                previousLine = line;
             }
         }
         return totalSubroutines == numSubroutines;
