@@ -36,6 +36,7 @@ public class EditableException extends Exception{
                 
             default: 
                 errorMessage="Generic Exception Error \n";
+                break;
         }
          
         return errorMessage;
