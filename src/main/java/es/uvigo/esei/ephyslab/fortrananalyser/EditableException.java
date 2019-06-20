@@ -34,6 +34,10 @@ public class EditableException extends Exception{
                 errorMessage="bad number of argument. Check README.md file \n";
                 break;
                 
+            case 222: 
+                errorMessage="Input or Output Error \n";
+                break;
+                
             default: 
                 errorMessage="Generic Exception Error \n";
                 break;

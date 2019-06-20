@@ -40,9 +40,8 @@ public class Principal {
 
                 String language = args[0];
                 String path = args[1];
-                String fileName = args[2];
-                Window w;
-                w = new Window(language, path, fileName);
+                String outputFileName = args[2];
+                Window w = new Window(language, path, outputFileName);
 
             } else {
                 throw new EditableException(111);
