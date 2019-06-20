@@ -24,23 +24,18 @@ public class EditableException extends Exception{
     @Override
     public String getMessage(){
          
-        String mensaje="";
+        String errorMessage="";
          
         switch(errorCode){
             case 111:
-                mensaje="bad number of argument. Check README.md file \n";
+                errorMessage="bad number of argument. Check README.md file \n";
                 break;
-            case 222:
-                mensaje="Error, el numero esta entre 11 y 20";
-                break;
-            case 333:
-                mensaje="Error, el numero esta entre 21 y 30";
-                break;
+            default: 
+                errorMessage="Default Error Message \n";
         }
          
-        return mensaje;
+        return errorMessage;
          
     }
-    
     
 }
