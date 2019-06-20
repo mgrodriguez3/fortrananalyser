@@ -13,6 +13,9 @@ package es.uvigo.esei.ephyslab.fortrananalyser;
  */
 public class EditableException extends Exception{
     
+    /**
+     * code number of the exception error
+     */
     private final int errorCode;
      
     public EditableException(int codigoError){
@@ -24,23 +27,19 @@ public class EditableException extends Exception{
     @Override
     public String getMessage(){
          
-        String mensaje="";
+        String errorMessage="";
          
         switch(errorCode){
             case 111:
-                mensaje="bad number of argument. Check README.md file \n";
+                errorMessage="bad number of argument. Check README.md file \n";
                 break;
-            case 222:
-                mensaje="Error, el numero esta entre 11 y 20";
-                break;
-            case 333:
-                mensaje="Error, el numero esta entre 21 y 30";
-                break;
+                
+            default: 
+                errorMessage="Generic Exception Error \n";
         }
          
-        return mensaje;
+        return errorMessage;
          
     }
-    
     
 }
