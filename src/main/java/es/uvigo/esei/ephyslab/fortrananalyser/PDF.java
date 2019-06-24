@@ -382,6 +382,7 @@ public class PDF {
         Cell leftCell;
         Cell rightCell;
         com.itextpdf.kernel.color.Color headerColor;
+        String[] row = {"implicitNone_table", "ratio_table", "useNestedLoops_table", "CommentsBeginning_table", "CommentsVariables_table", "CommentsFunctions_table", "CommentsSubroutines_table", "CommentsControlStructures_table", "UseExit_table", "UseCycle_table"};
 
         /**
          * select header color
@@ -404,95 +405,13 @@ public class PDF {
         headerCellRight = this.configureHeaderCells(messages.getString("headerRight_table"), size, headerColor);
         table.addHeaderCell(headerCellRight);
 
-        /**
-         * 1. Implicit None
-         */
-        leftCell = this.addLeftCell(messages.getString("implicitNone_table"));
-        table.addCell(leftCell);
+        for (int i = 0; i < row.length; i++) {
+            leftCell = this.addLeftCell(messages.getString(row[i]));
+            table.addCell(leftCell);
 
-        rightCell = this.addRightCell(scores.get(position[0]));
-        table.addCell(rightCell);
-
-        /**
-         * 2. Ratio
-         */
-        leftCell = this.addLeftCell(messages.getString("ratio_table"));
-        table.addCell(leftCell);
-
-        rightCell = this.addRightCell(scores.get(position[1]));
-        table.addCell(rightCell);
-
-        /**
-         * 3. Nested Loops
-         */
-        leftCell = this.addLeftCell(messages.getString("useNestedLoops_table"));
-        table.addCell(leftCell);
-
-        rightCell = this.addRightCell(scores.get(position[2]));
-        table.addCell(rightCell);
-
-        /**
-         * 4. Comments beginning
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsBeginning_table"));
-        table.addCell(leftCell);
-
-        rightCell = this.addRightCell(scores.get(position[3]));
-        table.addCell(rightCell);
-
-        /**
-         * 5. Comments variables
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsVariables_table"));
-        table.addCell(leftCell);
-
-        rightCell = this.addRightCell(scores.get(position[4]));
-        table.addCell(rightCell);
-
-        /**
-         * 6. Comments in functions
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsFunctions_table"));
-        table.addCell(leftCell);
-
-        rightCell = this.addRightCell(scores.get(position[5]));
-        table.addCell(rightCell);
-
-        /**
-         * 7. Comments subroutines
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsSubroutines_table"));
-        table.addCell(leftCell);
-
-        rightCell = this.addRightCell(scores.get(position[6]));
-        table.addCell(rightCell);
-
-        /**
-         * 8. Comments control structures
-         */
-        leftCell = this.addLeftCell(messages.getString("CommentsControlStructures_table"));
-        table.addCell(leftCell);
-
-        rightCell = this.addRightCell(scores.get(position[7]));
-        table.addCell(rightCell);
-
-        /**
-         * 9. Use sentence EXIT
-         */
-        leftCell = this.addLeftCell(messages.getString("UseExit_table"));
-        table.addCell(leftCell);
-
-        rightCell = this.addRightCell(scores.get(position[8]));
-        table.addCell(rightCell);
-
-        /**
-         * 10. Use sentence CYCLE
-         */
-        leftCell = this.addLeftCell(messages.getString("UseCycle_table"));
-        table.addCell(leftCell);
-
-        rightCell = this.addRightCell(scores.get(position[9]));
-        table.addCell(rightCell);
+            rightCell = this.addRightCell(scores.get(position[i]));
+            table.addCell(rightCell);
+        }
 
         this.document.add(table);
 

@@ -658,8 +658,8 @@ public class NoGUI {
      */
     private boolean analyseGoodCommentFunctions(String filePath) throws IOException {
 
-        String chain = "";
-        String previousChain = "";
+        String characters = "";
+        String previousCharacters = "";
         File file = new File(filePath);
         int numFunction = 0;
         int totalFunctions = 0;
@@ -667,23 +667,23 @@ public class NoGUI {
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
+            while ((characters = b.readLine()) != null) {
 
-                chain = chain.toUpperCase();
+                characters = characters.toUpperCase();
                 //check if it is a declaration of a function
-                if (!chain.contains("!")
-                        && !chain.contains("END FUNCTION")
-                        && chain.contains("FUNCTION")) {
+                if (!characters.contains("!")
+                        && !characters.contains("END FUNCTION")
+                        && characters.contains("FUNCTION")) {
                     totalFunctions++;
 
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (previousChain.contains("!")) {
+                    if (previousCharacters.contains("!")) {
                         numFunction++;
                         this.commentedElementsNoGUI++;
                     }
                 }
-                previousChain = chain;
+                previousCharacters = characters;
             }
         }
         return totalFunctions == numFunction;
