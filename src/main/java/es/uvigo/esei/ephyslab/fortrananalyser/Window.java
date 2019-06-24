@@ -47,6 +47,16 @@ public class Window extends JFrame implements ActionListener {
     static final String DEFAULT_LANGUAGE = "en";
 
     /**
+     * other available languages to the user interface.
+     */
+    static final String[] AVAILABLE_LANGUAGES = {"es", "fr", "gl", "en"};
+
+    /**
+     * other available countries
+     */
+    static final String[] AVAILABLE_COUNTRIES = {"ES", "FR", "ES", "GB"};
+
+    /**
      * the name of the package where the messagesBundle i18n are.
      */
     static final String BUNDLE = "es.uvigo.esei.ephyslab.i18n.bundle.MessagesBundle";
@@ -139,6 +149,7 @@ public class Window extends JFrame implements ActionListener {
 
     /**
      * Constructor for NoGUI usage
+     *
      * @param language selected
      * @param pathToAnalyse path to analyse
      * @param fileName name of the output file
@@ -269,27 +280,40 @@ public class Window extends JFrame implements ActionListener {
 
         //In the language menu, a language is selected
         if (e.getSource().equals(spanish)) {
-            this.changeLanguage("es");
-            this.reConfigureButtons();
-            this.reConfigureMenuBar();
+            if (!this.currentLocale.getLanguage().equals("es")) {
+                
+                this.changeLanguage("es");
+                this.reConfigureButtons();
+                this.reConfigureMenuBar();
+            }
+
         }
 
         if (e.getSource().equals(french)) {
-            this.changeLanguage("fr");
-            this.reConfigureButtons();
-            this.reConfigureMenuBar();
+            if (!this.currentLocale.getLanguage().equals("fr")) {
+                
+                this.changeLanguage("fr");
+                this.reConfigureButtons();
+                this.reConfigureMenuBar();
+            }
         }
 
         if (e.getSource().equals(english)) {
-            this.changeLanguage("en");
-            this.reConfigureButtons();
-            this.reConfigureMenuBar();
+            if (!this.currentLocale.getLanguage().equals("en")) {
+                
+                this.changeLanguage("en");
+                this.reConfigureButtons();
+                this.reConfigureMenuBar();
+            }
         }
 
         if (e.getSource().equals(galician)) {
-            this.changeLanguage("gl");
-            this.reConfigureButtons();
-            this.reConfigureMenuBar();
+            if (!this.currentLocale.getLanguage().equals("gl")) {
+                
+                this.changeLanguage("gl");
+                this.reConfigureButtons();
+                this.reConfigureMenuBar();
+            }
         }
 
     }
@@ -315,71 +339,14 @@ public class Window extends JFrame implements ActionListener {
      */
     private void changeLanguage(String lang) {
 
-        if (!this.currentLocale.getLanguage().equals(lang)) {
-            /**
-             * configuring the language
-             */
-            switch (lang) {
+            for (int i = 0; i < AVAILABLE_LANGUAGES.length; i++) {
 
-                /**
-                 * spanish from Spain
-                 */
-                case "es":
-                    if (!this.currentLocale.getLanguage().equals("es")) {
-
-                        //translate the text and update the value of strings in the messages variable
-                        currentLocale = new Locale("es", "ES");
-                        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                    }
-
-                    break;
-                /**
-                 * french from France
-                 */
-                case "fr":
-                    if (!this.currentLocale.getLanguage().equals("fr")) {
-
-                        //translate the text and update the value of strings in the messages variable
-                        this.currentLocale = new Locale("fr", "FR");
-                        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                    }
-                    break;
-
-                /**
-                 * Galician from Spain
-                 */
-                case "gl":
-                    if (!this.currentLocale.getLanguage().equals("gl")) {
-
-                        //translate the text and update the value of strings in the messages variable
-                        this.currentLocale = new Locale("gl", "ES");
-                        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                    }
-                    break;
-
-                /**
-                 * english from United Kingdom
-                 */
-                case "en":
-                    if (!this.currentLocale.getLanguage().equals("en")) {
-
-                        //translate the text and update the value of strings in the messages variable
-                        this.currentLocale = new Locale("en", "GB");
-                        this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                    }
-                    break;
-
-                default:
-
-                    //translate the text and update the value of strings in the messages variable
-                    this.currentLocale = new Locale("en", "GB");
+                if (AVAILABLE_LANGUAGES[i].equals(lang)) {
+                    currentLocale = new Locale(AVAILABLE_LANGUAGES[i], AVAILABLE_COUNTRIES[i]);
                     this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-
                     break;
+                }
             }
-
-        }
-
     }
 
     /**

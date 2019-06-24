@@ -293,13 +293,6 @@ public class TasksBarJUnitTests {
     }
 
     @Test
-    public void testInitializeVariables() {
-
-        TasksBar.scanFilesInDirectory("files/", new ArrayList<>());
-
-    }
-
-    @Test
     public void testGetPathFromFile() {
 
         assertEquals(System.getProperty("user.dir") + "/target/test-classes/files", TasksBar.getPathFromFile(file));

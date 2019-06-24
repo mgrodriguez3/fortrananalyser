@@ -50,7 +50,7 @@ public class NoGUIJUnitTest {
     @Test
     public void testDEST_PATH(){
         String path =System.getProperty("user.home") + "/temp";
-        assertEquals(path, NoGUI.DEST_PATH);
+        assertEquals(NoGUI.DEST_PATH, path);
     }
     
     @Test

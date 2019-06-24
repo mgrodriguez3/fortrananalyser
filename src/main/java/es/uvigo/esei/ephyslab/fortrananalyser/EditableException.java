@@ -28,21 +28,14 @@ public class EditableException extends Exception{
     public String getMessage(){
          
         String errorMessage="";
-         
-        switch(errorCode){
-            case 111:
-                errorMessage="bad number of argument. Check README.md file \n";
-                break;
-                
-            case 222: 
-                errorMessage="Input or Output Error \n";
-                break;
-                
-            default: 
-                errorMessage="Generic Exception Error \n";
-                break;
+        
+        if(errorCode==111){
+            errorMessage="bad number of argument. Check README.md file \n";
         }
-         
+        else{
+            errorMessage="Generic Exception Error \n";
+        }
+                  
         return errorMessage;
          
     }
