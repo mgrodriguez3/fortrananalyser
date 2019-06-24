@@ -1217,8 +1217,9 @@ public final class TasksBar extends
      * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
-        String chain = "";
-        String previousChain = "";
+        
+        String rowLine = "";
+        String previousRowLine = "";
         File file = new File(filePath);
         int variablesCommented = 0;
         int totalVariables = 0;
@@ -1226,23 +1227,23 @@ public final class TasksBar extends
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
-            while ((chain = b.readLine()) != null) {
+            while ((rowLine = b.readLine()) != null) {
 
                 //check if the chain is a declaration of a variable and
                 //it is not a comment 
-                if (chain.contains("::")) {
+                if (rowLine.contains("::")) {
 
                     totalVariables++;
 
                     //check if the next line is a comment or the previous line
                     //is a comment
-                    if (previousChain.contains("!")) {
+                    if (previousRowLine.contains("!")) {
                         variablesCommented++;
                         commentedElements++;
                     }
 
                 }
-                previousChain = chain;
+                previousRowLine = rowLine;
             }
         }
         return totalVariables == variablesCommented;

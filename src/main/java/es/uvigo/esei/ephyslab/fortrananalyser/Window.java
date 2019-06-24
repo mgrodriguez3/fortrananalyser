@@ -250,7 +250,7 @@ public class Window extends JFrame implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-
+       
         //button analyse is pulsed
         if (e.getSource().equals(buttonanalyse)) {
             if (!this.box.getText().isEmpty()) {
@@ -269,15 +269,13 @@ public class Window extends JFrame implements ActionListener {
         }
 
         //button file explorer is pulsed
-        if (e.getSource().equals(buttonFileExplorer)) {
-            int returnVal = this.fc.showOpenDialog(Window.this);
-
-            if (returnVal == JFileChooser.APPROVE_OPTION) {
+        if (e.getSource().equals(buttonFileExplorer) && this.fc.showOpenDialog(Window.this)==JFileChooser.APPROVE_OPTION) {
+            
                 File file = this.fc.getSelectedFile();
                 this.box.setText(file.getAbsolutePath());
-            }
+            
         }
-
+        
         //In the language menu, a language is selected
         if (e.getSource().equals(spanish) && !this.currentLocale.getLanguage().equals("es")) {
 
