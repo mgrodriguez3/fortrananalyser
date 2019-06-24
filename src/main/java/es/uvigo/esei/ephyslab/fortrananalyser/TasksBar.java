@@ -33,7 +33,6 @@ import javax.swing.UIManager;
 public final class TasksBar extends
         SwingWorker<Void, Integer> {
 
-    
     /**
      * the extension file to search.
      */
@@ -435,7 +434,7 @@ public final class TasksBar extends
                 } else {
                     auxNote = partialCalification / this.totalNumLines;
                 }
-                
+
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
             }
 
@@ -1380,7 +1379,6 @@ public final class TasksBar extends
         }
     }
 
-    
     public static String getDEST() {
         return DEST;
     }
@@ -1412,8 +1410,5 @@ public final class TasksBar extends
     public static String getEXTENSION3() {
         return EXTENSION3;
     }
-    
-    
-    
 
 }

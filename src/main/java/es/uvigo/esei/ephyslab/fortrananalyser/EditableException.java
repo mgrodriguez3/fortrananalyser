@@ -11,33 +11,31 @@ package es.uvigo.esei.ephyslab.fortrananalyser;
  * @author Michael García Rodríguez
  * @version 1.9.7
  */
-public class EditableException extends Exception{
-    
+public class EditableException extends Exception {
+
     /**
      * code number of the exception error
      */
     private final int errorCode;
-     
-    public EditableException(int codigoError){
+
+    public EditableException(int codigoError) {
         super();
-        this.errorCode=codigoError;
+        this.errorCode = codigoError;
     }
-     
-    
+
     @Override
-    public String getMessage(){
-         
-        String errorMessage="";
-        
-        if(errorCode==111){
-            errorMessage="bad number of argument. Check README.md file \n";
+    public String getMessage() {
+
+        String errorMessage = "";
+
+        if (errorCode == 111) {
+            errorMessage = "bad number of argument. Check README.md file \n";
+        } else {
+            errorMessage = "Generic Exception Error \n";
         }
-        else{
-            errorMessage="Generic Exception Error \n";
-        }
-                  
+
         return errorMessage;
-         
+
     }
-    
+
 }

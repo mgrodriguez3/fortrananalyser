@@ -47,8 +47,6 @@ public class Principal {
                 throw new EditableException(111);
 
             }
-
         }
-
     }
 }

@@ -279,41 +279,36 @@ public class Window extends JFrame implements ActionListener {
         }
 
         //In the language menu, a language is selected
-        if (e.getSource().equals(spanish)) {
-            if (!this.currentLocale.getLanguage().equals("es")) {
-                
-                this.changeLanguage("es");
-                this.reConfigureButtons();
-                this.reConfigureMenuBar();
-            }
+        if (e.getSource().equals(spanish) && !this.currentLocale.getLanguage().equals("es")) {
+
+            this.changeLanguage("es");
+            this.reConfigureButtons();
+            this.reConfigureMenuBar();
 
         }
 
-        if (e.getSource().equals(french)) {
-            if (!this.currentLocale.getLanguage().equals("fr")) {
-                
-                this.changeLanguage("fr");
-                this.reConfigureButtons();
-                this.reConfigureMenuBar();
-            }
+        if (e.getSource().equals(french) && !this.currentLocale.getLanguage().equals("fr")) {
+
+            this.changeLanguage("fr");
+            this.reConfigureButtons();
+            this.reConfigureMenuBar();
+
         }
 
-        if (e.getSource().equals(english)) {
-            if (!this.currentLocale.getLanguage().equals("en")) {
-                
-                this.changeLanguage("en");
-                this.reConfigureButtons();
-                this.reConfigureMenuBar();
-            }
+        if (e.getSource().equals(english) && !this.currentLocale.getLanguage().equals("en")) {
+
+            this.changeLanguage("en");
+            this.reConfigureButtons();
+            this.reConfigureMenuBar();
+
         }
 
-        if (e.getSource().equals(galician)) {
-            if (!this.currentLocale.getLanguage().equals("gl")) {
-                
-                this.changeLanguage("gl");
-                this.reConfigureButtons();
-                this.reConfigureMenuBar();
-            }
+        if (e.getSource().equals(galician) && !this.currentLocale.getLanguage().equals("gl")) {
+
+            this.changeLanguage("gl");
+            this.reConfigureButtons();
+            this.reConfigureMenuBar();
+
         }
 
     }
@@ -339,14 +334,14 @@ public class Window extends JFrame implements ActionListener {
      */
     private void changeLanguage(String lang) {
 
-            for (int i = 0; i < AVAILABLE_LANGUAGES.length; i++) {
+        for (int i = 0; i < AVAILABLE_LANGUAGES.length; i++) {
 
-                if (AVAILABLE_LANGUAGES[i].equals(lang)) {
-                    currentLocale = new Locale(AVAILABLE_LANGUAGES[i], AVAILABLE_COUNTRIES[i]);
-                    this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
-                    break;
-                }
+            if (AVAILABLE_LANGUAGES[i].equals(lang)) {
+                currentLocale = new Locale(AVAILABLE_LANGUAGES[i], AVAILABLE_COUNTRIES[i]);
+                this.messages = ResourceBundle.getBundle(Window.BUNDLE, currentLocale);
+                break;
             }
+        }
     }
 
     /**
