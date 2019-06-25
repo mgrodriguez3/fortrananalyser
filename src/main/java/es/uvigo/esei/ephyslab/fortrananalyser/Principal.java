@@ -14,14 +14,13 @@ import javax.swing.SwingUtilities;
 public class Principal {
 
     /**
-     *
-     * @param args arguments used when the programme is launched:
-     *
-     * In case that there are no arguments, the user interface is launched; In
-     * case that there are arguments, the user interface is not launched.
-     * @throws java.lang.Exception
+     * @param args arguments used when the programme is launched: In case that
+     * there are no arguments, the user interface is launched; In case that
+     * there are arguments, the user interface is not launched.
+     * @throws es.uvigo.esei.ephyslab.fortrananalyser.EditableException 
+     * exception throwed in case the number of arguments are wrong
      */
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) throws EditableException {
         org.apache.log4j.BasicConfigurator.configure();
 
         if (args.length == 0) {
