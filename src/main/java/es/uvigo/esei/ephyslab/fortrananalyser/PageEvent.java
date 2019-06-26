@@ -16,7 +16,7 @@ import com.itextpdf.layout.property.TextAlignment;
  * This class manage the event of each page in a document.
  *
  * @author Michael García Rodríguez
- * @version 1.9.2
+ * @version 1.9.7
  */
 public class PageEvent implements IEventHandler {
 

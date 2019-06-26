@@ -18,7 +18,7 @@ import javax.annotation.Resource;
  * without graphical intercface, after that it generate the quallity report.
  *
  * @author Michael García Rodríguez
- * @version 1.9.2
+ * @version 1.9.7
  */
 public class NoGUI {
     

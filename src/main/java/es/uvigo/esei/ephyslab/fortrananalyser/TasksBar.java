@@ -28,7 +28,7 @@ import javax.swing.UIManager;
  * generate the quallity report
  *
  * @author Michael García Rodríguez
- * @version 1.9.2
+ * @version 1.9.7
  */
 public final class TasksBar extends
         SwingWorker<Void, Integer> {
@@ -344,12 +344,7 @@ public final class TasksBar extends
             percentage += 1.0;
             publish((int) percentage);
 
-            /**
-             * In case the temp folder doesn't exits
-             */
-            if (!Paths.get(TasksBar.DEST).toFile().exists()) {
-                new File(TasksBar.DESTPATH).mkdirs();
-            }
+            checkTempFileExist();                 
 
             pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
 
@@ -429,9 +424,7 @@ public final class TasksBar extends
                 /**
                  * Checking if there are not files analysed
                  */
-                if (this.totalNumLines == 0) {
-                    auxNote = 0.0;
-                } else {
+                if (this.totalNumLines != 0) {
                     auxNote = partialCalification / this.totalNumLines;
                 }
 
@@ -549,6 +542,17 @@ public final class TasksBar extends
         } catch (Exception e) {
             return "";
         }
+    }
+    
+    /**
+     * Check if the temp directory exists. If it not exists, this method create
+     * it.
+     */
+    private static void checkTempFileExist(){
+        
+        if (!Paths.get(TasksBar.DEST).toFile().exists()) {
+                new File(TasksBar.DESTPATH).mkdirs();
+            }
     }
 
     /**
