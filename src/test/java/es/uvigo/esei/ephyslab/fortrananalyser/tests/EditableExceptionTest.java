@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
 
 /**
  *
- * @author miki
+ * @author Michael García Rodríguez
  */
 public class EditableExceptionTest {
 

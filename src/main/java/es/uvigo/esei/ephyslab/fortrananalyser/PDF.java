@@ -38,7 +38,7 @@ import java.util.ResourceBundle;
  * This class create the document PDF with the quality report
  *
  * @author Michael García Rodríguez
- * @version 1.9.7
+ * @version 1.9.8
  */
 public class PDF {
 

@@ -28,7 +28,7 @@ import javax.swing.UIManager;
  * generate the quallity report
  *
  * @author Michael García Rodríguez
- * @version 1.9.7
+ * @version 1.9.8
  */
 public final class TasksBar extends
         SwingWorker<Void, Integer> {
