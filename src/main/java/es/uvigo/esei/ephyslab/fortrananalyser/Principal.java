@@ -1,8 +1,5 @@
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 
 /**
@@ -25,13 +22,10 @@ public class Principal {
 
         if (args.length == 0) {
             SwingUtilities.invokeLater(() -> {
-                Window w;
-                try {
-                    w = new Window();
-                    w.setVisible(true);
-                } catch (IOException ex) {
-                    Logger.getLogger(Principal.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                MainWindow mw;
+                mw = new MainWindow();
+                mw.setVisible(true);
+                
             });
         } else {
 
@@ -41,11 +35,10 @@ public class Principal {
                 String path = args[1];
                 String outputFileName = args[2];
 
-                new Window(language, path, outputFileName);
+                new MainWindow(language, path, outputFileName);
 
             } else {
                 throw new EditableException(111);
-
             }
         }
     }

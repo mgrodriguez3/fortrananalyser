@@ -1,7 +1,5 @@
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
-import java.awt.Color;
-import java.awt.Desktop;
 import java.awt.FlowLayout;
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,13 +13,9 @@ import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.SwingWorker;
-import javax.swing.UIManager;
 
 /**
  * This class create a taskBar and support the logic part of the application. it
@@ -86,19 +80,14 @@ public final class TasksBar extends
     private JFrame taskbar;
 
     /**
-     * the progressbar of the taskbar.
-     */
-    private JProgressBar progreso;
-
-    /**
      * the panel where is the progressbar.
      */
     private JPanel pane;
 
     /**
-     * the window of the progressbar.
+     * The main window of the GUI
      */
-    private Window w;
+    private MainWindow mw;
 
     /**
      * the path of the directory to analyse.
@@ -217,34 +206,21 @@ public final class TasksBar extends
 
     /**
      * Constructor of the class with GUI
-     *
-     * @param w the iframe
+     * 
+     * @param mw the iframe
      * @param path the path of file
      * @param messages all strings for build the report
      */
-    TasksBar(Window w, String path, ResourceBundle messages) {
+    TasksBar(MainWindow mw, String path, ResourceBundle messages) {
 
         initializeVariables();
 
-        this.w = w;
+        this.mw = mw;
         this.messages = messages;
-        this.taskbar = new JFrame();
         this.pane = new JPanel();
         this.path = path;
 
         this.pane.setLayout(new FlowLayout());
-        this.progreso = new JProgressBar(0, 100);
-        this.progreso.setValue(0);
-        this.progreso.setStringPainted(true);
-        this.pane.add(progreso);
-        this.pane.setVisible(true);
-
-        this.taskbar.add(this.pane);
-        this.taskbar.pack();
-        this.taskbar.setLocationRelativeTo(null);
-        this.taskbar.setResizable(false);
-        this.taskbar.setVisible(true);
-
     }
 
     /**
@@ -344,7 +320,7 @@ public final class TasksBar extends
             percentage += 1.0;
             publish((int) percentage);
 
-            checkTempFileExist();                 
+            checkTempFileExist();
 
             pdf.createPdf(TasksBar.DEST, this.messages.getLocale());
 
@@ -438,10 +414,11 @@ public final class TasksBar extends
             publish((int) percentage);
 
         } catch (IOException ex) {
-            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        this.w.setEnabled(true);
+        //this.w.setEnabled(true);
+        this.mw.setEnabled(true);
         return null;
     }
 
@@ -474,7 +451,7 @@ public final class TasksBar extends
      */
     @Override
     protected void process(List<Integer> chunks) {
-        progreso.setValue(chunks.get(0));
+        this.mw.setValuejProgressBar1(chunks.get(0));
     }
 
     /**
@@ -484,35 +461,24 @@ public final class TasksBar extends
     @Override
     protected void done() {
 
-        taskbar.setVisible(false);
-        taskbar.dispose();
-
-        UIManager.put("OptionPane.background", Color.white);
-        UIManager.put("Panel.background", Color.white);
-        ImageIcon icon = new ImageIcon(Window.class.getResource("fortranAnalyserIcon.png"));
         long timeStop = System.currentTimeMillis();
-
         timeStop = timeStop - timeStart;
 
-        JOptionPane.showMessageDialog(taskbar, "<html> <span style='color:#007A82'>" + messages.getString("exitMessage") + "</span></html>"
-                + messages.getString("directoryMessage") + "\n" + TasksBar.DEST + "\n"
-                + "\n<html> <span style='color:#cf6a0b'>"
-                + messages.getString("timeMessage") + TasksBar.getDurationAnalyse(timeStop)
-                + "</span></html>\n"
-                + "\n<html> <span style='color:#089650'>" + messages.getString("arithmeticAverage") + String.format(Locale.ROOT, "%.3f", auxNote) + "</span></html>",
-                this.messages.getString("headMessageDialog"), JOptionPane.INFORMATION_MESSAGE, icon);
+        this.mw.getjLabel19().setText("<html> <span style='color:#007A82'>" + getDurationAnalyse(timeStop) + "</span></html>");
+        this.mw.getjLabel20().setText(String.format(Locale.ROOT, "%.3f", auxNote));
+        this.mw.getjLabel21().setText(TasksBar.DEST);
 
-        /**
-         * open the pdf file if it is possible
-         */
-        if (Desktop.isDesktopSupported()) {
-            try {
-                File myFile = new File(TasksBar.DEST);
-                Desktop.getDesktop().open(myFile);
-            } catch (IOException ex) {
-                Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        this.mw.getjLabel15().setVisible(true);
+        this.mw.getjLabel16().setVisible(true);
+        this.mw.getjLabel17().setVisible(true);
+        this.mw.getjLabel18().setVisible(true);
+        this.mw.getjLabel19().setVisible(true);
+        this.mw.getjLabel20().setVisible(true);
+        this.mw.getjLabel21().setVisible(true);
+        this.mw.getjLabel22().setVisible(true);
+        this.mw.getjButton1().setEnabled(true);
+        this.mw.getjButton3().setEnabled(true);
+
     }
 
     /**
@@ -543,16 +509,16 @@ public final class TasksBar extends
             return "";
         }
     }
-    
+
     /**
      * Check if the temp directory exists. If it not exists, this method create
      * it.
      */
-    private static void checkTempFileExist(){
-        
+    private static void checkTempFileExist() {
+
         if (!Paths.get(TasksBar.DEST).toFile().exists()) {
-                new File(TasksBar.DESTPATH).mkdirs();
-            }
+            new File(TasksBar.DESTPATH).mkdirs();
+        }
     }
 
     /**
@@ -1221,7 +1187,7 @@ public final class TasksBar extends
      * @throws IOException in case something wrong with intput/output file
      */
     public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
-        
+
         String rowLine = "";
         String previousRowLine = "";
         File file = new File(filePath);

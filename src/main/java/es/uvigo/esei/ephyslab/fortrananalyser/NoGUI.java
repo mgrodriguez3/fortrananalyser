@@ -297,7 +297,7 @@ public class NoGUI {
             System.exit(1);
 
         } catch (IOException ex) {
-            Logger.getLogger(Window.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
 
     }
