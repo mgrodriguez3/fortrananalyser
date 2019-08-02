@@ -464,7 +464,7 @@ public final class TasksBar extends
         long timeStop = System.currentTimeMillis();
         timeStop = timeStop - timeStart;
 
-        this.mw.getjLabel19().setText("<html> <span style='color:#007A82'>" + getDurationAnalyse(timeStop) + "</span></html>");
+        this.mw.getjLabel19().setText(getDurationAnalyse(timeStop));
         this.mw.getjLabel20().setText(String.format(Locale.ROOT, "%.3f", auxNote));
         this.mw.getjLabel21().setText(TasksBar.DEST);
 
@@ -476,6 +476,7 @@ public final class TasksBar extends
         this.mw.getjLabel20().setVisible(true);
         this.mw.getjLabel21().setVisible(true);
         this.mw.getjLabel22().setVisible(true);
+        this.mw.getjLabel24().setVisible(true);
         this.mw.getjButton1().setEnabled(true);
         this.mw.getjButton3().setEnabled(true);
 

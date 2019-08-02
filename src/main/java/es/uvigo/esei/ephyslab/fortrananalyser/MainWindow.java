@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -33,7 +34,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import javax.swing.Timer;
 
 /**
  *
@@ -61,6 +61,17 @@ public class MainWindow extends javax.swing.JFrame {
      * the path of the license.txt file.
      */
     static final String PATHLICENSE = "/es/uvigo/esei/ephyslab/documents/fortrananalyser/license.pdf";
+
+    /**
+     * the path of the errorpdf.pdf file.
+     */
+    static final String PATHERRORPDF = "/es/uvigo/esei/ephyslab/documents/fortrananalyser/errorpdf.pdf";
+
+    /**
+     * the local path of the quality report file in local home directory of the
+     * current user.
+     */
+    static final String QUALITYREPORT = (System.getProperty("user.home") + "/temp/QualityReport.pdf");
 
     /**
      * other available languages to the user interface.
@@ -275,17 +286,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel22.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                /**
-                 * open the pdf file if it is possible
-                 */
-                if (Desktop.isDesktopSupported()) {
-                    try {
-                        File myFile = new File(System.getProperty("user.home") + "/temp/QualityReport.pdf");
-                        Desktop.getDesktop().open(myFile);
-                    } catch (IOException ex) {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
+                displayPDF(2);
             }
 
             @Override
@@ -323,6 +324,33 @@ public class MainWindow extends javax.swing.JFrame {
                     }
 
                 }
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+
+            }
+        });
+
+        this.jLabel24.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                displayPDF(2);
             }
 
             @Override
@@ -401,6 +429,21 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel16.setText(this.messages.getString("timeResults"));
         this.jLabel17.setText(this.messages.getString("arithmeticAverage"));
         this.jLabel18.setText(this.messages.getString("directoryMessage"));
+        this.jLabel24.setText(this.messages.getString("openFile"));
+        
+        
+        /**
+         * hide labels of the quality report.
+         */
+        this.jLabel15.setVisible(false);
+        this.jLabel16.setVisible(false);
+        this.jLabel17.setVisible(false);
+        this.jLabel18.setVisible(false);
+        this.jLabel19.setVisible(false);
+        this.jLabel20.setVisible(false);
+        this.jLabel21.setVisible(false);
+        this.jLabel22.setVisible(false);
+        this.jLabel24.setVisible(false);
     }
 
     /**
@@ -409,18 +452,29 @@ public class MainWindow extends javax.swing.JFrame {
      * @param num the number to identify the PDF to open: 0 for the user manual;
      * 1 for the license document.
      */
-    private void displayPDF(long num) {
+    private void displayPDF(int num) {
 
         try {
             File myFile;
-            
+
             URL url;
 
-            if (num == 0) {
-                url = getClass().getResource(MainWindow.USERMANUAL + "_" + currentLocale.getLanguage() + ".pdf");
+            switch (num) {
+                case 0:
+                    url = getClass().getResource(MainWindow.USERMANUAL + "_" + currentLocale.getLanguage() + ".pdf");
+                    break;
 
-            } else {
-                url = getClass().getResource(MainWindow.PATHLICENSE);
+                case 1:
+                    url = getClass().getResource(MainWindow.PATHLICENSE);
+                    break;
+
+                case 2:
+                    url = Paths.get(MainWindow.QUALITYREPORT).toUri().toURL();
+                    break;
+
+                default:
+                    url = getClass().getResource(MainWindow.PATHERRORPDF);
+                    break;
 
             }
 
@@ -475,6 +529,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
         jLabel22 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(183, 183, 183));
@@ -655,7 +710,8 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel14.setForeground(new java.awt.Color(128, 19, 25));
         jLabel14.setText("Error message");
 
-        jProgressBar1.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        jProgressBar1.setForeground(new java.awt.Color(61, 143, 199));
+        jProgressBar1.setBorder(null);
         jProgressBar1.setMaximumSize(new java.awt.Dimension(150, 20));
         jProgressBar1.setMinimumSize(new java.awt.Dimension(150, 20));
 
@@ -685,6 +741,9 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel22.setMinimumSize(new java.awt.Dimension(57, 50));
         jLabel22.setPreferredSize(new java.awt.Dimension(50, 50));
 
+        jLabel24.setFont(new java.awt.Font("Ubuntu", 0, 10)); // NOI18N
+        jLabel24.setText("jLabel24");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -697,32 +756,35 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(63, 63, 63)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
                             .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                        .addGap(25, 25, 25))))
+                        .addGap(25, 25, 25))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel24)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel21, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(217, 217, 217)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -761,7 +823,9 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(jLabel18)
                         .addComponent(jLabel21))
                     .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(73, 73, 73))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel24)
+                .addGap(50, 50, 50))
         );
 
         jTextField1.getAccessibleContext().setAccessibleName("panelText1");
@@ -825,7 +889,6 @@ public class MainWindow extends javax.swing.JFrame {
         this.setEnabled(false);
         this.jButton1.setEnabled(false);
         this.jButton3.setEnabled(false);
-        //this.jProgressBar1.setValue(5);
         t.execute();
 
     }
@@ -858,6 +921,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel20.setVisible(false);
         this.jLabel21.setVisible(false);
         this.jLabel22.setVisible(false);
+        this.jLabel24.setVisible(false);
     }
 
     /**
@@ -894,6 +958,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel16.setText(this.messages.getString("timeResults"));
         this.jLabel17.setText(this.messages.getString("arithmeticAverage"));
         this.jLabel18.setText(this.messages.getString("directoryMessage"));
+        this.jLabel24.setText(this.messages.getString("openFile"));
 
         this.fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -961,6 +1026,10 @@ public class MainWindow extends javax.swing.JFrame {
         return jLabel22;
     }
 
+    public JLabel getjLabel24() {
+        return jLabel24;
+    }
+    
     public JButton getjButton1() {
         return jButton1;
     }
@@ -989,6 +1058,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel21;
     private javax.swing.JLabel jLabel22;
     private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
