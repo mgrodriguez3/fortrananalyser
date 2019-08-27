@@ -399,7 +399,7 @@ public class PDF {
         Cell leftCell;
         Cell rightCell;
         com.itextpdf.kernel.color.Color headerColor;
-        String[] row = {"implicitNone_table", "ratio_table", "useNestedLoops_table", "CommentsBeginning_table", "CommentsVariables_table", "CommentsFunctions_table", "CommentsSubroutines_table", "CommentsControlStructures_table", "UseExit_table", "UseCycle_table"};
+        String[] row = {"implicitNone_table", "ratio_table", "useNestedLoops_table", "CommentsBeginning_table", "CommentsVariables_table", "CommentsFunctions_table", "CommentsSubroutines_table", "CommentsControlStructures_table", "UseExit_table", "UseCycle_table", "cyclomaticComplexity"};
 
         /**
          * select header color

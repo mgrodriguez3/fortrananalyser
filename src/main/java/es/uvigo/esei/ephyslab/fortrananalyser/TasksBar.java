@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2019 Michael Garvcía Rodríguez
+ * Copyright (C) 2019 Michael García Rodríguez
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -72,13 +72,13 @@ public final class TasksBar extends
      * corresponding position in the scores array of the score obtain on each
      * metric
      */
-    private static final int[] POSITIONTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9};
+    private static final int[] POSITIONTABLESCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9, 10};
 
     /**
      * corresponding position in the finalScores array of the scores obtain on
      * each metric
      */
-    private static final int[] POSITIONSFINALTABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    private static final int[] POSITIONSFINALTABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
     /**
      * Ends of the loops in Fortran
@@ -216,13 +216,18 @@ public final class TasksBar extends
     private List<File> filesInFolder;
 
     /**
+     * All score from cyclomatic complexity
+     */
+    private ArrayList<Double> cycloScores;
+
+    /**
      * the string resources i18n.
      */
     ResourceBundle messages;
 
     /**
      * Constructor of the class with GUI
-     * 
+     *
      * @param mw the iframe
      * @param path the path of file
      * @param messages all strings for build the report
@@ -275,6 +280,7 @@ public final class TasksBar extends
         this.commentedElements = 0.0;
         this.partialCalification = 0.0;
         this.assesment = 0.0;
+        this.cycloScores = new ArrayList<>();
     }
 
     /**
@@ -317,6 +323,7 @@ public final class TasksBar extends
         this.commentedElements = 0.0;
         this.totalNumLines = 0;
         this.partialCalification = 0.0;
+        this.cycloScores.clear();
 
         PDF pdf;
         int countNumberOfFiles = 0;
@@ -401,6 +408,7 @@ public final class TasksBar extends
             this.scores.add(calculateAverage(this.scoresCommentsControlStructures));
             this.scores.add(calculateAverage(this.scoresExit));
             this.scores.add(calculateAverage(this.scoresCycle));
+            this.scores.add(calculateAverage(this.cycloScores));
 
             /**
              * Check if the software analysed have not Fortran files
@@ -433,7 +441,6 @@ public final class TasksBar extends
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        //this.w.setEnabled(true);
         this.mw.setEnabled(true);
         return null;
     }
@@ -560,6 +567,8 @@ public final class TasksBar extends
         int numSubroutines = analyseNumberSubroutines(pathFile);
         int numVariables = analyseNumberOfDeclaredVariables(pathFile);
         String goodComments = analyseGoodComment(pathFile);
+        CycloComplexity cc = new CycloComplexity();
+        String cycloResult = cc.CalculateComplexitySimpleCalcule(pathFile, this.messages);
 
         this.commentableElements += numFunctions;
         this.commentableElements += numSubroutines;
@@ -694,6 +703,21 @@ public final class TasksBar extends
 
         this.partialCalification += this.assesment * numLines;
 
+        /**
+         * 11. Add the Cyclomatic complexity.
+         */
+        if (!cycloResult.isEmpty()) {
+            result += "\n";
+            result += this.messages.getString("cyclomaticComplexity").toUpperCase();
+            result += "\n\n";
+            result += cycloResult;
+            this.scores.add(calculateAverage(cc.getScoresCC()));
+        }
+        else{
+            
+            this.scores.add(0.0);
+        }
+
         return result;
 
     }
@@ -775,7 +799,7 @@ public final class TasksBar extends
             }
         }
 
-        return (count / 2);
+        return count;
     }
 
     /**
