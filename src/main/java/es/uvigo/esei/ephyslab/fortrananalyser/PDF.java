@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2019 Michael Garvcía Rodríguez
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import com.itextpdf.io.image.ImageDataFactory;
@@ -382,7 +399,7 @@ public class PDF {
         Cell leftCell;
         Cell rightCell;
         com.itextpdf.kernel.color.Color headerColor;
-        String[] row = {"implicitNone_table", "ratio_table", "useNestedLoops_table", "CommentsBeginning_table", "CommentsVariables_table", "CommentsFunctions_table", "CommentsSubroutines_table", "CommentsControlStructures_table", "UseExit_table", "UseCycle_table"};
+        String[] row = {"implicitNone_table", "ratio_table", "useNestedLoops_table", "CommentsBeginning_table", "CommentsVariables_table", "CommentsFunctions_table", "CommentsSubroutines_table", "CommentsControlStructures_table", "UseExit_table", "UseCycle_table", "cyclomaticComplexity"};
 
         /**
          * select header color

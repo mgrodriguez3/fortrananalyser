@@ -1,6 +1,6 @@
                             FortranAnalyser
     
-    Fortran code multi-language static analysis tool for Linux platform.
+    Fortran code multi-language static analysis tool for cross-platform.
     Copyright (C) 2017  Michael García Rodríguez
 
     This program is free software: you can redistribute it and/or modify
