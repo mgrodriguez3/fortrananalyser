@@ -558,6 +558,7 @@ public final class TasksBar extends
         String result = "";
         assesment = 0.0;
         double ratio = 0.0;
+        double avgCyclo = 0.0;
         int numLines = analyseNumberOfLines(pathFile);
         boolean useImplicitNone = analyseUseImplicitNone(pathFile);
         boolean checkNestedLoops = analyseNestedLoops(pathFile);
@@ -711,7 +712,9 @@ public final class TasksBar extends
             result += this.messages.getString("cyclomaticComplexity").toUpperCase();
             result += "\n\n";
             result += cycloResult;
-            this.scores.add(calculateAverage(cc.getScoresCC()));
+            avgCyclo = calculateAverage(cc.getScoresCC());
+            this.cycloScores.add(avgCyclo);
+            this.scores.add(avgCyclo);
         }
         else{
             
@@ -792,8 +795,8 @@ public final class TasksBar extends
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
                 if (!chain.contains("!")
-                        && !chain.contains("END FUNCTION")
-                        && chain.contains("FUNCTION")) {
+                        && !chain.contains("END FUNCTION ")
+                        && chain.contains("FUNCTION ")) {
                     count++;
                 }
             }

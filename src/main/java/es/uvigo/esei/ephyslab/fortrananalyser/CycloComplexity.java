@@ -28,8 +28,8 @@ import java.util.ResourceBundle;
  * @author Michael García Rodríguez
  */
 public class CycloComplexity {
-    
-    private ArrayList<Double> scoresCC;
+
+    private final ArrayList<Double> scoresCC;
 
     /**
      * empty constructor.
@@ -52,6 +52,7 @@ public class CycloComplexity {
 
         String chain = "";
         String result = "";
+        String nameFunctSub = "";
         int cc = 1;
         this.scoresCC.clear();
         boolean method = false;
@@ -62,14 +63,11 @@ public class CycloComplexity {
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
-                if (!chain.contains("!")
-                        && (!chain.contains("END FUNCTION")
-                        && chain.contains("FUNCTION")
-                        || !chain.contains("END SUBROUTINE")
-                        && chain.contains("SUBROUTINE"))
-                        && !method) {
 
-                    result += chain + ": ";
+                if (!chain.contains("!")
+                        && ((!chain.contains("END FUNCTION") && chain.contains("FUNCTION ")) || (!chain.contains("END SUBROUTINE") && chain.contains("SUBROUTINE ")))
+                        && !method) {
+                    nameFunctSub = chain;
                     method = true;
                 }
 
@@ -91,7 +89,7 @@ public class CycloComplexity {
 
                     if (!chain.contains("!") && (chain.contains("END FUNCTION") || chain.contains("END SUBROUTINE"))) {
 
-                        result += cc;
+                        result += nameFunctSub + ": " + cc;
                         result += "\n";
                         this.scoresCC.add(new Double(cc));
                         cc = 1;
@@ -109,6 +107,4 @@ public class CycloComplexity {
     public ArrayList<Double> getScoresCC() {
         return scoresCC;
     }
-    
-    
 }
