@@ -48,7 +48,7 @@ public class CycloComplexity {
      * @return the string with the result
      * @throws java.io.IOException in case that file is not opened.
      */
-    public String CalculateComplexitySimpleCalcule(String path, ResourceBundle messages) throws IOException {
+    public String calculateComplexitySimpleCalcule(String path, ResourceBundle messages) throws IOException {
 
         String chain = "";
         String result = "";

@@ -91,11 +91,6 @@ public final class TasksBar extends
     private static final String ARROW = "\n\t--> ";
 
     /**
-     * the frame that represent the taskbar.
-     */
-    private JFrame taskbar;
-
-    /**
      * the panel where is the progressbar.
      */
     private JPanel pane;
@@ -569,7 +564,7 @@ public final class TasksBar extends
         int numVariables = analyseNumberOfDeclaredVariables(pathFile);
         String goodComments = analyseGoodComment(pathFile);
         CycloComplexity cc = new CycloComplexity();
-        String cycloResult = cc.CalculateComplexitySimpleCalcule(pathFile, this.messages);
+        String cycloResult = cc.calculateComplexitySimpleCalcule(pathFile, this.messages);
 
         this.commentableElements += numFunctions;
         this.commentableElements += numSubroutines;

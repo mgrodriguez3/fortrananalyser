@@ -36,10 +36,10 @@ import javax.swing.JPanel;
  */
 public class CustomProgressBar extends JPanel {
 
-    int progress_value;
+    int progressValue;
 
     public void updateProgressBar(int progress_value) {
-        this.progress_value = progress_value;
+        this.progressValue = progress_value;
     }
 
     /**
@@ -65,7 +65,7 @@ public class CustomProgressBar extends JPanel {
         circle.setFrameFromCenter(new Point(0, 0), new Point(40, 40));
 
         arc.setAngleStart(1);
-        arc.setAngleExtent(-progress_value * 3.6);
+        arc.setAngleExtent(-progressValue * 3.6);
         g2.setColor(new Color(61, 143, 199));
         g2.draw(arc);
         g2.fill(arc);
@@ -80,12 +80,12 @@ public class CustomProgressBar extends JPanel {
         g2.setFont(new Font(TOOL_TIP_TEXT_KEY, Font.PLAIN, 25));
 
         FontMetrics fm = g2.getFontMetrics();
-        Rectangle2D r = fm.getStringBounds(progress_value + "%", g);
+        Rectangle2D r = fm.getStringBounds(progressValue + "%", g);
 
         int x = (0 - (int) r.getWidth() / 2);
         int y = (0 - (int) r.getHeight() / 2 + fm.getAscent());
 
-        g2.drawString(progress_value + "%", x, y);
+        g2.drawString(progressValue + "%", x, y);
     }
 
 }

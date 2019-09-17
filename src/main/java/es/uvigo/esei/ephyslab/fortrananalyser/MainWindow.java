@@ -21,14 +21,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Locale;
-import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -101,6 +99,11 @@ public class MainWindow extends javax.swing.JFrame {
     static final String DEFAULT_LANGUAGE = "en";
 
     /**
+     * default typography of the the user interface.
+     */
+    static final String UBUNTU = "Ubuntu";
+
+    /**
      * the file choser from the computer where the application is open.
      */
     private final JFileChooser fc;
@@ -123,22 +126,23 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
+                //nothing to do
 
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                jLabel8.setFont(new java.awt.Font("Ubuntu", 1, 15));
+                jLabel8.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 15));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                jLabel8.setFont(new java.awt.Font("Ubuntu", 0, 15));
+                jLabel8.setFont(new java.awt.Font(MainWindow.UBUNTU, 0, 15));
             }
         });
 
@@ -152,22 +156,22 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                jLabel9.setFont(new java.awt.Font("Ubuntu", 1, 15));
+                jLabel9.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 15));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                jLabel9.setFont(new java.awt.Font("Ubuntu", 0, 15));
+                jLabel9.setFont(new java.awt.Font(MainWindow.UBUNTU, 0, 15));
             }
         });
 
@@ -181,22 +185,22 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                jLabel10.setFont(new java.awt.Font("Ubuntu", 1, 15));
+                jLabel10.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 15));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                jLabel10.setFont(new java.awt.Font("Ubuntu", 0, 15));
+                jLabel10.setFont(new java.awt.Font(MainWindow.UBUNTU, 0, 15));
             }
         });
 
@@ -210,22 +214,22 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                jLabel11.setFont(new java.awt.Font("Ubuntu", 1, 15));
+                jLabel11.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 15));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                jLabel11.setFont(new java.awt.Font("Ubuntu", 0, 15));
+                jLabel11.setFont(new java.awt.Font(MainWindow.UBUNTU, 0, 15));
             }
         });
 
@@ -238,22 +242,22 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                jLabel12.setFont(new java.awt.Font("Ubuntu", 1, 15));
+                jLabel12.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 15));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                jLabel12.setFont(new java.awt.Font("Ubuntu", 0, 15));
+                jLabel12.setFont(new java.awt.Font(MainWindow.UBUNTU, 0, 15));
             }
         });
 
@@ -266,22 +270,22 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                jLabel13.setFont(new java.awt.Font("Ubuntu", 1, 15));
+                jLabel13.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 15));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                jLabel13.setFont(new java.awt.Font("Ubuntu", 0, 15));
+                jLabel13.setFont(new java.awt.Font(MainWindow.UBUNTU, 0, 15));
             }
         });
 
@@ -293,22 +297,22 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                jLabel24.setFont(new java.awt.Font("Ubuntu", 1, 10));
+                jLabel24.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 10));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                jLabel24.setFont(new java.awt.Font("Ubuntu", 0, 10));
+                jLabel24.setFont(new java.awt.Font(MainWindow.UBUNTU, 0, 10));
             }
         });
 
@@ -320,22 +324,22 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-
+                //nothing to do
             }
         });
 
@@ -347,23 +351,23 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                jLabel24.setFont(new java.awt.Font("Ubuntu", 1, 10));
+                jLabel24.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 10));
 
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                jLabel24.setFont(new java.awt.Font("Ubuntu", 0, 10));
+                jLabel24.setFont(new java.awt.Font(MainWindow.UBUNTU, 0, 10));
             }
         });
 
@@ -376,26 +380,24 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                //nothing to do
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                jLabel25.setFont(new java.awt.Font("Ubuntu", 1, 15));
+                jLabel25.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 15));
             }
 
             @Override
             public void mouseExited(MouseEvent e) {
-                jLabel25.setFont(new java.awt.Font("Ubuntu", 0, 15));
+                jLabel25.setFont(new java.awt.Font(MainWindow.UBUNTU, 0, 15));
             }
         });
-
-        checkForUpdates();
 
     }
 
@@ -468,14 +470,6 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel22.setVisible(false);
         this.jLabel24.setVisible(false);
         this.customProgressBar1.setVisible(false);
-    }
-
-    private boolean checkForUpdates() {
-
-      
-        System.out.println("Version: " + "${version}");
-
-        return true;
     }
 
     /**
@@ -936,16 +930,13 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     /**
-     * Button to analyse the selected directory
+     * Button to analyse the selected directory. Show message error in case that
+     * the user not chose a directory
      *
      * @param evt push the button event
      */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-        int i = 0;
-        /**
-         * Show message error in case that the user not chose a directory
-         */
+
         if (this.jTextField1.getText().equals(this.messages.getString("selectDirectory"))) {
             this.jLabel14.setVisible(true);
         } else {
@@ -964,7 +955,6 @@ public class MainWindow extends javax.swing.JFrame {
      * @param evt the event to push the button
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
 
         if (this.fc.showOpenDialog(MainWindow.this) == JFileChooser.APPROVE_OPTION) {
 
