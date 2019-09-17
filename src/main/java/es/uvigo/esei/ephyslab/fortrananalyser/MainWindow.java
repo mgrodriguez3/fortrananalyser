@@ -21,11 +21,14 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Locale;
+import java.util.Properties;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,33 +57,33 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * the path of the readme.txt file.
      */
-    static final String USERMANUAL = "/es/uvigo/esei/ephyslab/documents/fortrananalyser/userManual";
+    static final String USERMANUAL = "userManual";
 
     /**
      * the path of the license.txt file.
      */
-    static final String PATHLICENSE = "/es/uvigo/esei/ephyslab/documents/fortrananalyser/license.pdf";
+    static final String PATHLICENSE = "license.pdf";
 
     /**
      * the path of the errorpdf.pdf file.
      */
-    static final String PATHERRORPDF = "/es/uvigo/esei/ephyslab/documents/fortrananalyser/errorpdf.pdf";
+    static final String PATHERRORPDF = "errorpdf.pdf";
 
     /**
      * the local path of the quality report file in local home directory of the
      * current user.
      */
-    static final String QUALITYREPORT = (System.getProperty("user.home") + "/temp/QualityReport.pdf");
+    static final String QUALITYREPORT = System.getProperty("user.home") + "/temp/QualityReport.pdf";
 
     /**
      * other available languages to the user interface.
      */
-    static final String[] AVAILABLE_LANGUAGES = {"es", "fr", "gl", "en","pt"};
+    static final String[] AVAILABLE_LANGUAGES = {"es", "fr", "gl", "en", "pt"};
 
     /**
      * other available countries
      */
-    static final String[] AVAILABLE_COUNTRIES = {"ES", "FR", "ES", "GB","PT"};
+    static final String[] AVAILABLE_COUNTRIES = {"ES", "FR", "ES", "GB", "PT"};
 
     /**
      * By default, the selected language is Enslish.
@@ -230,7 +233,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                displayPDF(0);
+                openLink(0);
             }
 
             @Override
@@ -258,7 +261,7 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                displayPDF(1);
+                openLink(1);
             }
 
             @Override
@@ -285,7 +288,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel22.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                displayPDF(2);
+                openReport();
             }
 
             @Override
@@ -312,17 +315,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel23.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
-
-                if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
-
-                    try {
-                        desktop.browse(new URI("http://fortrananalyser.ephyslab.uvigo.es/"));
-                    } catch (URISyntaxException | IOException ex) {
-                        Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-
-                }
+                openLink(2);
             }
 
             @Override
@@ -349,7 +342,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel24.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                displayPDF(2);
+                openReport();
             }
 
             @Override
@@ -373,7 +366,7 @@ public class MainWindow extends javax.swing.JFrame {
                 jLabel24.setFont(new java.awt.Font("Ubuntu", 0, 10));
             }
         });
-        
+
         this.jLabel25.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -383,12 +376,12 @@ public class MainWindow extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(MouseEvent e) {
-                
+
             }
 
             @Override
             public void mouseReleased(MouseEvent e) {
-                
+
             }
 
             @Override
@@ -401,7 +394,9 @@ public class MainWindow extends javax.swing.JFrame {
                 jLabel25.setFont(new java.awt.Font("Ubuntu", 0, 15));
             }
         });
-        
+
+        checkForUpdates();
+
     }
 
     /**
@@ -475,47 +470,75 @@ public class MainWindow extends javax.swing.JFrame {
         this.customProgressBar1.setVisible(false);
     }
 
+    private boolean checkForUpdates() {
+
+      
+        System.out.println("Version: " + "${version}");
+
+        return true;
+    }
+
     /**
      * This method displays the PDF selected by the user.
      *
      * @param num the number to identify the PDF to open: 0 for the user manual;
-     * 1 for the license document.
+     * 0: for user manual document; 1: for the license document; 2: open the web
+     * page; default: for the eror file;
      */
-    private void displayPDF(int num) {
+    private void openLink(int num) {
+        Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+        String web = "http://fortrananalyser.ephyslab.uvigo.es/docs/";
 
-        try {
-            File myFile;
+        switch (num) {
+            case 0:
+                web += MainWindow.USERMANUAL + "_" + currentLocale.getLanguage() + ".pdf";
+                break;
 
-            URL url;
+            case 1:
+                web += MainWindow.PATHLICENSE;
+                break;
 
-            switch (num) {
-                case 0:
-                    url = getClass().getResource(MainWindow.USERMANUAL + "_" + currentLocale.getLanguage() + ".pdf");
-                    break;
+            case 2:
+                web = "http://fortrananalyser.ephyslab.uvigo.es/";
+                break;
 
-                case 1:
-                    url = getClass().getResource(MainWindow.PATHLICENSE);
-                    break;
+            default:
+                web += MainWindow.PATHERRORPDF;
+                break;
+        }
 
-                case 2:
-                    url = Paths.get(MainWindow.QUALITYREPORT).toUri().toURL();
-                    break;
+        if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
 
-                default:
-                    url = getClass().getResource(MainWindow.PATHERRORPDF);
-                    break;
-
+            try {
+                desktop.browse(new URI(web));
+            } catch (URISyntaxException | IOException ex) {
+                Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
             }
 
+        }
+    }
+
+    /**
+     * This method open the report file into the default PDF visor.
+     */
+    private void openReport() {
+        URL url;
+        File myFile;
+
+        try {
+            url = Paths.get(MainWindow.QUALITYREPORT).toUri().toURL();
             myFile = new File(url.toURI());
 
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(myFile);
             }
 
-        } catch (IOException | URISyntaxException ex) {
+        } catch (MalformedURLException | URISyntaxException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
     /**
@@ -921,8 +944,8 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         int i = 0;
         /**
-        * Show message error in case that the user not chose a directory
-        */
+         * Show message error in case that the user not chose a directory
+         */
         if (this.jTextField1.getText().equals(this.messages.getString("selectDirectory"))) {
             this.jLabel14.setVisible(true);
         } else {
@@ -1008,7 +1031,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel8.setText(this.messages.getString("nameButtonEnglish"));
         this.jLabel9.setText(this.messages.getString("nameButtonFrench"));
         this.jLabel10.setText(this.messages.getString("nameButtonSpanish"));
-        this.jLabel11.setText(this.messages.getString("nameButtonGalician"));        
+        this.jLabel11.setText(this.messages.getString("nameButtonGalician"));
         this.jLabel25.setText(this.messages.getString("nameButtonPortuges"));
         this.jLabel12.setText(this.messages.getString("manual"));
         this.jLabel13.setText(this.messages.getString("license"));
