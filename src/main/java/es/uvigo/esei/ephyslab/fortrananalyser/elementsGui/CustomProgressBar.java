@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.uvigo.esei.ephyslab.fortrananalyser;
+package es.uvigo.esei.ephyslab.fortrananalyser.elementsGui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -37,22 +37,9 @@ import javax.swing.JPanel;
 public class CustomProgressBar extends JPanel {
 
     int progressValue;
-    private boolean changeMode = false;
-    
-    private final Color arcColorBlue = new Color(61, 143, 199);
-    private final Color arcColorOrange = new Color(255,110,25);
-    private final Color circleColorGrey = new Color(234, 234, 234);
-    private final Color circleColorBlack = new Color(60, 63, 65);
-    private final Color textColorBlue = new Color(61, 143, 199);
-    private final Color textColorOrange = new Color(255,110,25);
-    
 
     public void updateProgressBar(int progress_value) {
         this.progressValue = progress_value;
-    }
-    
-    public void changeModeProgressBar(boolean darkMode){
-        changeMode=darkMode;
     }
 
     /**
@@ -79,27 +66,15 @@ public class CustomProgressBar extends JPanel {
 
         arc.setAngleStart(1);
         arc.setAngleExtent(-progressValue * 3.6);
-        if(!changeMode){
-        g2.setColor(arcColorBlue);
-        }else{
-            g2.setColor(arcColorOrange);
-        }
+        g2.setColor(new Color(61, 143, 199));
         g2.draw(arc);
         g2.fill(arc);
 
-        if(!changeMode){
-        g2.setColor(circleColorGrey);
-        }else{
-        g2.setColor(circleColorBlack);
-        }
+        g2.setColor(new Color(234, 234, 234));
         g2.draw(circle);
         g2.fill(circle);
 
-        if(!changeMode){
-        g2.setColor(textColorBlue);
-        }else{
-            g2.setColor(textColorOrange);
-        }
+        g2.setColor(new Color(61, 143, 199));
 
         g2.rotate(Math.toRadians(90));
         g2.setFont(new Font(TOOL_TIP_TEXT_KEY, Font.PLAIN, 25));
