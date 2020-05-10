@@ -109,7 +109,7 @@ public class MainWindow extends javax.swing.JFrame {
      * the file choser from the computer where the application is open.
      */
     private final JFileChooser fc;
-    
+
     private boolean darkMode = false;
 
     /**
@@ -583,6 +583,7 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel22 = new javax.swing.JLabel();
         jLabel24 = new javax.swing.JLabel();
         customProgressBar1 = new es.uvigo.esei.ephyslab.fortrananalyser.CustomProgressBar();
+        jLabel26 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(183, 183, 183));
@@ -830,6 +831,9 @@ public class MainWindow extends javax.swing.JFrame {
             .addGap(0, 125, Short.MAX_VALUE)
         );
 
+        jLabel26.setFont(new java.awt.Font("Tahoma", 0, 26)); // NOI18N
+        jLabel26.setText("FortranAnalyser");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -856,18 +860,19 @@ public class MainWindow extends javax.swing.JFrame {
                                     .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(112, 112, 112)))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
+                                .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
                         .addGap(25, 25, 25))))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(155, 155, 155))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -889,8 +894,13 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(jLabel26, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -917,11 +927,11 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18)
                     .addComponent(jLabel21))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20))
+                .addContainerGap())
         );
 
         jTextField1.getAccessibleContext().setAccessibleName("panelText1");
@@ -984,6 +994,7 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (!darkMode) {
             darkMode = true;
+            this.jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/es/uvigo/esei/ephyslab/fortrananalyser/pdf-50-dark.png")));
             this.customProgressBar1.changeModeProgressBar(darkMode);
             this.customCheckBoxDM1.setBackground(new Color(60, 63, 65));
             this.customCheckBoxDM1.setColored(true);
@@ -1020,9 +1031,11 @@ public class MainWindow extends javax.swing.JFrame {
             this.jLabel20.setForeground(Color.WHITE);
             this.jLabel21.setForeground(Color.WHITE);
             this.jLabel24.setForeground(Color.WHITE);
+            this.jLabel26.setForeground(new Color(255, 110, 25));
 
         } else {
             darkMode = false;
+            this.jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/es/uvigo/esei/ephyslab/fortrananalyser/pdf-50.png")));
             this.customProgressBar1.changeModeProgressBar(darkMode);
             this.menuPanel.setBackground(new Color(61, 143, 199));
             this.customCheckBoxDM1.setBackground(new Color(61, 143, 199));
@@ -1056,16 +1069,16 @@ public class MainWindow extends javax.swing.JFrame {
             this.jLabel20.setForeground(Color.BLACK);
             this.jLabel21.setForeground(Color.BLACK);
             this.jLabel24.setForeground(Color.BLACK);
+            this.jLabel26.setForeground(Color.BLACK);
 
         }
     }//GEN-LAST:event_customCheckBoxDM1ActionPerformed
 
     private void initializeDarkModeSwitch() {
-        this.customCheckBoxDM1.setSelectedColor(Colors.MAGENTA);
         this.customCheckBoxDM1.setRised(true);
         this.customCheckBoxDM1.setText("Dark Mode");
     }
-    
+
     /**
      * call the execution of the analisis in a new Thread
      *
@@ -1134,6 +1147,7 @@ public class MainWindow extends javax.swing.JFrame {
         this.jLabel17.setText(this.messages.getString("arithmeticAverage"));
         this.jLabel18.setText(this.messages.getString("directoryMessage"));
         this.jLabel24.setText(this.messages.getString("openFile"));
+        this.jLabel26.setFont(new java.awt.Font(MainWindow.UBUNTU, 1, 26));
 
         this.fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
@@ -1218,6 +1232,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
