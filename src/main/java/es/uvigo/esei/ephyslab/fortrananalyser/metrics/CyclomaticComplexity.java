@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.uvigo.esei.ephyslab.fortrananalyser;
+package es.uvigo.esei.ephyslab.fortrananalyser.metrics;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -23,18 +23,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-/**
- *
- * @author Michael García Rodríguez
- */
-public class CycloComplexity {
+public class CyclomaticComplexity {
 
     private final ArrayList<Double> scoresCC;
 
-    /**
-     * empty constructor.
-     */
-    public CycloComplexity() {
+
+    public CyclomaticComplexity() {
         this.scoresCC = new ArrayList<>();
     }
 
@@ -43,12 +37,12 @@ public class CycloComplexity {
      * variable. This calcule is found in many tools of other programming
      * languages
      *
-     * @param path the path of the file to be analysed.
+     * @param path     the path of the file to be analysed.
      * @param messages list of messages in all available languages
      * @return the string with the result
      * @throws java.io.IOException in case that file is not opened.
      */
-    public String calculateComplexitySimpleCalcule(String path, ResourceBundle messages) throws IOException {
+    public String simpleComplexityCalculation(String path, ResourceBundle messages) throws IOException {
 
         String chain = "";
         String result = "";
@@ -57,7 +51,6 @@ public class CycloComplexity {
         this.scoresCC.clear();
         boolean method = false;
         File file = new File(path);
-
         FileReader fr = new FileReader(file);
 
         try (BufferedReader b = new BufferedReader(fr)) {
@@ -83,24 +76,18 @@ public class CycloComplexity {
                             || chain.contains("DEFAULT")
                             || chain.contains("CASE")
                             || chain.contains("IF"))) {
-
                         cc++;
                     }
-
                     if (!chain.contains("!") && (chain.contains("END FUNCTION") || chain.contains("END SUBROUTINE"))) {
-
                         result += nameFunctSub + ": " + cc;
                         result += "\n";
-                        this.scoresCC.add(new Double(cc));
+                        this.scoresCC.add((double) cc);
                         cc = 1;
                         method = false;
                     }
-
                 }
-
             }
         }
-
         return result;
     }
 

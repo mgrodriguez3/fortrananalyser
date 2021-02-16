@@ -17,8 +17,10 @@
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents.MainWindow;
+import es.uvigo.esei.ephyslab.fortrananalyser.metrics.CyclomaticComplexity;
 
-import java.awt.FlowLayout;
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -31,8 +33,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
-import javax.swing.SwingWorker;
 
 public final class TasksBar extends
         SwingWorker<Void, Integer> {
@@ -557,8 +557,8 @@ public final class TasksBar extends
         int numSubroutines = analyseNumberSubroutines(pathFile);
         int numVariables = analyseNumberOfDeclaredVariables(pathFile);
         String goodComments = analyseGoodComment(pathFile);
-        CycloComplexity cc = new CycloComplexity();
-        String cycloResult = cc.calculateComplexitySimpleCalcule(pathFile, this.messages);
+        CyclomaticComplexity cc = new CyclomaticComplexity();
+        String cycloResult = cc.simpleComplexityCalculation(pathFile, this.messages);
 
         this.commentableElements += numFunctions;
         this.commentableElements += numSubroutines;

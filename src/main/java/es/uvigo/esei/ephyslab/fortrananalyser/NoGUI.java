@@ -18,6 +18,7 @@ package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents.MainWindow;
 
+import javax.annotation.Resource;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -29,7 +30,6 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.Resource;
 
 /**
  * This class create a NoGUI and support the logic part of the application
@@ -39,12 +39,12 @@ import javax.annotation.Resource;
  * @version 1.9.8
  */
 public class NoGUI {
-    
+
     /**
      * the path of the destination of the file
      */
     public static final String DEST_PATH = System.getProperty("user.home") + "/temp";
-    
+
     /**
      * the path of the directory to analyse.
      */
@@ -134,14 +134,14 @@ public class NoGUI {
      * List of file to analyse
      */
     List<File> filesInFolder;
-    
+
     /**
      * corresponding position in the scores array of the score obtain on each
      * metric
      */
     @Resource
     private static final int[] TABLESCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    
+
     /**
      * corresponding position in the finalScores array of the scores obtain on
      * each metric
@@ -155,10 +155,9 @@ public class NoGUI {
     ResourceBundle messages;
 
     /**
-     *
      * @param pathToAnalyse of the file
-     * @param fileName name of the output file
-     * @param messages with all Strings variables
+     * @param fileName      name of the output file
+     * @param messages      with all Strings variables
      */
     public NoGUI(String pathToAnalyse, String fileName, ResourceBundle messages) {
         try {
@@ -181,7 +180,7 @@ public class NoGUI {
             this.messages = messages;
             this.dirPath = pathToAnalyse;
             this.analyseFiles(NoGUI.DEST_PATH + fileName + ".pdf");
-            
+
         } catch (IOException ex) {
             Logger.getLogger(NoGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -193,14 +192,14 @@ public class NoGUI {
      * In background, this method obtains all the files in an specific directory
      * and subdirectories and analyse them where the extension of the files are
      * ".f90" or ".h90" or ".f"
-     * 
+     *
      * @param filePath the path of the file to analyse
      * @throws IOException in case that the reading file are wrong
      */
     private void analyseFiles(String filePath) throws IOException {
         /**
          * initialice all arrayList and global variables
-         */   
+         */
         this.scoresImplicitNoneNoGUI.clear();
         this.scoresRatioNoGUI.clear();
         this.scoresNestedLoopsNoGUI.clear();
@@ -217,7 +216,7 @@ public class NoGUI {
         this.totalNumLinesNoGUI = 0;
         this.noGUIPartialCalification = 0.0;
         this.assesment = 0.0;
-       
+
 
         PDF pdf;
         double auxNote = 0.0;
@@ -227,7 +226,7 @@ public class NoGUI {
             String auxDir = "";
             pdf = new PDF();
             String extensionFile = "";
-            
+
 
             /**
              * In case the temp folder doesn't exits
@@ -236,7 +235,7 @@ public class NoGUI {
                 new File(NoGUI.DEST_PATH).mkdirs();
             }
 
-            
+
             pdf.createPdf(filePath, this.messages.getLocale());
 
             TasksBar.scanFilesInDirectory(this.dirPath, filesInFolder);
@@ -274,7 +273,7 @@ public class NoGUI {
                             || extensionFile.equals(TasksBar.getEXTENSION3())) {
                         pdf.addSubSection(file.getName());
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
-                        pdf.addTableScores(scoresNoGUI, this.messages,13,1, NoGUI.TABLESCORES);
+                        pdf.addTableScores(scoresNoGUI, this.messages, 13, 1, NoGUI.TABLESCORES);
                         pdf.addScoreResult(this.messages.getString("noteFile") + String.format("%.3f", assesment));
                     }
 
@@ -301,7 +300,7 @@ public class NoGUI {
              */
             if (!this.scoresNoGUI.get(0).isNaN()) {
                 pdf.addSection(this.messages.getString("finalTable"));
-                pdf.addTableScores(this.scoresNoGUI, this.messages,15,0,NoGUI.FINALTABLESCORES);
+                pdf.addTableScores(this.scoresNoGUI, this.messages, 15, 0, NoGUI.FINALTABLESCORES);
                 auxNote = noGUIPartialCalification / this.totalNumLinesNoGUI;
                 pdf.addFinalNote(this.messages.getString("arithmeticAverage") + " " + String.format(Locale.ROOT, "%.3f", auxNote));
             }
@@ -341,7 +340,7 @@ public class NoGUI {
         int numSubroutines = TasksBar.analyseNumberSubroutines(pathFile);
         int numVariables = TasksBar.analyseNumberOfDeclaredVariables(pathFile);
         String goodComments = this.analyseGoodComment(pathFile);
-        
+
         this.commentableElementsNoGUI += numFunctions;
         this.commentableElementsNoGUI += numSubroutines;
         this.commentableElementsNoGUI += numVariables;
@@ -387,7 +386,7 @@ public class NoGUI {
 
         /**
          * 7. calcule the ratio and show it in percentage in the report
-         */       
+         */
         if (commentableElementsNoGUI > 0.0) {
             ratio = (commentedElementsNoGUI / commentableElementsNoGUI);
         }
@@ -706,22 +705,24 @@ public class NoGUI {
         }
         return totalFunctions == numFunction;
     }
-    
-    
+
+
     /**
      * Getter from tablesScores
+     *
      * @return array from tablesScores
      */
-    public static int[] getTablesScores(){
+    public static int[] getTablesScores() {
         return TABLESCORES;
     }
-    
+
     /**
      * Getter from finalTablesScores
+     *
      * @return array from finalTablesScores
      */
-    public static int[] getFinalTablesScores(){
+    public static int[] getFinalTablesScores() {
         return FINALTABLESCORES;
     }
-    
+
 }
