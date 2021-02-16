@@ -1,0 +1,899 @@
+/*
+ * Copyright (C) 2019 Michael García Rodríguez
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+package es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents;
+
+import es.uvigo.esei.ephyslab.fortrananalyser.NoGUI;
+import es.uvigo.esei.ephyslab.fortrananalyser.TasksBar;
+import es.uvigo.esei.ephyslab.fortrananalyser.action.WindowActions;
+
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JLabel;
+
+/**
+ * @author Michael García Rodríguez
+ * @version 2.1
+ */
+public class MainWindow extends javax.swing.JFrame {
+
+    private ResourceBundle messages;
+    private static final String MESSAGE_BUNDLE = "es.uvigo.esei.ephyslab.i18n.bundle.MessagesBundle";
+    private static final String TYPOGRAPHY = "Ubuntu";
+    private final JFileChooser FILE_CHOOSER;
+    private final WindowActions wa;
+    private static final String APP_TITLE = "FortranAnalyser";
+
+    public MainWindow() {
+        initComponents();
+        wa = new WindowActions();
+        FILE_CHOOSER = new JFileChooser();
+        initializeVariables();
+        addMouseListeners();
+    }
+
+    public MainWindow(String language, String pathToAnalyse, String fileName) {
+        FILE_CHOOSER = null;
+        wa = new WindowActions();
+        initialiceComponentsNoGUI();
+        wa.changeLanguage(language);
+        new NoGUI(pathToAnalyse, fileName, MainWindow.this.messages);
+
+    }
+
+    private void addMouseListeners() {
+        this.jLabel8.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                messages = wa.changeLanguage("en");
+                reconfigureComponents();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jLabel8.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 1, 15));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jLabel8.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 0, 15));
+            }
+        });
+
+        this.jLabel9.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                messages = wa.changeLanguage("fr");
+                reconfigureComponents();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jLabel9.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 1, 15));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jLabel9.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 0, 15));
+            }
+        });
+
+        this.jLabel10.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                messages = wa.changeLanguage("es");
+                reconfigureComponents();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jLabel10.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 1, 15));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jLabel10.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 0, 15));
+            }
+        });
+
+        this.jLabel11.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                messages = wa.changeLanguage("gl");
+                reconfigureComponents();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jLabel11.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 1, 15));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jLabel11.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 0, 15));
+            }
+        });
+
+        this.jLabel12.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                wa.openLink(0);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jLabel12.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 1, 15));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jLabel12.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 0, 15));
+            }
+        });
+
+        this.jLabel13.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                wa.openLink(1);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jLabel13.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 1, 15));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jLabel13.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 0, 15));
+            }
+        });
+
+        this.jLabel22.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                wa.openReport();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jLabel24.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 1, 10));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jLabel24.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 0, 10));
+            }
+        });
+
+        this.jLabel23.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                wa.openLink(2);
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+            }
+        });
+
+        this.jLabel24.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                wa.openReport();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jLabel24.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 1, 10));
+
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jLabel24.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 0, 10));
+            }
+        });
+
+        this.jLabel25.addMouseListener(new MouseListener() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                messages = wa.changeLanguage("pt");
+                reconfigureComponents();
+            }
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+            }
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jLabel25.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 1, 15));
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jLabel25.setFont(new java.awt.Font(MainWindow.TYPOGRAPHY, 0, 15));
+            }
+        });
+    }
+
+    private void reconfigureComponents() {
+
+        configureLabelsText();
+        hideQualityReportLabels();
+    }
+
+    private void configureLabelsText() {
+        this.jTextField1.setText(this.messages.getString("selectDirectory"));
+        this.jButton3.setText(this.messages.getString("nameButtonAnalyse"));
+        this.jLabel2.setText(this.messages.getString("version"));
+        this.jLabel3.setText(this.messages.getString("nameMenu"));
+        this.jLabel6.setText(this.messages.getString("about"));
+        this.jLabel8.setText(this.messages.getString("nameButtonEnglish"));
+        this.jLabel9.setText(this.messages.getString("nameButtonFrench"));
+        this.jLabel10.setText(this.messages.getString("nameButtonSpanish"));
+        this.jLabel11.setText(this.messages.getString("nameButtonGalician"));
+        this.jLabel25.setText(this.messages.getString("nameButtonPortuges"));
+        this.jLabel12.setText(this.messages.getString("manual"));
+        this.jLabel13.setText(this.messages.getString("license"));
+        this.jLabel14.setText(this.messages.getString("errorDirectoryEmpty"));
+        this.jLabel15.setText(this.messages.getString("analisisResults"));
+        this.jLabel16.setText(this.messages.getString("timeResults"));
+        this.jLabel17.setText(this.messages.getString("arithmeticAverage"));
+        this.jLabel18.setText(this.messages.getString("directoryMessage"));
+        this.jLabel24.setText(this.messages.getString("openFile"));
+    }
+
+    private void hideQualityReportLabels() {
+        hideComponents();
+        this.customProgressBar1.setVisible(false);
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        jLabel17 = new javax.swing.JLabel();
+        jLabel18 = new javax.swing.JLabel();
+        jLabel19 = new javax.swing.JLabel();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        customProgressBar1 = new es.uvigo.esei.ephyslab.fortrananalyser.CustomProgressBar();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(183, 183, 183));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        setMinimumSize(new java.awt.Dimension(838, 535));
+        setResizable(false);
+
+        jPanel2.setBackground(new java.awt.Color(61, 143, 199));
+
+        jLabel2.setBackground(java.awt.Color.white);
+        jLabel2.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        jLabel2.setForeground(java.awt.Color.white);
+        jLabel2.setText("version");
+
+        jLabel3.setBackground(java.awt.Color.white);
+        jLabel3.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        jLabel3.setForeground(java.awt.Color.white);
+        jLabel3.setText("menu1");
+
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/es/uvigo/esei/ephyslab/fortrananalyser/icon-white_orig.png"))); // NOI18N
+
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/es/uvigo/esei/ephyslab/fortrananalyser/aboutIcon.png"))); // NOI18N
+
+        jLabel6.setBackground(java.awt.Color.white);
+        jLabel6.setFont(new java.awt.Font("Ubuntu", 0, 18)); // NOI18N
+        jLabel6.setForeground(java.awt.Color.white);
+        jLabel6.setText("menu2");
+
+        jLabel7.setFont(new java.awt.Font("Ubuntu", 0, 24)); // NOI18N
+        jLabel7.setForeground(java.awt.Color.white);
+        jLabel7.setText("FortranAnalyser");
+
+        jLabel8.setBackground(java.awt.Color.white);
+        jLabel8.setForeground(java.awt.Color.white);
+        jLabel8.setText("jLabel8");
+        jLabel8.setName(""); // NOI18N
+
+        jLabel9.setBackground(java.awt.Color.white);
+        jLabel9.setForeground(java.awt.Color.white);
+        jLabel9.setText("jLabel9");
+
+        jLabel10.setBackground(java.awt.Color.white);
+        jLabel10.setForeground(java.awt.Color.white);
+        jLabel10.setText("jLabel10");
+
+        jLabel11.setBackground(java.awt.Color.white);
+        jLabel11.setForeground(java.awt.Color.white);
+        jLabel11.setText("jLabel11");
+
+        jLabel12.setBackground(java.awt.Color.white);
+        jLabel12.setForeground(java.awt.Color.white);
+        jLabel12.setText("jLabel12");
+
+        jLabel13.setBackground(java.awt.Color.white);
+        jLabel13.setForeground(java.awt.Color.white);
+        jLabel13.setText("jLabel13");
+
+        jLabel23.setFont(new java.awt.Font("Ubuntu", 0, 11)); // NOI18N
+        jLabel23.setForeground(java.awt.Color.white);
+        jLabel23.setText("www.fortrananalyser.ephyslab.uvigo.es");
+        jLabel23.setToolTipText("");
+
+        jLabel25.setBackground(java.awt.Color.white);
+        jLabel25.setForeground(java.awt.Color.white);
+        jLabel25.setText("jLabel25");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGap(18, 18, 18)
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addComponent(jLabel5)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addComponent(jLabel4)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                                .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                                .addContainerGap()
+                                                .addComponent(jSeparator2))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                                .addContainerGap(23, Short.MAX_VALUE)
+                                                .addComponent(jLabel7)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                                .addComponent(jLabel2)
+                                                .addGap(15, 15, 15))
+                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addGap(44, 44, 44)
+                                                                .addComponent(jLabel23, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addGroup(jPanel2Layout.createSequentialGroup()
+                                                                .addGap(76, 76, 76)
+                                                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                        .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                        .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                                .addGap(0, 0, Short.MAX_VALUE)))
+                                .addContainerGap())
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(62, 62, 62))
+        );
+        jPanel2Layout.setVerticalGroup(
+                jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel7)
+                                        .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(32, 32, 32)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel3)
+                                        .addComponent(jLabel5))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel25, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(50, 50, 50)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel23)
+                                .addContainerGap())
+        );
+
+        jLabel2.getAccessibleContext().setAccessibleDescription("");
+
+        jPanel3.setBackground(new java.awt.Color(234, 234, 234));
+        jPanel3.setBorder(null);
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/es/uvigo/esei/ephyslab/fortrananalyser/headerTitle.png"))); // NOI18N
+        jLabel1.setToolTipText("");
+
+        jTextField1.setEditable(false);
+        jTextField1.setBackground(new java.awt.Color(234, 234, 234));
+        jTextField1.setFont(new java.awt.Font("Ubuntu", 2, 15)); // NOI18N
+        jTextField1.setForeground(new java.awt.Color(15, 15, 15));
+        jTextField1.setText("jTextField1");
+        jTextField1.setToolTipText("");
+        jTextField1.setBorder(null);
+
+        jSeparator1.setBackground(new java.awt.Color(76, 76, 76));
+        jSeparator1.setToolTipText("");
+        jSeparator1.setBorder(null);
+
+        jButton1.setBackground(new java.awt.Color(212, 212, 212));
+        jButton1.setForeground(java.awt.Color.black);
+        jButton1.setText(". . .");
+        jButton1.setBorder(null);
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setBackground(new java.awt.Color(255, 110, 25));
+        jButton3.setForeground(java.awt.Color.white);
+        jButton3.setText("jButton3");
+        jButton3.setBorder(null);
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel14.setBackground(new java.awt.Color(234, 234, 234));
+        jLabel14.setForeground(new java.awt.Color(128, 19, 25));
+        jLabel14.setText("Error message");
+
+        jLabel15.setFont(new java.awt.Font("Ubuntu", 1, 16)); // NOI18N
+
+        jLabel16.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel16.setText("jLabel16");
+
+        jLabel17.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel17.setText("jLabel17");
+
+        jLabel18.setFont(new java.awt.Font("Ubuntu", 1, 14)); // NOI18N
+        jLabel18.setText("jLabel18");
+
+        jLabel19.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel19.setText("jLabel19");
+
+        jLabel20.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel20.setText("jLabel20");
+
+        jLabel21.setFont(new java.awt.Font("Ubuntu", 0, 14)); // NOI18N
+        jLabel21.setText("jLabel21");
+
+        jLabel22.setIcon(new javax.swing.ImageIcon(getClass().getResource("/es/uvigo/esei/ephyslab/fortrananalyser/pdf-50.png"))); // NOI18N
+        jLabel22.setToolTipText("");
+        jLabel22.setMaximumSize(new java.awt.Dimension(57, 50));
+        jLabel22.setMinimumSize(new java.awt.Dimension(57, 50));
+        jLabel22.setPreferredSize(new java.awt.Dimension(50, 50));
+
+        jLabel24.setFont(new java.awt.Font("Ubuntu", 0, 10)); // NOI18N
+        jLabel24.setText("jLabel24");
+
+        customProgressBar1.setBackground(new java.awt.Color(234, 234, 234));
+
+        javax.swing.GroupLayout customProgressBar1Layout = new javax.swing.GroupLayout(customProgressBar1);
+        customProgressBar1.setLayout(customProgressBar1Layout);
+        customProgressBar1Layout.setHorizontalGroup(
+                customProgressBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 143, Short.MAX_VALUE)
+        );
+        customProgressBar1Layout.setVerticalGroup(
+                customProgressBar1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(0, 125, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(63, 63, 63)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
+                                                                .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                .addComponent(jLabel21, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 209, Short.MAX_VALUE))
+                                                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                                                                .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                                .addComponent(jLabel20, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                        .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                .addGap(112, 112, 112)))
+                                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                                        .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 413, Short.MAX_VALUE)
+                                                        .addComponent(jLabel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                                                .addGap(25, 25, 25))))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(155, 155, 155))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(46, 46, 46))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap())))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(customProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(210, 210, 210))
+        );
+        jPanel3Layout.setVerticalGroup(
+                jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(28, 28, 28)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel14)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(customProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(jLabel16)
+                                        .addComponent(jLabel19))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel17)
+                                        .addComponent(jLabel20))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel18)
+                                        .addComponent(jLabel21))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel22, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel24, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20))
+        );
+
+        jTextField1.getAccessibleContext().setAccessibleName("panelText1");
+        jButton1.getAccessibleContext().setAccessibleName("fileChoser");
+        jButton1.getAccessibleContext().setAccessibleDescription("");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(1, 1, 1)
+                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+
+        if (this.jTextField1.getText().equals(this.messages.getString("selectDirectory"))) {
+            this.jLabel14.setVisible(true);
+        } else {
+            this.jLabel14.setVisible(false);
+            this.customProgressBar1.setVisible(true);
+            this.customProgressBar1.updateProgressBar(0);
+
+            executeAnalyse(this.jTextField1.getText());
+
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
+        if (this.FILE_CHOOSER.showOpenDialog(MainWindow.this) == JFileChooser.APPROVE_OPTION) {
+
+            File file = this.FILE_CHOOSER.getSelectedFile();
+            this.jTextField1.setText(file.getAbsolutePath());
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void executeAnalyse(String pathFile) {
+
+        hideComponents();
+
+        TasksBar t = new TasksBar(MainWindow.this, pathFile, MainWindow.this.messages);
+        this.setEnabled(false);
+        this.jButton1.setEnabled(false);
+        this.jButton3.setEnabled(false);
+        t.execute();
+
+    }
+
+    private void hideComponents() {
+        this.jLabel15.setVisible(false);
+        this.jLabel16.setVisible(false);
+        this.jLabel17.setVisible(false);
+        this.jLabel18.setVisible(false);
+        this.jLabel19.setVisible(false);
+        this.jLabel20.setVisible(false);
+        this.jLabel21.setVisible(false);
+        this.jLabel22.setVisible(false);
+        this.jLabel24.setVisible(false);
+    }
+
+    private void initializeVariables() {
+
+        this.setLocationRelativeTo(null);
+        this.setTitle(APP_TITLE);
+        this.setIconImage(new ImageIcon(getClass().getResource("/es/uvigo/esei/ephyslab/fortrananalyser/fortranAnalyserIcon.png")).getImage());
+        Locale.setDefault(wa.getCurrentLocale());
+        this.messages = ResourceBundle.getBundle(MainWindow.MESSAGE_BUNDLE, wa.getCurrentLocale());
+        this.jLabel14.setVisible(false);
+        this.customProgressBar1.setVisible(false);
+        hideComponents();
+        configureLabelsText();
+        this.FILE_CHOOSER.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+    }
+
+    private void initialiceComponentsNoGUI() {
+        Locale.setDefault(wa.getCurrentLocale());
+        this.messages = ResourceBundle.getBundle(MainWindow.MESSAGE_BUNDLE, wa.getCurrentLocale());
+    }
+
+    public JLabel getjLabel15() {
+        return jLabel15;
+    }
+
+    public JLabel getjLabel16() {
+        return jLabel16;
+    }
+
+    public JLabel getjLabel17() {
+        return jLabel17;
+    }
+
+    public JLabel getjLabel18() {
+        return jLabel18;
+    }
+
+    public JLabel getjLabel19() {
+        return jLabel19;
+    }
+
+    public JLabel getjLabel20() {
+        return jLabel20;
+    }
+
+    public JLabel getjLabel21() {
+        return jLabel21;
+    }
+
+    public JLabel getjLabel22() {
+        return jLabel22;
+    }
+
+    public JLabel getjLabel24() {
+        return jLabel24;
+    }
+
+    public JButton getjButton1() {
+        return jButton1;
+    }
+
+    public JButton getjButton3() {
+        return jButton3;
+    }
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    public es.uvigo.esei.ephyslab.fortrananalyser.CustomProgressBar customProgressBar1;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTextField jTextField1;
+    // End of variables declaration//GEN-END:variables
+}

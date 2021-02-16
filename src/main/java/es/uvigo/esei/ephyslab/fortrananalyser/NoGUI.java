@@ -16,6 +16,8 @@
  */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
+import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents.MainWindow;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -158,7 +160,7 @@ public class NoGUI {
      * @param fileName name of the output file
      * @param messages with all Strings variables
      */
-    NoGUI(String pathToAnalyse, String fileName, ResourceBundle messages) {
+    public NoGUI(String pathToAnalyse, String fileName, ResourceBundle messages) {
         try {
             this.scoresNoGUI = new ArrayList<>();
             this.scoresImplicitNoneNoGUI = new ArrayList<>();

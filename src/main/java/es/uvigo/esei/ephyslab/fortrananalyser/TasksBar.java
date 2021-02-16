@@ -16,6 +16,8 @@
  */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
+import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents.MainWindow;
+
 import java.awt.FlowLayout;
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,7 +31,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
@@ -38,7 +39,7 @@ import javax.swing.SwingWorker;
  * generate the quallity report
  *
  * @author Michael García Rodríguez
- * @version 1.9.8
+ * @version 2.1
  */
 public final class TasksBar extends
         SwingWorker<Void, Integer> {
@@ -227,7 +228,7 @@ public final class TasksBar extends
      * @param path the path of file
      * @param messages all strings for build the report
      */
-    TasksBar(MainWindow mw, String path, ResourceBundle messages) {
+    public TasksBar(MainWindow mw, String path, ResourceBundle messages) {
 
         initializeVariables();
 
