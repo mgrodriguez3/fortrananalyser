@@ -36,10 +36,6 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 
-/**
- * @author Michael García Rodríguez
- * @version 2.1
- */
 public class MainWindow extends javax.swing.JFrame {
 
     private ResourceBundle messages;

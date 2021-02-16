@@ -5,7 +5,7 @@
  */
 package es.uvigo.esei.ephyslab.fortrananalyser.tests;
 
-import es.uvigo.esei.ephyslab.fortrananalyser.EditableException;
+import es.uvigo.esei.ephyslab.fortrananalyser.exceptions.EditableException;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

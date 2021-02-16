@@ -30,12 +30,12 @@ public class WindowActions {
     }
 
     public ResourceBundle changeLanguage(String lang) {
-        for (int i = 0; i< AVAILABLE_LANGUAGES.length;i++){
-            if(AVAILABLE_LANGUAGES[i].equals(lang)){
+        for (int i = 0; i < AVAILABLE_LANGUAGES.length; i++) {
+            if (AVAILABLE_LANGUAGES[i].equals(lang)) {
                 currentLocale = new Locale(AVAILABLE_LANGUAGES[i], AVAILABLE_COUNTRIES[i]);
             }
         }
-        return  ResourceBundle.getBundle(MESSAGE_BUNDLE, currentLocale);
+        return ResourceBundle.getBundle(MESSAGE_BUNDLE, currentLocale);
     }
 
     public void openLink(int num) {

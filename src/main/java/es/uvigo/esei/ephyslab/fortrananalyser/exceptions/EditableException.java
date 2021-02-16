@@ -14,19 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.uvigo.esei.ephyslab.fortrananalyser;
+package es.uvigo.esei.ephyslab.fortrananalyser.exceptions;
 
-/**
- * Exception class with all EditableException
- *
- * @author Michael García Rodríguez
- * @version 1.9.8
- */
 public class EditableException extends Exception {
 
-    /**
-     * code number of the exception error
-     */
     private final int errorCode;
 
     public EditableException(int codigoError) {
@@ -36,7 +27,6 @@ public class EditableException extends Exception {
 
     @Override
     public String getMessage() {
-
         String errorMessage = "";
 
         if (errorCode == 111) {
@@ -44,9 +34,6 @@ public class EditableException extends Exception {
         } else {
             errorMessage = "Generic Exception Error \n";
         }
-
         return errorMessage;
-
     }
-
 }

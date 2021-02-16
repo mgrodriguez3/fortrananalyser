@@ -34,13 +34,6 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 
-/**
- * This class create a taskBar and support the logic part of the application. it
- * generate the quallity report
- *
- * @author Michael García Rodríguez
- * @version 2.1
- */
 public final class TasksBar extends
         SwingWorker<Void, Integer> {
 
