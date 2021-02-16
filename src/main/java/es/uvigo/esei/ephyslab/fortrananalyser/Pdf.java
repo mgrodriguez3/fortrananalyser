@@ -53,7 +53,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class PDF {
+public class Pdf {
     private static final com.itextpdf.kernel.color.Color MAIN_HEADER_COLOR = new DeviceRgb(0, 130, 130);
     private static final com.itextpdf.kernel.color.Color HEADER_COLOR = new DeviceRgb(0, 69, 69);
     private static final com.itextpdf.kernel.color.Color SECTION_COLOR = new DeviceRgb(207, 106, 11);
@@ -63,7 +63,7 @@ public class PDF {
     private static final String DATE_FORMAT = "EEEE, dd MMMM yyyy HH:mm:ss";
     private static final String AUTHOR = "Michael García Rodríguez";
     private static final String FORTRANANALYSER_ICON
-            = PDF.class.getResource("fortranAnalyser.png").toString();
+            = Pdf.class.getResource("fortranAnalyser.png").toString();
     private static final String PDF_TITLE = "FortranAnalyser: Quality report";
     private static final String APP_NAME = "FortranAnalyser";
     private Document report;
@@ -76,8 +76,8 @@ public class PDF {
         report = new Document(pdf, PageSize.A4);
         report.setFont(fontPDF);
 
-        PageEvent pageEvent = new PageEvent(report);
-        pdf.addEventHandler(PdfDocumentEvent.END_PAGE, pageEvent);
+        PdfPageEvent pdfPageEvent = new PdfPageEvent(report);
+        pdf.addEventHandler(PdfDocumentEvent.END_PAGE, pdfPageEvent);
         pdf.setTagged();
         pdf.getCatalog()
                 .setLang(new PdfString("es"));
@@ -179,7 +179,7 @@ public class PDF {
 
     private static PdfFont loadPdfFont() throws IOException {
         Path tmpFile = Files.createTempFile("fa-arial", ".ttf");
-        Files.copy(PDF.class.getResourceAsStream("arial.ttf"), tmpFile, StandardCopyOption.REPLACE_EXISTING);
+        Files.copy(Pdf.class.getResourceAsStream("arial.ttf"), tmpFile, StandardCopyOption.REPLACE_EXISTING);
 
         return PdfFontFactory.createFont(tmpFile.toString());
     }
@@ -230,9 +230,9 @@ public class PDF {
                 "cyclomaticComplexity"};
 
         if (color == 0) {
-            headerColor = PDF.MAIN_HEADER_COLOR;
+            headerColor = Pdf.MAIN_HEADER_COLOR;
         } else {
-            headerColor = PDF.HEADER_COLOR;
+            headerColor = Pdf.HEADER_COLOR;
         }
         headerCellLeft = configureHeaderCells(messages.getString("headerLeft_table"), size, headerColor);
         table.addHeaderCell(headerCellLeft);

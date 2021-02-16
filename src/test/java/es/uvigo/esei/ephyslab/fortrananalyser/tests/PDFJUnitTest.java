@@ -6,7 +6,7 @@
 package es.uvigo.esei.ephyslab.fortrananalyser.tests;
 
 import com.itextpdf.kernel.color.DeviceRgb;
-import es.uvigo.esei.ephyslab.fortrananalyser.PDF;
+import es.uvigo.esei.ephyslab.fortrananalyser.Pdf;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -47,36 +47,36 @@ public class PDFJUnitTest {
     
     @Test
     public void testHEADERCOLOR(){
-        assertEquals(new DeviceRgb(0, 130, 130), PDF.getHEADERCOLOR());
+        assertEquals(new DeviceRgb(0, 130, 130), Pdf.getHEADERCOLOR());
     }
     
     @Test
     public void testHEADER2COLOR(){
-        assertEquals(new DeviceRgb(0, 69, 69), PDF.getHEADER2COLOR());
+        assertEquals(new DeviceRgb(0, 69, 69), Pdf.getHEADER2COLOR());
     }
     
     @Test
     public void testFinalnotecolor(){
-        assertEquals(new DeviceRgb(77, 135, 133), PDF.getFINALNOTECOLOR());
+        assertEquals(new DeviceRgb(77, 135, 133), Pdf.getFINALNOTECOLOR());
     }
     
     @Test
     public void testIcon(){
-        assertEquals(PDF.class.getResource("fortranAnalyser.png").toString(), PDF.getICONFORTRANANALYSER());
+        assertEquals(Pdf.class.getResource("fortranAnalyser.png").toString(), Pdf.getICONFORTRANANALYSER());
     }
     
     @Test
     public void testResultCOLOR(){
-        assertEquals(new DeviceRgb(38, 50, 61), PDF.getRESULTCOLOR());
+        assertEquals(new DeviceRgb(38, 50, 61), Pdf.getRESULTCOLOR());
     }
     
     @Test
     public void testSectionCOLOR(){
-        assertEquals(new DeviceRgb(207, 106, 11), PDF.getSECTIONCOLOR());
+        assertEquals(new DeviceRgb(207, 106, 11), Pdf.getSECTIONCOLOR());
     }
     
     @Test
     public void testSubsectionCOLOR(){
-        assertEquals(new DeviceRgb(11, 136, 207), PDF.getSUBSECTIONCOLOR());
+        assertEquals(new DeviceRgb(11, 136, 207), Pdf.getSUBSECTIONCOLOR());
     }
 }

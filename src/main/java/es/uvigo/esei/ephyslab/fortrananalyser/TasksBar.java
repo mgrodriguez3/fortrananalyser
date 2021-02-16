@@ -314,7 +314,7 @@ public final class TasksBar extends
         this.partialCalification = 0.0;
         this.cycloScores.clear();
 
-        PDF pdf;
+        Pdf pdf;
         int countNumberOfFiles = 0;
         auxNote = 0.0;
 
@@ -323,7 +323,7 @@ public final class TasksBar extends
         try {
 
             String auxDir = "";
-            pdf = new PDF();
+            pdf = new Pdf();
             String extensionFile = "";
 
             //start the duration of the analysis

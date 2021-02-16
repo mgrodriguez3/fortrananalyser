@@ -28,11 +28,11 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 
-public class PageEvent implements IEventHandler {
+public class PdfPageEvent implements IEventHandler {
 
     private final Document report;
 
-    public PageEvent(Document doc) {
+    public PdfPageEvent(Document doc) {
         report = doc;
     }
 

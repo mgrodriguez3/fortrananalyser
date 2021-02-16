@@ -218,13 +218,13 @@ public class NoGUI {
         this.assesment = 0.0;
 
 
-        PDF pdf;
+        Pdf pdf;
         double auxNote = 0.0;
 
         try {
 
             String auxDir = "";
-            pdf = new PDF();
+            pdf = new Pdf();
             String extensionFile = "";
 
 
