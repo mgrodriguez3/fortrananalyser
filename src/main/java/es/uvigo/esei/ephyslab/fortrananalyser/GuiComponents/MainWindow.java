@@ -20,21 +20,12 @@ import es.uvigo.esei.ephyslab.fortrananalyser.NoGUI;
 import es.uvigo.esei.ephyslab.fortrananalyser.TasksBar;
 import es.uvigo.esei.ephyslab.fortrananalyser.action.WindowActions;
 
-import java.awt.*;
+import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-import javax.swing.JLabel;
 
 public class MainWindow extends javax.swing.JFrame {
 
@@ -59,7 +50,6 @@ public class MainWindow extends javax.swing.JFrame {
         initialiceComponentsNoGUI();
         wa.changeLanguage(language);
         new NoGUI(pathToAnalyse, fileName, MainWindow.this.messages);
-
     }
 
     private void addMouseListeners() {
@@ -320,7 +310,6 @@ public class MainWindow extends javax.swing.JFrame {
     }
 
     private void reconfigureComponents() {
-
         configureLabelsText();
         hideQualityReportLabels();
     }
@@ -746,38 +735,31 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
         if (this.jTextField1.getText().equals(this.messages.getString("selectDirectory"))) {
             this.jLabel14.setVisible(true);
         } else {
             this.jLabel14.setVisible(false);
             this.customProgressBar1.setVisible(true);
             this.customProgressBar1.updateProgressBar(0);
-
             executeAnalyse(this.jTextField1.getText());
-
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
         if (this.FILE_CHOOSER.showOpenDialog(MainWindow.this) == JFileChooser.APPROVE_OPTION) {
-
             File file = this.FILE_CHOOSER.getSelectedFile();
             this.jTextField1.setText(file.getAbsolutePath());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void executeAnalyse(String pathFile) {
-
         hideComponents();
-
         TasksBar t = new TasksBar(MainWindow.this, pathFile, MainWindow.this.messages);
         this.setEnabled(false);
         this.jButton1.setEnabled(false);
         this.jButton3.setEnabled(false);
         t.execute();
-
     }
 
     private void hideComponents() {

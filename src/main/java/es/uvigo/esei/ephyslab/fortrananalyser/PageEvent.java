@@ -28,32 +28,18 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.property.TextAlignment;
 
-/**
- * This class manage the event of each page in a document.
- *
- * @author Michael García Rodríguez
- * @version 1.9.8
- */
 public class PageEvent implements IEventHandler {
 
-    private final Document document;
+    private final Document report;
 
     public PageEvent(Document doc) {
-        document = doc;
+        report = doc;
     }
 
-    /**
-     * This method create a rectangle in footer.
-     *
-     * @param docEvent Document event
-     * @return Area where footer is.
-     */
     public Rectangle createFooterRectangle(PdfDocumentEvent docEvent) {
-
         PdfDocument pdfDoc = docEvent.getDocument();
         PdfPage page = docEvent.getPage();
-
-        float xFooter = pdfDoc.getDefaultPageSize().getX() + document.getLeftMargin();
+        float xFooter = pdfDoc.getDefaultPageSize().getX() + report.getLeftMargin();
         float yFooter = pdfDoc.getDefaultPageSize().getBottom();
         float widthFooter = page.getPageSize().getWidth() - 72;
         float heightFooter = 50F;
@@ -61,57 +47,29 @@ public class PageEvent implements IEventHandler {
         return new Rectangle(xFooter, yFooter, widthFooter, heightFooter);
     }
 
-    /**
-     * This method create a table in footer.
-     *
-     * @param docEvent The document event
-     * @return Footer with page number
-     */
     private Paragraph createFooterTable(PdfDocumentEvent docEvent) {
-
         PdfPage page = docEvent.getPage();
-        Integer pageNum = docEvent.getDocument().getPageNumber(page) - 1;
+        int pageNum = docEvent.getDocument().getPageNumber(page) - 1;
         Paragraph p;
-
         if (pageNum > 0) {
-            p = new Paragraph("- " + pageNum.toString() + " -");
+            p = new Paragraph("- " + Integer.toString(pageNum) + " -");
         } else {
             p = new Paragraph("");
         }
-
         return p;
     }
 
-    /**
-     * This method manage the page change event: it add a header and a footer on
-     * each page.
-     *
-     * @param event Evento de pagina
-     */
     @Override
     public void handleEvent(Event event) {
-
         PdfDocumentEvent docEvent = (PdfDocumentEvent) event;
         PdfDocument pdfDoc = docEvent.getDocument();
         PdfPage page = docEvent.getPage();
         float yPosition = pdfDoc.getDefaultPageSize().getBottom() + 10;
-        float xPosition = pdfDoc.getDefaultPageSize().getX() + document.getLeftMargin() + 260;
+        float xPosition = pdfDoc.getDefaultPageSize().getX() + report.getLeftMargin() + 260;
         PdfCanvas canvas = new PdfCanvas(page.newContentStreamBefore(), page.getResources(), pdfDoc);
-
-        Rectangle footerRectangle = this.createFooterRectangle(docEvent);
+        Rectangle footerRectangle = createFooterRectangle(docEvent);
         Canvas footerCanvas = new Canvas(canvas, pdfDoc, footerRectangle);
-
-        footerCanvas.showTextAligned(this.createFooterTable(docEvent), xPosition,
+        footerCanvas.showTextAligned(createFooterTable(docEvent), xPosition,
                 yPosition, TextAlignment.CENTER);
-
-    }
-
-    /**
-     * Getter from documento variable
-     *
-     * @return the value of documento variable
-     */
-    public Document getDocument() {
-        return this.document;
     }
 }
