@@ -1,4 +1,6 @@
-package es.uvigo.esei.ephyslab.fortrananalyser.metrics;
+package es.uvigo.esei.ephyslab.fortrananalyser.metric;
+
+import org.apache.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,6 +9,7 @@ import java.io.IOException;
 
 public class NumberOfLines implements Runnable {
 
+    private static final Logger LOG = Logger.getLogger(NumberOfLines.class.getName());
     private final String filePath;
     private int numOfLines;
 
@@ -26,8 +29,9 @@ public class NumberOfLines implements Runnable {
                     numOfLines++;
                 }
             }
+            LOG.info(String.format("{%s} - Number of lines analisis: finished", filePath));
         } catch (IOException e) {
-            System.out.println("ERROR");
+            LOG.error(String.format("Buffer reader error on reading file [%s]", filePath), e);
         }
     }
 

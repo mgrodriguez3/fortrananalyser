@@ -1,6 +1,6 @@
 package es.uvigo.esei.ephyslab.fortrananalyser.action;
 
-import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents.MainWindow;
+import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent.MainWindow;
 
 import java.awt.*;
 import java.io.File;

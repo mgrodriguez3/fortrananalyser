@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents;
+package es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent;
 
 import es.uvigo.esei.ephyslab.fortrananalyser.NoGUI;
 import es.uvigo.esei.ephyslab.fortrananalyser.TasksBar;

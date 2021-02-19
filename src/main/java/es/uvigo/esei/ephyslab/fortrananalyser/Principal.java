@@ -16,8 +16,8 @@
  */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
-import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents.MainWindow;
-import es.uvigo.esei.ephyslab.fortrananalyser.exceptions.EditableException;
+import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent.MainWindow;
+import es.uvigo.esei.ephyslab.fortrananalyser.exception.EditableException;
 
 import javax.swing.SwingUtilities;
 

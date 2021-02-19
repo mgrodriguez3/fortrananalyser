@@ -16,7 +16,7 @@
  */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
-import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents.MainWindow;
+import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent.MainWindow;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;

@@ -16,8 +16,9 @@
  */
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
-import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponents.MainWindow;
-import es.uvigo.esei.ephyslab.fortrananalyser.metrics.CyclomaticComplexity;
+import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent.MainWindow;
+import es.uvigo.esei.ephyslab.fortrananalyser.metric.CyclomaticComplexity;
+import es.uvigo.esei.ephyslab.fortrananalyser.metric.NumberOfLines;
 
 import javax.swing.*;
 import java.awt.*;
@@ -285,7 +286,10 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
         String result = "";
         assesment = 0.0;
         double ratio = 0.0;
-        double avgCyclo = 0.0;
+        double avgCyclo;
+        Thread numberOfLinesThread = new Thread(new NumberOfLines(pathFile));
+        numberOfLinesThread.start();
+
         int numLines = analyseNumberOfLines(pathFile);
         boolean useImplicitNone = analyseUseImplicitNone(pathFile);
         boolean checkNestedLoops = analyseNestedLoops(pathFile);
@@ -549,7 +553,7 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
                 }
             }
         }
-        return nestedLoops == 0;
+        return (nestedLoops >= 0 && nestedLoops <= 3 );
     }
 
     public static int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
