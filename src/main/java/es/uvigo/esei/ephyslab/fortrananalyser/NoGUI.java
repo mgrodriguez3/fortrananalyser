@@ -17,6 +17,7 @@
 package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent.MainWindow;
+import es.uvigo.esei.ephyslab.fortrananalyser.statistics.Calculation;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;
@@ -284,16 +285,16 @@ public class NoGUI {
              * the list scores is reused to stock the average of all metrics.
              */
             this.scoresNoGUI.clear();
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresImplicitNoneNoGUI));
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresRatioNoGUI));
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresNestedLoopsNoGUI));
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsBeginningNoGUI));
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsVariablesNoGUI));
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsfunctionNoGUI));
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsSubroutineNoGUI));
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCommentsControlStructuresNoGUI));
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresExitNoGUI));
-            this.scoresNoGUI.add(TasksBar.calculateAverage(this.scoresCycleNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresImplicitNoneNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresRatioNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresNestedLoopsNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresCommentsBeginningNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresCommentsVariablesNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresCommentsfunctionNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresCommentsSubroutineNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresCommentsControlStructuresNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresExitNoGUI));
+            this.scoresNoGUI.add(Calculation.calculateAverage(this.scoresCycleNoGUI));
 
             /**
              * Check if the software analysed have not Fortran files

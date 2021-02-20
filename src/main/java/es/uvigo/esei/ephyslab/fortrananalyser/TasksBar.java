@@ -19,6 +19,7 @@ package es.uvigo.esei.ephyslab.fortrananalyser;
 import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent.MainWindow;
 import es.uvigo.esei.ephyslab.fortrananalyser.metric.CyclomaticComplexity;
 import es.uvigo.esei.ephyslab.fortrananalyser.metric.NumberOfLines;
+import es.uvigo.esei.ephyslab.fortrananalyser.statistics.Calculation;
 
 import javax.swing.*;
 import java.awt.*;
@@ -182,17 +183,17 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
             }
 
             scores.clear();
-            scores.add(calculateAverage(implicitNoneScores));
-            scores.add(calculateAverage(ratioScores));
-            scores.add(calculateAverage(nestedLoopsScores));
-            scores.add(calculateAverage(commentsBeginningScores));
-            scores.add(calculateAverage(commentsVariablesScores));
-            scores.add(calculateAverage(commentsfunctionScores));
-            scores.add(calculateAverage(commentsSubroutineScores));
-            scores.add(calculateAverage(commentsControlStructuresScores));
-            scores.add(calculateAverage(exitScores));
-            scores.add(calculateAverage(cycleScores));
-            scores.add(calculateAverage(cycloScores));
+            scores.add(Calculation.calculateAverage(implicitNoneScores));
+            scores.add(Calculation.calculateAverage(ratioScores));
+            scores.add(Calculation.calculateAverage(nestedLoopsScores));
+            scores.add(Calculation.calculateAverage(commentsBeginningScores));
+            scores.add(Calculation.calculateAverage(commentsVariablesScores));
+            scores.add(Calculation.calculateAverage(commentsfunctionScores));
+            scores.add(Calculation.calculateAverage(commentsSubroutineScores));
+            scores.add(Calculation.calculateAverage(commentsControlStructuresScores));
+            scores.add(Calculation.calculateAverage(exitScores));
+            scores.add(Calculation.calculateAverage(cycleScores));
+            scores.add(Calculation.calculateAverage(cycloScores));
 
             if (!scores.get(0).isNaN()) {
                 pdf.addSection(messages.getString("summary"));
@@ -244,7 +245,7 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     protected void done() {
         long timeStop = System.currentTimeMillis();
         timeStop = timeStop - startTime;
-        mw.getjLabel19().setText(getDurationAnalyse(timeStop));
+        mw.getjLabel19().setText(Calculation.getDurationAnalyse(timeStop));
         mw.getjLabel20().setText(String.format(Locale.ROOT, "%.3f", auxScore));
         mw.getjLabel21().setText(TasksBar.REPORT_NAME);
         mw.getjLabel15().setVisible(true);
@@ -391,7 +392,7 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
             result += messages.getString("cyclomaticComplexity").toUpperCase();
             result += "\n\n";
             result += cycloResult;
-            avgCyclo = calculateAverage(cc.getScoresCC());
+            avgCyclo = Calculation.calculateAverage(cc.getScoresCC());
             cycloScores.add(avgCyclo);
             scores.add(avgCyclo);
         } else {
@@ -759,44 +760,6 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
             }
         }
         return totalFunctions == numFunction;
-    }
-
-    public static String getDurationAnalyse(long millis) {
-        if (millis < 0) {
-            throw new IllegalArgumentException("Duration must be greater than zero!");
-        }
-        long days = TimeUnit.MILLISECONDS.toDays(millis);
-        millis -= TimeUnit.DAYS.toMillis(days);
-        long hours = TimeUnit.MILLISECONDS.toHours(millis);
-        millis -= TimeUnit.HOURS.toMillis(hours);
-        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
-        millis -= TimeUnit.MINUTES.toMillis(minutes);
-        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
-        millis -= TimeUnit.MILLISECONDS.toMillis(seconds);
-        StringBuilder sb = new StringBuilder(64);
-        sb.append(days);
-        sb.append(" D ");
-        sb.append(hours);
-        sb.append(" h ");
-        sb.append(minutes);
-        sb.append(" min ");
-        sb.append(seconds);
-        sb.append(" s ");
-        sb.append(millis);
-        sb.append(" ms");
-        return sb.toString();
-    }
-
-    public static Double calculateAverage(List<Double> l) {
-        Double aux = 0.0;
-        if (!l.isEmpty()) {
-            for (int i = 0; i < l.size(); i++) {
-                aux += l.get(i);
-            }
-            return aux / l.size();
-        } else {
-            return 0.0;
-        }
     }
 
     public static String getDEST() {

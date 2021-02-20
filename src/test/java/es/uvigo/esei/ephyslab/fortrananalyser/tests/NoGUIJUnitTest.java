@@ -8,6 +8,8 @@ package es.uvigo.esei.ephyslab.fortrananalyser.tests;
 import es.uvigo.esei.ephyslab.fortrananalyser.NoGUI;
 import es.uvigo.esei.ephyslab.fortrananalyser.TasksBar;
 import java.util.ArrayList;
+
+import es.uvigo.esei.ephyslab.fortrananalyser.statistics.Calculation;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -76,7 +78,7 @@ public class NoGUIJUnitTest {
         l.add(2.0);
         l.add(3.0);
         
-        assertEquals(2, TasksBar.calculateAverage(l), 0.01);
+        assertEquals(2, Calculation.calculateAverage(l), 0.01);
 
     }
     
@@ -85,7 +87,7 @@ public class NoGUIJUnitTest {
         ArrayList<Double> l= new ArrayList<>();
         l.add(0.0);
         
-        assertEquals(0,TasksBar.calculateAverage(l),0.01);
+        assertEquals(0,Calculation.calculateAverage(l),0.01);
         
     }
     
@@ -93,7 +95,7 @@ public class NoGUIJUnitTest {
     public void testCalculateAverageEmpty(){
         ArrayList<Double> l= new ArrayList<>();
         
-        assertEquals(0,TasksBar.calculateAverage(l),0.01);
+        assertEquals(0,Calculation.calculateAverage(l),0.01);
         
     }
     

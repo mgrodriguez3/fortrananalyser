@@ -17,6 +17,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+
+import es.uvigo.esei.ephyslab.fortrananalyser.statistics.Calculation;
 import org.junit.Test;
 
 /**
@@ -242,7 +244,7 @@ public class TasksBarJUnitTests {
     @Test(expected = IllegalArgumentException.class)
     public void TestGetDurationAnalyseException() throws Exception {
 
-        TasksBar.getDurationAnalyse(-1);
+        Calculation.getDurationAnalyse(-1);
 
     }
 
@@ -251,7 +253,7 @@ public class TasksBarJUnitTests {
 
         String expectedDate = "17 D 10 h 41 min 23 s 23700 ms";
 
-        assertEquals(expectedDate, TasksBar.getDurationAnalyse(1507283723));
+        assertEquals(expectedDate, Calculation.getDurationAnalyse(1507283723));
     }
 
     @Test
@@ -409,7 +411,7 @@ public class TasksBarJUnitTests {
    @Test
    public void testGetDurationAnalyse(){
        
-       assertEquals("0 D 0 h 0 min 13 s 13530 ms",TasksBar.getDurationAnalyse(13543));
+       assertEquals("0 D 0 h 0 min 13 s 13530 ms",Calculation.getDurationAnalyse(13543));
    }
    
    @Test
@@ -419,7 +421,7 @@ public class TasksBarJUnitTests {
        l.add(2.0);
        l.add(3.0);
        
-       assertEquals(2.0,TasksBar.calculateAverage(l), 0.01);
+       assertEquals(2.0,Calculation.calculateAverage(l), 0.01);
        
    }
 }

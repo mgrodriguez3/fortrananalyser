@@ -18,6 +18,7 @@ package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent.MainWindow;
 import es.uvigo.esei.ephyslab.fortrananalyser.exception.EditableException;
+import org.apache.log4j.Logger;
 
 import javax.swing.SwingUtilities;
 
@@ -27,9 +28,13 @@ import javax.swing.SwingUtilities;
  */
 public class Principal {
 
+    private static final Logger LOG = Logger.getLogger(Principal.class.getName());
+
     public static void main(String[] args) throws EditableException {
         org.apache.log4j.BasicConfigurator.configure();
+
         if (args.length == 0) {
+            LOG.info("-- Starting FortranAnalyser --");
             SwingUtilities.invokeLater(() -> {
                 MainWindow mw;
                 mw = new MainWindow();
@@ -37,11 +42,13 @@ public class Principal {
             });
         } else {
             if (args.length == 3) {
+                LOG.info("-- Starting FortranAnalyser console mode--");
                 String language = args[0];
                 String path = args[1];
                 String outputFileName = args[2];
                 new MainWindow(language, path, outputFileName);
             } else {
+                LOG.error("--Starting FortranAnalyser --");
                 throw new EditableException(111);
             }
         }
