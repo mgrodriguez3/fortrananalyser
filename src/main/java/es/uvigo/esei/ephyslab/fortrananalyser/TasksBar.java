@@ -20,6 +20,7 @@ import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent.MainWindow;
 import es.uvigo.esei.ephyslab.fortrananalyser.metric.CyclomaticComplexity;
 import es.uvigo.esei.ephyslab.fortrananalyser.metric.NumberOfLines;
 import es.uvigo.esei.ephyslab.fortrananalyser.statistics.Calculation;
+import es.uvigo.esei.ephyslab.fortrananalyser.util.FileUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -137,7 +138,6 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
         totalNumLines = 0;
         partialCalification = 0.0;
         cycloScores.clear();
-
         Pdf pdf;
         int countNumberOfFiles = 0;
         auxScore = 0.0;
@@ -150,20 +150,20 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
             startTime = System.currentTimeMillis();
             percentage += 1.0;
             publish((int) percentage);
-            checkTempFileExist();
+            FileUtils.checkTempFileExist();
             pdf.createPdf(TasksBar.REPORT_NAME, messages.getLocale());
-            scanFilesInDirectory(path, filesInDirectory);
+            FileUtils.scanFilesInDirectory(path, filesInDirectory);
 
             for (File file : filesInDirectory) {
                 scores.clear();
-                extensionFile = getFileExtension(file).toLowerCase();
+                extensionFile = FileUtils.getFileExtension(file).toLowerCase();
                 if (file.length() > 0) {
 
-                    if (!auxDir.equals(getPathFromFile(file))
+                    if (!auxDir.equals(FileUtils.getPathFromFile(file))
                             && (extensionFile.equals(TasksBar.FILE_EXTENSION)
                             || extensionFile.equals(TasksBar.FILE_EXTENSION_2)
                             || extensionFile.equals(TasksBar.FILE_EXTENSION_3))) {
-                        auxDir = getPathFromFile(file);
+                        auxDir = FileUtils.getPathFromFile(file);
                         pdf.addSection(auxDir);
                     }
                     if (extensionFile.equals(TasksBar.FILE_EXTENSION)
@@ -221,20 +221,6 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
         return null;
     }
 
-    public static void scanFilesInDirectory(String directoryName, List<File> files) {
-        File directory = new File(directoryName);
-        File[] fList = directory.listFiles();
-        if (fList != null) {
-            for (File file : fList) {
-                if (file.isFile()) {
-                    files.add(file);
-                } else if (file.isDirectory()) {
-                    scanFilesInDirectory(file.getAbsolutePath(), files);
-                }
-            }
-        }
-    }
-
     @Override
     protected void process(List<Integer> chunks) {
         mw.customProgressBar1.updateProgressBar(chunks.get(0));
@@ -259,28 +245,6 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
         mw.getjLabel24().setVisible(true);
         mw.getjButton1().setEnabled(true);
         mw.getjButton3().setEnabled(true);
-
-    }
-
-    public static String getPathFromFile(File file) {
-        return file.getAbsolutePath().
-                substring(0, file.getAbsolutePath().lastIndexOf(File.separator));
-
-    }
-
-    public static String getFileExtension(File file) {
-        String name = file.getName();
-        try {
-            return name.substring(name.lastIndexOf('.') + 1);
-        } catch (Exception e) {
-            return "";
-        }
-    }
-
-    private static void checkTempFileExist() {
-        if (!Paths.get(TasksBar.REPORT_NAME).toFile().exists()) {
-            new File(TasksBar.REPORT_PATH).mkdirs();
-        }
     }
 
     public String analyseFile(String pathFile) throws IOException {

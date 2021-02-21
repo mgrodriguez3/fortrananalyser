@@ -19,6 +19,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import es.uvigo.esei.ephyslab.fortrananalyser.statistics.Calculation;
+import es.uvigo.esei.ephyslab.fortrananalyser.util.FileUtils;
 import org.junit.Test;
 
 /**
@@ -297,13 +298,13 @@ public class TasksBarJUnitTests {
     @Test
     public void testGetPathFromFile() {
 
-        assertEquals(System.getProperty("user.dir") + "/target/test-classes/files", TasksBar.getPathFromFile(file));
+        assertEquals(System.getProperty("user.dir") + "/target/test-classes/files", FileUtils.getPathFromFile(file));
     }
 
     @Test
     public void testGetFileExtension() {
 
-        assertEquals("f90", TasksBar.getFileExtension(file));
+        assertEquals("f90", FileUtils.getFileExtension(file));
     }
 
     @Test
