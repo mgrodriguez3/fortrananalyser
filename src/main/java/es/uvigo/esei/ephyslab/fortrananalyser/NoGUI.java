@@ -18,6 +18,7 @@ package es.uvigo.esei.ephyslab.fortrananalyser;
 
 import es.uvigo.esei.ephyslab.fortrananalyser.GuiComponent.MainWindow;
 import es.uvigo.esei.ephyslab.fortrananalyser.statistics.Calculation;
+import es.uvigo.esei.ephyslab.fortrananalyser.util.FileUtils;
 
 import javax.annotation.Resource;
 import java.io.BufferedReader;
@@ -239,7 +240,7 @@ public class NoGUI {
 
             pdf.createPdf(filePath, this.messages.getLocale());
 
-            TasksBar.scanFilesInDirectory(this.dirPath, filesInFolder);
+            FileUtils.scanFilesInDirectory(this.dirPath, filesInFolder);
 
             /**
              * for each file of the directory and subdirectory
@@ -247,7 +248,7 @@ public class NoGUI {
             for (File file : filesInFolder) {
 
                 this.scoresNoGUI.clear();
-                extensionFile = TasksBar.getFileExtension(file).toLowerCase();
+                extensionFile = FileUtils.getFileExtension(file).toLowerCase();
 
                 /**
                  * Check if the file is not empty
@@ -257,11 +258,11 @@ public class NoGUI {
                      * If it is a new directory, the path is added into the
                      * report.
                      */
-                    if (!auxDir.equals(TasksBar.getPathFromFile(file))
+                    if (!auxDir.equals(FileUtils.getPathFromFile(file))
                             && (extensionFile.equals(TasksBar.getEXTENSION())
                             || extensionFile.equals(TasksBar.getEXTENSION2())
                             || extensionFile.equals(TasksBar.getEXTENSION3()))) {
-                        auxDir = TasksBar.getPathFromFile(file);
+                        auxDir = FileUtils.getPathFromFile(file);
                         pdf.addSection(auxDir);
                     }
 
