@@ -21,7 +21,6 @@ public class ControlStructureComment implements Runnable {
 
     public ControlStructureComment(String filePath) {
         this.filePath = filePath;
-
     }
 
     @Override

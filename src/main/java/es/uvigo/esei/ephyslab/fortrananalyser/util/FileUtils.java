@@ -1,7 +1,5 @@
 package es.uvigo.esei.ephyslab.fortrananalyser.util;
 
-import es.uvigo.esei.ephyslab.fortrananalyser.TasksBar;
-
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
