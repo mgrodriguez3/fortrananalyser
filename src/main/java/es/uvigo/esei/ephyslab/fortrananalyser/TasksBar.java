@@ -28,81 +28,77 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class TasksBar extends SwingWorker<Void, Integer> {
-    private static final String FILE_EXTENSION = "f90";
-    private static final String FILE_EXTENSION_2 = "h90";
-    private static final String FILE_EXTENSION_3 = "f";
-    private static final String REPORT_NAME = System.getProperty("user.home") + "/temp/QualityReport.pdf";
-    private static final String REPORT_PATH = System.getProperty("user.home") + "/temp";
-    private static final int[] POSITION_TABLE_SCORES = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9, 10};
-    private static final int[] POSITIONS_FINAL_TABLE_SCORES = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
-    private static final String END_DO = "END DO";
-    private static final String ARROW = "\n\t--> ";
-    private JPanel progressBarPanel;
-    private MainWindow mw;
-    private String path;
-    private double assesment;
-    private double auxScore;
-    private long startTime;
-    private ArrayList<Double> scores;
-    private ArrayList<Double> implicitNoneScores;
-    private ArrayList<Double> ratioScores;
-    private ArrayList<Double> nestedLoopsScores;
-    private ArrayList<Double> commentsBeginningScores;
-    private ArrayList<Double> commentsVariablesScores;
-    private ArrayList<Double> commentsfunctionScores;
-    private ArrayList<Double> commentsSubroutineScores;
-    private ArrayList<Double> commentsControlStructuresScores;
-    private ArrayList<Double> exitScores;
-    private ArrayList<Double> cycleScores;
-    private double commentableElements;
-    private double commentedElements;
-    private int totalNumLines;
-    private double partialCalification;
-    private ArrayList<String> fileNames;
-    private ArrayList<Double> fileScores;
-    private List<File> filesInDirectory;
-    private ArrayList<Double> cycloScores;
-    ResourceBundle messages;
+
+    private static final Set<String>    FORTRAN_EXTENSIONS                  = new HashSet<>(Arrays.asList("f90", "h90", "f", "for"));
+    private static final String         REPORT_ID                           = "";//UUID.randomUUID().toString();
+    private static final String         REPORT_NAME                         = System.getProperty("user.home") + "/temp/QualityReport_"+ REPORT_ID +".pdf";
+    private static final String         REPORT_PATH                         = System.getProperty("user.home") + "/temp";
+    private static final int[]          POSITION_TABLE_SCORES               = new int[]{5, 6, 7, 1, 2, 0, 3, 4, 8, 9, 10};
+    private static final int[]          POSITIONS_FINAL_TABLE_SCORES        = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    private static final String         END_DO                              = "END DO";
+    private static final String         ARROW                               = "\n\t--> ";
+    private JPanel                      progressBarPanel;
+    private MainWindow                  mw;
+    private String                      path;
+    private ResourceBundle              messages;
+    private int                         totalNumLines;
+    private long                        startTime;
+    private double                      assesment;
+    private double                      auxScore;
+    private double                      commentableElements;
+    private double                      commentedElements;
+    private double                      partialCalification;
+    private List<File>                  filesInDirectory;
+    private ArrayList<Double>           scores;
+    private ArrayList<Double>           implicitNoneScores;
+    private ArrayList<Double>           ratioScores;
+    private ArrayList<Double>           nestedLoopsScores;
+    private ArrayList<Double>           commentsBeginningScores;
+    private ArrayList<Double>           commentsVariablesScores;
+    private ArrayList<Double>           commentsFunctionScores;
+    private ArrayList<Double>           commentsSubroutineScores;
+    private ArrayList<Double>           commentsControlStructuresScores;
+    private ArrayList<Double>           exitScores;
+    private ArrayList<Double>           cycleScores;
+    private ArrayList<String>           fileNames;
+    private ArrayList<Double>           fileScores;
+    private ArrayList<Double>           cycloScores;
 
     public TasksBar(MainWindow mw, String path, ResourceBundle messages) {
         initializeVariables();
-        this.mw = mw;
-        this.messages = messages;
-        progressBarPanel = new JPanel();
-        this.path = path;
-        progressBarPanel.setLayout(new FlowLayout());
+        this.mw                 = mw;
+        this.messages           = messages;
+        this.progressBarPanel   = new JPanel();
+        this.path               = path;
+        this.progressBarPanel.setLayout(new FlowLayout());
     }
 
     public void initializeVariables() {
-        scores = new ArrayList<>();
-        implicitNoneScores = new ArrayList<>();
-        ratioScores = new ArrayList<>();
-        nestedLoopsScores = new ArrayList<>();
-        commentsBeginningScores = new ArrayList<>();
-        commentsVariablesScores = new ArrayList<>();
-        commentsfunctionScores = new ArrayList<>();
-        commentsSubroutineScores = new ArrayList<>();
+        scores                          = new ArrayList<>();
+        implicitNoneScores              = new ArrayList<>();
+        ratioScores                     = new ArrayList<>();
+        nestedLoopsScores               = new ArrayList<>();
+        commentsBeginningScores         = new ArrayList<>();
+        commentsVariablesScores         = new ArrayList<>();
+        commentsFunctionScores          = new ArrayList<>();
+        commentsSubroutineScores        = new ArrayList<>();
         commentsControlStructuresScores = new ArrayList<>();
-        exitScores = new ArrayList<>();
-        cycleScores = new ArrayList<>();
-        fileNames = new ArrayList<>();
-        fileScores = new ArrayList<>();
-        filesInDirectory = new ArrayList<>();
-        commentableElements = 0.0;
-        commentedElements = 0.0;
-        partialCalification = 0.0;
-        assesment = 0.0;
-        cycloScores = new ArrayList<>();
+        exitScores                      = new ArrayList<>();
+        cycleScores                     = new ArrayList<>();
+        fileNames                       = new ArrayList<>();
+        fileScores                      = new ArrayList<>();
+        filesInDirectory                = new ArrayList<>();
+        cycloScores                     = new ArrayList<>();
+        commentableElements             = 0.0;
+        commentedElements               = 0.0;
+        partialCalification             = 0.0;
+        assesment                       = 0.0;
     }
 
     public TasksBar() {
@@ -120,12 +116,20 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     @Override
     protected Void doInBackground() throws Exception {
 
+        Pdf     pdf;
+        int     countNumberOfFiles  = 0;
+        double  percentage          = 0.0;
+        commentableElements         = 0.0;
+        commentedElements           = 0.0;
+        partialCalification         = 0.0;
+        auxScore                    = 0.0;
+        totalNumLines               = 0;
         implicitNoneScores.clear();
         ratioScores.clear();
         nestedLoopsScores.clear();
         commentsBeginningScores.clear();
         commentsVariablesScores.clear();
-        commentsfunctionScores.clear();
+        commentsFunctionScores.clear();
         commentsSubroutineScores.clear();
         commentsControlStructuresScores.clear();
         exitScores.clear();
@@ -133,20 +137,11 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
         fileNames.clear();
         fileScores.clear();
         filesInDirectory.clear();
-        commentableElements = 0.0;
-        commentedElements = 0.0;
-        totalNumLines = 0;
-        partialCalification = 0.0;
         cycloScores.clear();
-        Pdf pdf;
-        int countNumberOfFiles = 0;
-        auxScore = 0.0;
-        double percentage = 0.0;
 
         try {
             String auxDir = "";
             pdf = new Pdf();
-            String extensionFile = "";
             startTime = System.currentTimeMillis();
             percentage += 1.0;
             publish((int) percentage);
@@ -156,19 +151,12 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
 
             for (File file : filesInDirectory) {
                 scores.clear();
-                extensionFile = FileUtils.getFileExtension(file).toLowerCase();
                 if (file.length() > 0) {
-
-                    if (!auxDir.equals(FileUtils.getPathFromFile(file))
-                            && (extensionFile.equals(TasksBar.FILE_EXTENSION)
-                            || extensionFile.equals(TasksBar.FILE_EXTENSION_2)
-                            || extensionFile.equals(TasksBar.FILE_EXTENSION_3))) {
-                        auxDir = FileUtils.getPathFromFile(file);
-                        pdf.addSection(auxDir);
-                    }
-                    if (extensionFile.equals(TasksBar.FILE_EXTENSION)
-                            || extensionFile.equals(TasksBar.FILE_EXTENSION_2)
-                            || extensionFile.equals(TasksBar.FILE_EXTENSION_3)) {
+                    if (FORTRAN_EXTENSIONS.contains(FileUtils.getFileExtension(file).toLowerCase())) {
+                        if(!auxDir.equals(FileUtils.getPathFromFile(file))) {
+                            auxDir = FileUtils.getPathFromFile(file);
+                            pdf.addSection(auxDir);
+                        }
                         pdf.addSubSection(file.getName());
                         fileNames.add(file.getName());
                         pdf.addResult(analyseFile(file.getAbsolutePath()));
@@ -188,7 +176,7 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
             scores.add(Calculation.calculateAverage(nestedLoopsScores));
             scores.add(Calculation.calculateAverage(commentsBeginningScores));
             scores.add(Calculation.calculateAverage(commentsVariablesScores));
-            scores.add(Calculation.calculateAverage(commentsfunctionScores));
+            scores.add(Calculation.calculateAverage(commentsFunctionScores));
             scores.add(Calculation.calculateAverage(commentsSubroutineScores));
             scores.add(Calculation.calculateAverage(commentsControlStructuresScores));
             scores.add(Calculation.calculateAverage(exitScores));
@@ -210,8 +198,8 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
             }
             pdf.closePDF();
             partialCalification = 0.0;
-            percentage = 100;
-            totalNumLines = 0;
+            percentage          = 100;
+            totalNumLines       = 0;
             publish((int) percentage);
 
         } catch (IOException ex) {
@@ -248,35 +236,35 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public String analyseFile(String pathFile) throws IOException {
-        String result = "";
-        assesment = 0.0;
-        double ratio = 0.0;
+        String result               = "";
+        assesment                   = 0.0;
+        double ratio                = 0.0;
         double avgCyclo;
-        Thread numberOfLinesThread = new Thread(new NumberOfLines(pathFile));
+        Thread numberOfLinesThread  = new Thread(new NumberOfLines(pathFile));
         numberOfLinesThread.start();
 
-        int numLines = analyseNumberOfLines(pathFile);
-        boolean useImplicitNone = analyseUseImplicitNone(pathFile);
-        boolean checkNestedLoops = analyseNestedLoops(pathFile);
-        boolean useExit = analyseUseExit(pathFile);
-        boolean useCycle = analyseUseCycle(pathFile);
-        int numFunctions = analyseNumFunctions(pathFile);
-        int numSubroutines = analyseNumberSubroutines(pathFile);
-        int numVariables = analyseNumberOfDeclaredVariables(pathFile);
-        String goodComments = analyseGoodComment(pathFile);
-        CyclomaticComplexity cc = new CyclomaticComplexity();
-        String cycloResult = cc.simpleComplexityCalculation(pathFile, messages);
-        commentableElements += numFunctions;
-        commentableElements += numSubroutines;
-        commentableElements += numVariables;
-        result += messages.getString("numberOfLines") + numLines;
-        result += "\n";
-        totalNumLines += numLines;
+        int numLines                = analyseNumberOfLines(pathFile);
+        boolean useImplicitNone     = analyseUseImplicitNone(pathFile);
+        boolean checkNestedLoops    = analyseNestedLoops(pathFile);
+        boolean useExit             = analyseUseExit(pathFile);
+        boolean useCycle            = analyseUseCycle(pathFile);
+        int numFunctions            = analyseNumFunctions(pathFile);
+        int numSubroutines          = analyseNumberSubroutines(pathFile);
+        int numVariables            = analyseNumberOfDeclaredVariables(pathFile);
+        String goodComments         = analyseGoodComment(pathFile);
+        CyclomaticComplexity cc     = new CyclomaticComplexity();
+        String cycloResult          = cc.simpleComplexityCalculation(pathFile, messages);
+        commentableElements         += numFunctions;
+        commentableElements         += numSubroutines;
+        commentableElements         += numVariables;
+        result                      += messages.getString("numberOfLines") + numLines;
+        result                      += "\n";
+        totalNumLines               += numLines;
         /**
          * 6. Use or not use the sentence IMPLICIT NONE
          */
-        result += messages.getString("implicitNone") + useImplicitNone;
-        result += "\n";
+        result                      += messages.getString("implicitNone") + useImplicitNone;
+        result                      += "\n";
         if (useImplicitNone) {
             assesment += 2.0;
             scores.add(2.0);
@@ -285,10 +273,10 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
             scores.add(0.0);
             implicitNoneScores.add(0.0);
         }
-        result += messages.getString("numFunctions") + numFunctions;
-        result += "\n";
-        result += messages.getString("subroutinesCall") + analyseNumCalls(pathFile);
-        result += "\n";
+        result                      += messages.getString("numFunctions") + numFunctions;
+        result                      += "\n";
+        result                      += messages.getString("subroutinesCall") + analyseNumCalls(pathFile);
+        result                      += "\n";
 
         /**
          * 7. calcule the ratio and show it in percentage in the report
@@ -296,19 +284,19 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
         if (commentableElements > 0.0) {
             ratio = (commentedElements / commentableElements);
         }
-        result += messages.getString("ratio") + String.format(Locale.ROOT, "%.2f", (ratio * 100)) + "%";
-        result += " \n";
-        ratio = ratio * 2.0;
-        assesment += ratio;
+        result                      += messages.getString("ratio") + String.format(Locale.ROOT, "%.2f", (ratio * 100)) + "%";
+        result                      += " \n";
+        ratio                       = ratio * 2.0;
+        assesment                   += ratio;
         scores.add(ratio);
         ratioScores.add(ratio);
-        result += messages.getString("numVariables") + numVariables;
-        result += "\n";
+        result                      += messages.getString("numVariables") + numVariables;
+        result                      += "\n";
         /**
          * 8. check the Nested loops
          */
-        result += messages.getString("nestedLoops") + checkNestedLoops;
-        result += "\n";
+        result                      += messages.getString("nestedLoops") + checkNestedLoops;
+        result                      += "\n";
         if (checkNestedLoops) {
             assesment += 2.0;
             scores.add(2.0);
@@ -317,15 +305,15 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
             scores.add(0.0);
             nestedLoopsScores.add(0.0);
         }
-        result += messages.getString("goodComments") + goodComments;
-        result += "\n";
-        result += messages.getString("subroutines") + numSubroutines;
-        result += "\n";
+        result                      += messages.getString("goodComments") + goodComments;
+        result                      += "\n";
+        result                      += messages.getString("subroutines") + numSubroutines;
+        result                      += "\n";
         /**
          * 9. Check the use of EXIT
          */
-        result += messages.getString("exit") + useExit;
-        result += "\n";
+        result                      += messages.getString("exit") + useExit;
+        result                      += "\n";
         if (useExit) {
             assesment += 1.0;
             scores.add(1.0);
@@ -337,8 +325,8 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
         /**
          * 10. Check the use of CYCLE
          */
-        result += messages.getString("cycle") + useCycle;
-        result += "\n";
+        result                      += messages.getString("cycle") + useCycle;
+        result                      += "\n";
         if (useCycle) {
             assesment += 1.0;
             scores.add(1.0);
@@ -352,11 +340,11 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
          * 11. Add the Cyclomatic complexity.
          */
         if (!cycloResult.isEmpty()) {
-            result += "\n";
-            result += messages.getString("cyclomaticComplexity").toUpperCase();
-            result += "\n\n";
-            result += cycloResult;
-            avgCyclo = Calculation.calculateAverage(cc.getScoresCC());
+            result      += "\n";
+            result      += messages.getString("cyclomaticComplexity").toUpperCase();
+            result      += "\n\n";
+            result      += cycloResult;
+            avgCyclo    = Calculation.calculateAverage(cc.getScoresCC());
             cycloScores.add(avgCyclo);
             scores.add(avgCyclo);
         } else {
@@ -366,10 +354,11 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static int analyseNumberOfLines(String filePath) throws IOException {
-        int count = 0;
-        String line = "";
-        File file = new File(filePath);
-        FileReader fr = new FileReader(file);
+        int         count       = 0;
+        String      line        = "";
+        File        file        = new File(filePath);
+        FileReader  fr          = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((line = b.readLine()) != null) {
                 count++;
@@ -379,9 +368,10 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static boolean analyseUseImplicitNone(String filePath) throws IOException {
-        String chain = "";
-        File file = new File(filePath);
-        FileReader fr = new FileReader(file);
+        String      chain   = "";
+        File        file    = new File(filePath);
+        FileReader  fr      = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -394,10 +384,11 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static int analyseNumFunctions(String filePath) throws IOException {
-        int count = 0;
-        String chain = "";
-        File file = new File(filePath);
-        FileReader fr = new FileReader(file);
+        int         count   = 0;
+        String      chain   = "";
+        File        file    = new File(filePath);
+        FileReader  fr      = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -412,10 +403,11 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static int analyseNumCalls(String filePath) throws IOException {
-        int count = 0;
-        String chain = "";
-        File file = new File(filePath);
-        FileReader fr = new FileReader(file);
+        int         count   = 0;
+        String      chain   = "";
+        File        file    = new File(filePath);
+        FileReader  fr      = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -428,11 +420,12 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static boolean analyseUseCycle(String filePath) throws IOException {
-        String chain = "";
-        File file = new File(filePath);
-        int numCycles = 0;
-        int numLoops = 0;
-        FileReader fr = new FileReader(file);
+        String      chain       = "";
+        int         numCycles   = 0;
+        int         numLoops    = 0;
+        File        file        = new File(filePath);
+        FileReader  fr          = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -452,11 +445,12 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static boolean analyseUseExit(String filePath) throws IOException {
-        String chain = "";
-        File file = new File(filePath);
-        int numLoops = 0;
-        int numExit = 0;
-        FileReader fr = new FileReader(file);
+        String      chain       = "";
+        int         numLoops    = 0;
+        int         numExit     = 0;
+        File        file        = new File(filePath);
+        FileReader  fr          = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -476,10 +470,11 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static int analyseNumberSubroutines(String filePath) throws IOException {
-        String chain = "";
-        int count = 0;
-        File file = new File(filePath);
-        FileReader fr = new FileReader(file);
+        String      chain   = "";
+        int         count   = 0;
+        File        file    = new File(filePath);
+        FileReader  fr      = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -494,10 +489,11 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static boolean analyseNestedLoops(String filePath) throws IOException {
-        String chain = "";
-        int nestedLoops = 0;
-        File file = new File(filePath);
-        FileReader fr = new FileReader(file);
+        int         nestedLoops = 0;
+        String      chain       = "";
+        File        file        = new File(filePath);
+        FileReader  fr          = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -522,10 +518,11 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static int analyseNumberOfDeclaredVariables(String filePath) throws IOException {
-        String chain = "";
-        int count = 0;
-        File file = new File(filePath);
-        FileReader fr = new FileReader(file);
+        String      chain   = "";
+        int         count   = 0;
+        File        file    = new File(filePath);
+        FileReader  fr      = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 if (chain.contains("::")) {
@@ -540,17 +537,17 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public String analyseGoodComment(String filePath) throws IOException {
-        String sb = "";
-        boolean goodCommentFunctions = analyseGoodCommentFunctions(filePath);
-        boolean goodCommentInitDoc = analyseGoodCommentInitDoc(filePath);
-        boolean goodCommentVariables = analyseGoodCommentedVariables(filePath);
-        boolean goodCommentSubroutines = analyseGoodCommentSubroutines(filePath);
-        boolean goodCommentControlStructures = analyseGoodCommentControlStructures(filePath);
-        sb = TasksBar.ARROW + messages.getString("function") + goodCommentFunctions;
-        sb += TasksBar.ARROW + messages.getString("initDoc") + goodCommentInitDoc;
-        sb += TasksBar.ARROW + messages.getString("variables") + goodCommentVariables;
-        sb += TasksBar.ARROW + messages.getString("commentSubroutines") + goodCommentSubroutines;
-        sb += TasksBar.ARROW + messages.getString("commentControlStructures") + goodCommentControlStructures;
+        String  sb                              = "";
+        boolean goodCommentFunctions            = analyseGoodCommentFunctions(filePath);
+        boolean goodCommentInitDoc              = analyseGoodCommentInitDoc(filePath);
+        boolean goodCommentVariables            = analyseGoodCommentedVariables(filePath);
+        boolean goodCommentSubroutines          = analyseGoodCommentSubroutines(filePath);
+        boolean goodCommentControlStructures    = analyseGoodCommentControlStructures(filePath);
+        sb                                      = TasksBar.ARROW + messages.getString("function") + goodCommentFunctions;
+        sb                                      += TasksBar.ARROW + messages.getString("initDoc") + goodCommentInitDoc;
+        sb                                      += TasksBar.ARROW + messages.getString("variables") + goodCommentVariables;
+        sb                                      += TasksBar.ARROW + messages.getString("commentSubroutines") + goodCommentSubroutines;
+        sb                                      += TasksBar.ARROW + messages.getString("commentControlStructures") + goodCommentControlStructures;
 
         /**
          * 1. comments in functions
@@ -558,10 +555,10 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
         if (goodCommentFunctions) {
             assesment += 0.4;
             scores.add(0.4);
-            commentsfunctionScores.add(0.4);
+            commentsFunctionScores.add(0.4);
         } else {
             scores.add(0.0);
-            commentsfunctionScores.add(0.0);
+            commentsFunctionScores.add(0.0);
         }
         /**
          * 2. comments at the begining of the document
@@ -611,12 +608,13 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static boolean analyseGoodCommentControlStructures(String filePath) throws IOException {
-        String chain = "";
-        String previousChain = "";
-        File file = new File(filePath);
-        int numControlStructures = 0;
-        int totalControlStructures = 0;
-        FileReader fr = new FileReader(file);
+        String      chain                   = "";
+        String      previousChain           = "";
+        File        file                    = new File(filePath);
+        int         numControlStructures    = 0;
+        int         totalControlStructures  = 0;
+        FileReader  fr                      = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -638,12 +636,13 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public boolean analyseGoodCommentSubroutines(String filePath) throws IOException {
-        String chain = "";
-        String previousChain = "";
-        File file = new File(filePath);
-        int numSubroutines = 0;
-        int totalSubroutines = 0;
-        FileReader fr = new FileReader(file);
+        String      chain               = "";
+        String      previousChain       = "";
+        File        file                = new File(filePath);
+        int         numSubroutines      = 0;
+        int         totalSubroutines    = 0;
+        FileReader  fr                  = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -663,12 +662,13 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public boolean analyseGoodCommentedVariables(String filePath) throws IOException {
-        String rowLine = "";
-        String previousRowLine = "";
-        File file = new File(filePath);
-        int variablesCommented = 0;
-        int totalVariables = 0;
-        FileReader fr = new FileReader(file);
+        String      rowLine             = "";
+        String      previousRowLine     = "";
+        int         variablesCommented  = 0;
+        int         totalVariables      = 0;
+        File        file                = new File(filePath);
+        FileReader  fr                  = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((rowLine = b.readLine()) != null) {
                 if (rowLine.contains("::")) {
@@ -685,11 +685,12 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public static boolean analyseGoodCommentInitDoc(String filePath) throws IOException {
-        String chain = "";
-        int count = 0;
-        int ite = 0;
-        File file = new File(filePath);
-        FileReader fr = new FileReader(file);
+        String      chain   = "";
+        int         count   = 0;
+        int         ite     = 0;
+        File        file    = new File(filePath);
+        FileReader  fr      = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null && count < 2 && ite < 3) {
                 if (chain.contains("!")) {
@@ -702,12 +703,13 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
     }
 
     public boolean analyseGoodCommentFunctions(String filePath) throws IOException {
-        String chain = "";
-        String previousChain = "";
-        File file = new File(filePath);
-        int numFunction = 0;
-        int totalFunctions = 0;
-        FileReader fr = new FileReader(file);
+        String      chain           = "";
+        String      previousChain   = "";
+        File        file            = new File(filePath);
+        int         numFunction     = 0;
+        int         totalFunctions  = 0;
+        FileReader  fr              = new FileReader(file);
+
         try (BufferedReader b = new BufferedReader(fr)) {
             while ((chain = b.readLine()) != null) {
                 chain = chain.toUpperCase();
@@ -746,16 +748,9 @@ public final class TasksBar extends SwingWorker<Void, Integer> {
         return ARROW;
     }
 
-    public static String getEXTENSION() {
-        return FILE_EXTENSION;
+    public static Set<String> getFORTRAN_EXTENSIONS() {
+        return FORTRAN_EXTENSIONS;
     }
 
-    public static String getEXTENSION2() {
-        return FILE_EXTENSION_2;
-    }
-
-    public static String getEXTENSION3() {
-        return FILE_EXTENSION_3;
-    }
 
 }
